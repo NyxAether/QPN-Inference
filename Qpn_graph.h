@@ -35,6 +35,7 @@ class Qpn_graph
 		//Defining iterators
 		typedef boost::graph_traits<QPN_INFLUENCE>::vertex_iterator vertex_iterator;
 		typedef boost::graph_traits<QPN_INFLUENCE>::edge_iterator influence_iterator;
+		typedef boost::graph_traits<QPN_SYNERGY>::edge_iterator synergy_iterator;
 		typedef boost::graph_traits<QPN_INFLUENCE>::out_edge_iterator out_influence_iterator;
 		typedef boost::graph_traits<QPN_INFLUENCE>::in_edge_iterator in_influence_iterator;
 

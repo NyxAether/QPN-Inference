@@ -68,14 +68,38 @@ void Qpn_graph::addIntercausalLink(std::string v1, std::string v2, std::string l
 
 void Qpn_graph::writeGraphViz(ostream& out)
 	{
-	QpnEdgeWriter<QPN_INFLUENCE> ew1(qpn_influence);
-	QpnVertexWriter<QPN_INFLUENCE> vw1(qpn_influence);
-	boost::write_graphviz(out
-		,qpn_influence,vw1,ew1);
-	QpnEdgeWriter<QPN_SYNERGY> ew2(qpn_synergy);
-	QpnVertexWriter<QPN_SYNERGY> vw2(qpn_synergy);
-	boost::write_graphviz(out
-		,qpn_synergy,vw2,ew2);
+	out<<"digraph G {"<<endl;
+	vertex_iterator	v_it, v_end;
+	influence_iterator	i_it, i_end;
+	synergy_iterator	s_it, s_end;
+	for(boost::tie(v_it, v_end) = vertices(qpn_influence); v_it!=v_end ; v_it++)
+		{
+		qpn_vertex v = get(vertex_bundle,qpn_influence,*v_it);
+		out<<v.name<<v<<";"<<endl;
+		}
+	for(boost::tie(i_it, i_end) = edges(qpn_influence); i_it!=i_end ; i_it++)
+		{
+		qpn_vertex v_s = get(vertex_bundle,qpn_influence,source(*i_it,qpn_influence));
+		qpn_vertex v_t = get(vertex_bundle,qpn_influence,target(*i_it,qpn_influence));
+		qpn_edge e = get(edge_bundle,qpn_influence,*i_it);
+		out<<v_s.name<<"->"<<v_t.name<<e<<";"<<endl;
+		}
+	for(boost::tie(s_it, s_end) = edges(qpn_synergy); s_it!=s_end ; s_it++)
+		{
+		qpn_vertex v_s = get(vertex_bundle,qpn_synergy,source(*s_it,qpn_synergy));
+		qpn_vertex v_t = get(vertex_bundle,qpn_synergy,target(*s_it,qpn_synergy));
+		intercausal_link e = get(edge_bundle,qpn_synergy,*s_it);
+		out<<v_s.name<<"->"<<v_t.name<<e<<";"<<endl;
+		}
+	//QpnEdgeWriter<QPN_INFLUENCE> ew1(qpn_influence);
+	//QpnVertexWriter<QPN_INFLUENCE> vw1(qpn_influence);
+	//boost::write_graphviz(out
+	//	,qpn_influence,vw1,ew1);
+	//QpnEdgeWriter<QPN_SYNERGY> ew2(qpn_synergy);
+	//QpnVertexWriter<QPN_SYNERGY> vw2(qpn_synergy);
+	//boost::write_graphviz(out
+	//	,qpn_synergy,vw2,ew2);
+	out<<"}"<<endl;
 	}
 
 void Qpn_graph::observeVertexValue(std::string vName, int value)

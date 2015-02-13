@@ -39,8 +39,16 @@ void intercausal_link::set_sign(int value, const Sign& s)
 
 ostream& intercausal_link::display(ostream& os) const
 	{
-		for(auto iter = valToSign.cbegin(); iter != valToSign.cend(); iter++){
-			os<<"("<< iter->first <<","<< iter->second <<")";
+	os <<"[label=\"";
+		for(auto iter = valToSign.cbegin(); iter != valToSign.cend();){
+
+			os<< iter->second;
+			if (++iter != valToSign.cend())
+				{
+				os<<",";
+				}
+
 			}
+		os<<"\",style=dotted, dir=none]";
 		return os;
 	}

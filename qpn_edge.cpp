@@ -29,7 +29,8 @@ void qpn_edge::set_sign(const Sign& s)
 
 std::ostream& qpn_edge::display(std::ostream& os)const
 	{
-	return os<< sign;
+	os<<"[label=\""<<sign<<"\"]";
+	return os;
 	}
 
 std::ostream& operator<<(std::ostream& os, const qpn_edge& edge)
