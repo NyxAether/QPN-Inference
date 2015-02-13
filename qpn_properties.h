@@ -14,17 +14,17 @@
 
 
 //Sign definitions
-typedef struct Sign Sign;
-struct Sign
-{
-public:
-	char c;
-	Sign operator+( const  Sign & s);
-	Sign operator*( const  Sign & s);
-	bool operator==( const  Sign & s);
-	bool operator!=( const  Sign & s);
-	friend std::ostream& operator<< (std::ostream& os, const Sign& s);
-};
+//typedef struct Sign Sign;
+//struct Sign
+//{
+//public:
+//	char c;
+//	Sign operator+( const  Sign & s);
+//	Sign operator*( const  Sign & s);
+//	bool operator==( const  Sign & s);
+//	bool operator!=( const  Sign & s);
+//	friend std::ostream& operator<< (std::ostream& os, const Sign& s);
+//};
 /////////////////////
 /// END DEFINTION ///
 /////////////////////
