@@ -1,4 +1,4 @@
-#include "intercausal_link.h"
+#include "../../header/simple_qpn/intercausal_link.h"
 
 
 using namespace std;

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "targetver.h"
+#include "../../header/simple_qpn/targetver.h"
 
 #include <stdio.h>
 #include <tchar.h>

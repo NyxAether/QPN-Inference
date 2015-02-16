@@ -1,5 +1,5 @@
 #pragma once
-#include "qpn_edge.h"
+#include "../../header/simple_qpn/qpn_edge.h"
 
 
 qpn_edge::qpn_edge()

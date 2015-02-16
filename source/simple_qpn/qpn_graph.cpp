@@ -1,10 +1,10 @@
-#include "qpn_graph.h"
+#include "../../header/simple_qpn/qpn_graph.h"
 #include "boost/graph/graphviz.hpp"
-#include "QpnEdgeWriter.h"
+#include "../../header/simple_qpn/QpnEdgeWriter.h"
 #include "boost/property_map/property_map.hpp"
 #include <boost/graph/depth_first_search.hpp>
-#include "QpnVertexWriter.h"
-#include "observed_descendant_dfs_visitor.h"
+#include "../../header/simple_qpn/QpnVertexWriter.h"
+#include "../../header/simple_qpn/observed_descendant_dfs_visitor.h"
 
 
 
@@ -114,10 +114,10 @@ void Qpn_graph::observeVertexValue(std::string vName, int value)
 	v.set_sign(sign);
 
 
-	//TODO Is it necessary to propagate a sign variation when a value is observed.
+	//TODO Is it necessary to propagate a sign variation when a value is observed ?
 	//map<string, bool> colorMap =  map<string, bool>();
 
-	////fromChild of the propagateSign is set to true to ensure we can propagate the sign toward the parent of the vertex 
+	//fromChild of the propagateSign is set to true to ensure we can propagate the sign toward the parent of the vertex 
 	//propagateSign(vName,colorMap, true);
 	}
 
@@ -185,29 +185,10 @@ void Qpn_graph::findNeighbours(string& vName,  map<std::string, bool>& colorMap,
 	if (fromChild)
 		{
 		findSourcesByEdgeType(vName,qpn_influence,colorMap,in_edges(v,qpn_influence),activesInfluences);
-		//in_influence_iterator in_i, in_end;
-		//for(boost::tie(in_i, in_end) = in_edges(v, qpn_influence); in_i !=in_end; in_i++)
-		//	{
-		//	Vertex currentV = source(*in_i, qpn_influence);
-		//	qpn_vertex& current_vertex = get(vertex_bundle,qpn_influence, currentV);
-		//	string currentVName = current_vertex.name;
-		//	if(! colorMap[currentVName] && current_vertex.get_value() == -1)
-		//		{
-		//		activesInfluences.push_back(*in_i);
-		//		}
-		//	}
+
 		}
 	findTargetsByEdgeType(vName,qpn_influence,colorMap,out_edges(v,qpn_influence),activesInfluences);
-	//out_influence_iterator out_i, out_end;
-	//for(boost::tie(out_i, out_end) = out_edges(v, qpn_influence); out_i !=out_end; out_i++){
-	//	Vertex currentV =target(*out_i, qpn_influence);
-	//	qpn_vertex& current_vertex = get(vertex_bundle,qpn_influence, currentV);
-	//	string currentVName =current_vertex.name;
-	//	if(! colorMap[currentVName]  && current_vertex.get_value() == -1)
-	//		{
-	//		activesInfluences.push_back(*out_i);
-	//		}
-	//	}
+
 	VertexSyn vS = qpn_synergy.vertex(vName); 
 	if (existV(vName,qpn_synergy))
 		findTargetsByEdgeType(vName,qpn_synergy,colorMap,out_edges(vS,qpn_synergy),activesSynergies);
@@ -254,8 +235,8 @@ bool Qpn_graph::hasObservedDescendant(Vertex& v, map<Vertex, bool>& colorMap)
 
 	//TODO Implement this method with the BGL dfs algorithm using a visitor
 	//observed_descendant_dfs_visitor vis = observed_descendant_dfs_visitor();
-	//std::map<Vertex, boost::default_color_type> c_m; 
-	//boost::depth_first_search(qpn_influence, vis);
+	//std::map<Vertex, color_traits<Vertex>> c_m; 
+	//depth_first_search(qpn_influence,visitor(vis), c_m, v);
 	//cout<<vis.hasDescendant;
 	//TODO This information can be put in the property of each vertex and changed only when a node is observed
 	out_influence_iterator  out_i, out_end;

@@ -1,5 +1,5 @@
 #pragma once
-#include "qpn_sign.h"
+#include "../../header/simple_qpn/qpn_sign.h"
 
 
 const Sign Sign::PLUS_SIGN = Sign('+');

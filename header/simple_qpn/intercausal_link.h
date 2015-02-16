@@ -12,8 +12,8 @@
   Header for the intercausal link. This class inherit from the qpn_edge but differ by the sign value which depends on an third node value .
  **************************************************************************************************/
 #pragma once
-#include "qpn_edge.h"
-#include "qpn_vertex.h"
+#include "../../header/simple_qpn/qpn_edge.h"
+#include "../../header/simple_qpn/qpn_vertex.h"
 #include <map>
 
 /**********************************************************************************************//**

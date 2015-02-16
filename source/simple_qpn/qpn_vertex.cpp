@@ -1,5 +1,5 @@
 #pragma once
-#include "qpn_vertex.h"
+#include "../../header/simple_qpn/qpn_vertex.h"
 #include <string>
 
 using namespace std;

@@ -4,9 +4,9 @@
 #include "boost\graph\adjacency_list.hpp"
 #include "boost\graph\labeled_graph.hpp"
 #include "boost\property_map\property_map.hpp"
-#include "qpn_vertex.h"
-#include "qpn_edge.h"
-#include "intercausal_link.h"
+#include "../../header/simple_qpn/qpn_vertex.h"
+#include "../../header/simple_qpn/qpn_edge.h"
+#include "../../header/simple_qpn/intercausal_link.h"
 
 /**********************************************************************************************//**
 \class	Qpn_graph qpn_graph.h qpn_graph.h
@@ -24,7 +24,7 @@ class Qpn_graph
 		// TYPEDEF //
 		/////////////
 
-		//typedef boost::property<boost::vertex_name_t, std::string> VertexProperty;
+		//typedef boost::property<boost::vertex_bundle_t, std::string,boost::property<boost::vertex_name_t, std::string>> VertexProperty;
 		//typedef boost::property<boost::edge_name_t, std::string> EdgeProperty;
 
 		//Defining the graph type used for QPN instantiation
