@@ -3,6 +3,19 @@
 
 typedef struct Sign Sign;
 
+/**********************************************************************************************//**
+\struct	Sign qpn_sign.h qpn_sign.h
+
+\brief	Defines the signs on a QPN. 
+		This sign can be :
+		- PLUS_SIGN used to describe the augmentation in probability of a value or a positive dependence between two nodes.<br/>
+		- MINUS_SIGN used to describe the reduction in probability of a value or a negative dependence between two nodes.<br/>
+		- ZERO_SIGN used to describe that no variation of a value is the most probable. If set on an edge, this edge will is equivalent to an independence. So, such edge as no reason to be created because it's equivalent to no edge.<br/>
+		- QMARK_SIGN used to describe ambiguous value or dependence. Can be understood as "We don' know how a value has changed or how two nodes interact".<br/>
+\author	Romain RINCE
+\date	16/02/2015
+ **************************************************************************************************/
+
 struct Sign
 	{
 
@@ -27,6 +40,25 @@ struct Sign
 	~Sign(void)
 		{
 		}
+
+	/**********************************************************************************************//**
+	\fn	const Sign operator+( const Sign & s) const
+	
+	\brief	Addition operator :
+				|	+	|	-	|	0	|	?<br/>
+			+	|	+	|	?	|	+	|	?<br/>
+			-	|	?	|	-	|	-	|	?<br/>
+			0	|	+	|	-	|	0	|	?<br/>
+			?	|	?	|	?	|	?	|	?<br/>
+	
+	\author	Romain RINCE
+	\date	16/02/2015
+	
+	\param	s	second part of the operand +
+	
+	\return	The result of the operation.
+	 **************************************************************************************************/
+
 	const Sign  operator+( const  Sign & s) const{
 		if (c == s.c)
 			return *this;
@@ -39,6 +71,25 @@ struct Sign
 		else 
 			return *this;
 		}
+
+	/**********************************************************************************************//**
+	\fn	const Sign operator*( const Sign & s) const
+	
+	\brief	Multiplication operator:
+				|	+	|	-	|	0	|	?<br/>
+			+	|	+	|	-	|	0	|	?<br/>
+			-	|	-	|	+	|	0	|	?<br/>
+			0	|	0	|	0	|	0	|	0<br/>
+			?	|	?	|	?	|	0	|	?<br/>
+	
+	\author	Romain RINCE
+	\date	16/02/2015
+	
+	\param	s	The const Sign &amp; to process.
+	
+	\return	The result of the operation.
+	 **************************************************************************************************/
+
 	const Sign operator*( const  Sign & s) const{
 		if (c == '0' || s.c == '0')
 			return ZERO_SIGN;

@@ -1,5 +1,25 @@
+/**********************************************************************************************//**
+\file	qpn_edge.h
+
+\brief	Describes the qpn edge class.
+
+\author	Romain RINCE
+\date	16/02/2015
+ **************************************************************************************************/
+
 #pragma once
 #include "qpn_sign.h"
+
+/**********************************************************************************************//**
+\class	qpn_edge qpn_edge.h qpn_edge.h
+
+\brief	Describes the behavior of a edge in a qpn.
+
+\author	Romain RINCE
+\date	16/02/2015
+
+An edge is defining by is Sign which can be '+', '-', '0' or '?' respectively for a positive influence, negative influence, zero influence and ambiguous influence.
+ **************************************************************************************************/
 
 class qpn_edge
 	{

@@ -7,7 +7,7 @@
   #include <boost/graph/adjacency_list.hpp>
   #include <boost/graph/dijkstra_shortest_paths.hpp>
   #include "qpn_graph.h"
-#include <fstream>
+  #include <fstream> 
 
 
   using namespace boost;
@@ -32,7 +32,7 @@ std::ofstream outf =std::ofstream("net.gv");
 	signMap[1] = Sign::PLUS_SIGN;
 	qpn.addIntercausalLink("2","3","4",signMap);
 	qpn.observeVertexValue("4", 0);
-
+		
 	qpn.observeVertexVariation("5",Sign::MINUS_SIGN);
 	qpn.writeGraphViz(outf);
  //   // create a typedef for the Graph type
