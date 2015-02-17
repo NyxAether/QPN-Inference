@@ -59,10 +59,7 @@ void Qpn_graph::addIntercausalLink(std::string v1, std::string v2, std::string l
 		}
 	Synergy e = add_edge_by_label(v1, v2, qpn_synergy).first;
 	qpn_synergy[e] = intercausal_link(&qpn_influence[linked_v],signMap);
-	//qpn_edge& inter1 =intercausal_link(&qpn_influence[linked_v],signMap);
-	//qpn_edge& inter2 =intercausal_link(&qpn_influence[linked_v],signMap);
-	//qpn_influence[e1] = intercausal_link(qpn_influence[linked_v],signmap);
-	//qpn_influence[e2] = intercausal_link(qpn_influence[linked_v],signmap);
+
 	}
 
 
