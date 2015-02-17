@@ -31,7 +31,7 @@ std::ofstream outf =std::ofstream("net.gv");
 	signMap[0] = Sign::MINUS_SIGN;
 	signMap[1] = Sign::PLUS_SIGN;
 	qpn.addIntercausalLink("2","3","4",signMap);
-	qpn.observeVertexValue("4", 0);
+	//qpn.observeVertexValue("4", 0);
 		
 	qpn.observeVertexVariation("5",Sign::MINUS_SIGN);
 	qpn.writeGraphViz(outf);

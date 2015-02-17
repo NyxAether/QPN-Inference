@@ -236,8 +236,10 @@ bool Qpn_graph::hasObservedDescendant(Vertex& v, map<Vertex, bool>& colorMap)
 	//TODO Implement this method with the BGL dfs algorithm using a visitor
 	//observed_descendant_dfs_visitor vis = observed_descendant_dfs_visitor();
 	//std::map<Vertex, color_traits<Vertex>> c_m; 
-	//depth_first_search(qpn_influence,visitor(vis), c_m, v);
-	//cout<<vis.hasDescendant;
+	//depth_first_search(qpn_influence,visitor(vis).v.get(vertex_index, qpn_influence));
+	cout<<"maion";
+	auto a =get(vertex_index,qpn_influence);
+	cout<<"blah"<<a[v];
 	//TODO This information can be put in the property of each vertex and changed only when a node is observed
 	out_influence_iterator  out_i, out_end;
 	for(boost::tie(out_i, out_end) = out_edges(v, qpn_influence); out_i !=out_end; out_i++){
