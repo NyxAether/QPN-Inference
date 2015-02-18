@@ -1,12 +1,12 @@
 // Meta_QPN.cpp : définit le point d'entrée pour l'application console.
 //
 
-#include "stdafx.h"
 
+using namespace boost;
 
-int _tmain(int argc, _TCHAR* argv[])
+int main()
 {
-
+	
 
 	return 0;
 }

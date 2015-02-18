@@ -34,23 +34,38 @@ void qpn_influence<NodeValue>::addEdge(qpn_edge& new_edge, const std::list<std::
 template <class NodeValue>
 void qpn_influence<NodeValue>::observeNodeValue(const std::string nName, NodeValue value)
 	{
-	throw std::logic_error("The method or operation is not implemented.");
+	qpn[nName].value = value;
+	qpn[nName].sign =Sign::ZERO_SIGN; //sign is reseted but this behavior is not necessarily usefull
 	}
 
 template <class NodeValue>
-void qpn_influence<NodeValue>::observeNodeVariation(const std::string nName, Sign sign)
+void qpn_influence<NodeValue>::observeNodeVariation(const std::string nName, const Sign& sign)
 	{
-	throw std::logic_error("The method or operation is not implemented.");
+	qpn[nName].sign = sign; //There is no more modification because it's the role of the meta_qpn to propagate the sign
 	}
 
 template <class NodeValue>
-void qpn_influence<NodeValue>::getNode(const std::string vName)
+Vertex qpn_influence<NodeValue>::getNode(const std::string vName)
 	{
 	throw std::logic_error("The method or operation is not implemented.");
+	return NULL;
 	}
 
+
 template <class NodeValue>
-bool qpn_influence<NodeValue>::exists(const std::string vName)
+std::pair<VIterator,VIterator> qpn_influence<NodeValue>::nodes()
 	{
-	throw std::logic_error("The method or operation is not implemented.");
+	typedef graph_traits<Graph>::vertex_iterator vertex_iter;
+	std::pair<vertex_iter, vertex_iter> vp;
+	for (vp = vertices(g); vp.first != vp.second; ++vp.first)
+		std::cout << city_name[*vp.first] << " " << city_index2[*vp.first] << std::endl;
+	std::cout << std::endl;
+	return NULL;
+	}
+
+
+template <class NodeValue>
+bool qpn_influence<NodeValue>::exists(const std::string nName)
+	{
+	return qpn.vertex(nName) != graph_traits<QPN_INFLUENCE>::null_vertrex();
 	}
