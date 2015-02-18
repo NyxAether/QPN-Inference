@@ -1,4 +1,8 @@
+#pragma once
 #include "qpn_influence.h"
+
+
+using namespace boost;
 
 template <class NodeValue>
 qpn_influence<NodeValue>::qpn_influence(void):qpn(QPN_INFLUENCE())
@@ -45,22 +49,16 @@ void qpn_influence<NodeValue>::observeNodeVariation(const std::string nName, con
 	}
 
 template <class NodeValue>
-Vertex qpn_influence<NodeValue>::getNode(const std::string vName)
+typename qpn_influence<NodeValue>::Vertex qpn_influence<NodeValue>::getNode(const std::string nName)
 	{
-	throw std::logic_error("The method or operation is not implemented.");
-	return NULL;
+	return qpn.vertex(vName);
 	}
 
 
 template <class NodeValue>
-std::pair<VIterator,VIterator> qpn_influence<NodeValue>::nodes()
+std::pair<typename qpn_influence<NodeValue>::VIterator,typename qpn_influence<NodeValue>::VIterator> qpn_influence<NodeValue>::nodes()
 	{
-	typedef graph_traits<Graph>::vertex_iterator vertex_iter;
-	std::pair<vertex_iter, vertex_iter> vp;
-	for (vp = vertices(g); vp.first != vp.second; ++vp.first)
-		std::cout << city_name[*vp.first] << " " << city_index2[*vp.first] << std::endl;
-	std::cout << std::endl;
-	return NULL;
+	return vertices(qpn);
 	}
 
 

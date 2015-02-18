@@ -1,3 +1,5 @@
+#pragma once
+
 #include "qpn_edge_influence.h"
 
 

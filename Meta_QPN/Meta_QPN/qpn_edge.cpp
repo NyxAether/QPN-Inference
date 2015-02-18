@@ -1,3 +1,4 @@
+#pragma once
 #include "qpn_edge.h"
 
 

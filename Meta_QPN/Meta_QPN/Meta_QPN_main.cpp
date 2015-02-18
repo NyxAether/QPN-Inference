@@ -2,7 +2,7 @@
 //
 
 
-using namespace boost;
+
 
 int main()
 {

@@ -6,23 +6,25 @@
 #include "qpn_edge.h"
 #include "qpn_descriptor.h"
 
+
 template <class NodeValue>
 class qpn_influence :
-	public qpn_descriptor<NodeValue, boost::labeled_graph<boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, qpn_node<NodeValue>, qpn_edge>, std::string>>
+	public qpn_descriptor<NodeValue>
 	{
+		public:
 	//Defining the graph type used for QPN instantiation
-	typedef boost::labeled_graph<
-		boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, qpn_node<NodeValue>, qpn_edge>, std::string> QPN_INFLUENCE;
+	//typedef boost::labeled_graph<
+	//	boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, qpn_node<NodeValue>, qpn_edge>, std::string> QPN_INFLUENCE;
 
 	//Defining vertices and edges for the graph
-	typedef typename boost::graph_traits<QPN_INFLUENCE>::vertex_descriptor Vertex;
-	typedef typename boost::graph_traits<QPN_INFLUENCE>::edge_descriptor Edge;
+	typedef typename boost::graph_traits<GraphType>::vertex_descriptor Vertex;
+	typedef typename boost::graph_traits<GraphType>::edge_descriptor Edge;
 
 	//Defining vertex and edge iterators
-	typedef typename boost::graph_traits<QPN_INFLUENCE>::vertex_iterator VIterator;
-	typedef typename boost::graph_traits<QPN_INFLUENCE>::edge_iterator EIterator;
+	typedef typename boost::graph_traits<GraphType>::vertex_iterator VIterator;
+	typedef typename boost::graph_traits<GraphType>::edge_iterator EIterator;
 
-	public:
+
 		qpn_influence(void);
 		~qpn_influence(void);
 
@@ -42,6 +44,6 @@ class qpn_influence :
 
 	protected:
 
-		QPN_INFLUENCE qpn;
+		GraphType qpn;
 	};
 
