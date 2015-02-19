@@ -2,15 +2,16 @@
 #include "qpn_sign.h"
 
 
-template <class NodeValue>
+template <typename NodeValue>
 struct qpn_node
 	{
 	public:
-		qpn_node(void);
-		virtual ~qpn_node(void);
+		qpn_node(void):value(NULL), sign(Sign::MINUS_SIGN)
+			{
+			};
+		virtual ~qpn_node(void){};
 
 		std::string name;
 		Sign sign;
 		NodeValue value;
 	};
-
