@@ -1,47 +1,135 @@
 #pragma once
 #include "qpn_descriptor.h"
 
-template < class NodeValue, typename EdgeType>
+template < typename NodeValue>
 class meta_qpn
 	{
 	public:
-		typedef typename qpn_descriptor<  NodeValue, EdgeType> qpn_type;
+		typedef typename qpn_descriptor< NodeValue, boost::bidirectionalS> qpn_directed_type;
+		typedef typename qpn_descriptor< NodeValue, boost::undirectedS> qpn_undirected_type;
+
 		//TODO using some smart pointers for the qpns can be the good way to do things
-		meta_qpn(void):qpn_directed(std::list<qpn_type>&>), qpn_undirected(std::list<qpn_descriptor< GraphType, NodeValue, EdgeType>&>){};
+		meta_qpn(void):qpn_directed(std::list<qpn_directed_type*>()), qpn_undirected(std::list<qpn_undirected_type*>()){};
 		~meta_qpn(void){};
 
-		void addQpn(qpn_descriptor<NodeValue,EdgeType >& qpn, bool isDirected)	{
-			if (isDirected)
-				{
-				if (qpn_directed.empty())
-					{
-					if(!qpn_undirected.empty())
-						{
-						for(qpn_type& it_qpn: qpn_undirected){
-							copyNode(from, to);
-							}
-						}
-					}
-				qpn_directed.push_back(qpn);
-				
-				} 
-			else
-				{
-				qpn_undirected.push_back(qpn);
-				}
+		void addQpn(qpn_directed_type* new_qpn);
+		void addQpn(qpn_undirected_type* new_qpn);
 
-			};
-		void observeNodeValue(std::string nName, NodeValue value){};
-		void observeNodeSign(std::string nName, Sign sign){};
+		void observeNodeValue(std::string nName, NodeValue value);
+		
+		void observeNodeSign(std::string nName, Sign sign);
+
+		void propagate(const std::string nName, std::map<std::string, bool> colorMap, bool fromChild);
+
+		void  writeGraphViz(std::ostream& out);
 
 	protected:
-		void copyNode(qpn_descriptor& from, qpn_descriptor& to)
+		template<typename NodeValue, typename T1, typename T2>
+		void copyNode(qpn_descriptor<NodeValue, T1>* from, qpn_descriptor<NodeValue, T2>* to)
 			{
-
+			std::list<std::string>* nNames = from->nodeNames();
+			for(std::list<std::string>::iterator nName = nNames->begin(); nName != nNames->cend(); nName++)
+				{
+				if(! to->exists(*nName))
+					{
+					to->addVertex(to->getNode(*nName));
+					}
+				}
 			};
 
 	private:
-		std::list<qpn_type>& qpn_directed;
-		std::list<qpn_type>& qpn_undirected;
+		std::list<qpn_directed_type*> qpn_directed;
+		std::list<qpn_directed_type*> qpn_undirected;
 	};
+
+
+
+template < typename NodeValue>
+void meta_qpn<NodeValue>::addQpn(qpn_directed_type* new_qpn)
+	{
+		if (qpn_directed.empty())
+			{
+			if(!qpn_undirected.empty())
+				{
+				for(std::list<qpn_type*>::iterator it = qpn_undirected.begin();  it!=qpn_undirected.cend();it++){
+					copyNode(*it, new_qpn);
+					}
+				}
+			}
+		else
+			{
+			copyNode(new_qpn, qpn_directed.front());
+			}
+		qpn_directed.push_back(new_qpn);
+
+		} 
+	
+
+template < typename NodeValue>
+void meta_qpn<NodeValue>::addQpn(qpn_undirected_type* new_qpn)
+	{
+	if(!qpn_directed.empty())
+		{
+		copyNode(new_qpn, qpn_directed.front());		
+		}
+		qpn_undirected.push_back(new_qpn);
+	}
+
+template < typename NodeValue>
+void meta_qpn<NodeValue>::observeNodeValue(std::string nName, NodeValue value)
+	{
+
+	}
+
+template < typename NodeValue>
+void meta_qpn<NodeValue>::observeNodeSign(std::string nName, Sign sign)
+	{
+	qpn[nName].assign = sign;
+	std::map<std::string, bool> colorMap = std::map<std::string, bool>();
+	colorMap[nName]=true;
+	propagate(nName,colorMap,true);
+	}
+
+template < typename NodeValue>
+void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::string, bool> colorMap, bool fromChild)
+	{
+	colorMap[nName]=true;
+	//Directed
+	for (std::list<qpn_directed_type*>::iterator it_qpn = qpn_directed.begin();it_qpn != qpn_directed.cend();it_qpn++)
+		{
+		std::map<std::string, bool> nextNodes = std::map<std::string, bool> ();
+		if(*it_qpn->exists(nName))
+			{
+			*it_qpn->propagate(nName,colorMap, fromChild, nextNodes)
+				for(std::map<std::string, bool>::iterator it_nName;it_nName!=nextNodes.cend();it_nName++)
+					{
+					propagate(it_nName->first,std::map<std::string, bool>(colorMap),it_nName->second)
+					}
+			}
+		}
+
+	//Undirected
+	for (std::list<qpn_undirected_type*>::iterator it_qpn = qpn_directed.begin();it_qpn != qpn_undirected.cend();it_qpn++)
+		{
+		std::map<std::string, bool> nextNodes = std::map<std::string, bool> ();
+		if(*it_qpn->exists(nName))
+			{
+			*it_qpn->propagate(nName,colorMap, false, nextNodes)
+				for(std::map<std::string, bool>::iterator it_nName;it_nName!=nextNodes.cend();it_nName++)
+					{
+					//In qpns undirected, from child need to be false everytime due to the indirection of the function target, source, out_egde, in_edge in those case.
+					propagate(it_nName->first,std::map<std::string, bool>(colorMap),false)
+					}
+			}
+		}
+	}
+
+template < typename NodeValue>
+void meta_qpn<NodeValue>::writeGraphViz(std::ostream& out)
+	{
+	for(std::list<qpn_type*>::iterator it = qpn_directed.begin(); it!=qpn_directed.cend(); it++)
+		{
+		(*it)->writeGraphVizNodes(out);
+		}
+	}
 

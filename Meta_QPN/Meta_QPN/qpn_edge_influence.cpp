@@ -19,3 +19,9 @@ Sign qpn_edge_influence::getSign(void)
 	{
 	return sign;
 	}
+
+std::ostream& qpn_edge_influence::writeGraphVizFormat(std::ostream& os)
+	{
+	os<<"[label=\""<<sign<<"\"]";
+	return os;
+	}

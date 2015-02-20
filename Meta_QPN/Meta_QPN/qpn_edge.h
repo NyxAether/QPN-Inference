@@ -5,6 +5,8 @@ struct qpn_edge
 	public:
 		qpn_edge(void);
 		virtual ~qpn_edge(void);
-		virtual Sign getSign()= 0;
+		virtual Sign getSign();
+		virtual std::ostream& writeGraphVizFormat(std::ostream& os) const;
+		friend std::ostream& operator<< (std::ostream& os, const qpn_edge& edge);
 	};
 
