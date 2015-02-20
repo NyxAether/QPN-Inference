@@ -12,19 +12,6 @@ template < typename NodeValue, typename Direction >
 class qpn_descriptor
 	{
 
-	//Defining the graph type used for QPN instantiation
-	typedef boost::labeled_graph<
-		boost::adjacency_list<boost::vecS, boost::vecS,  boost::bidirectionalS, qpn_node<NodeValue>, qpn_edge>, std::string> GraphType;
-
-	//Defining vertices and edges for the graph
-	typedef typename boost::graph_traits<GraphType>::vertex_descriptor Vertex;
-	typedef typename boost::graph_traits<GraphType>::edge_descriptor Edge;
-
-	//Defining vertex and edge iterators
-	typedef typename boost::graph_traits<GraphType>::vertex_iterator VIterator;
-	typedef typename boost::graph_traits<GraphType>::edge_iterator EIterator;
-	typedef typename boost::graph_traits<GraphType>::in_edge_iterator InEIterator;
-	typedef typename boost::graph_traits<GraphType>::out_edge_iterator OutEIterator;
 
 	public:
 		qpn_descriptor(void):qpn(GraphType()){};
@@ -48,6 +35,21 @@ class qpn_descriptor
 		virtual void  writeGraphVizEdges(std::ostream& os);
 
 	protected:
+		//Defining the graph type used for QPN instantiation
+		typedef boost::labeled_graph<
+			boost::adjacency_list<boost::vecS, boost::vecS,  boost::bidirectionalS, qpn_node<NodeValue>, qpn_edge>, std::string> GraphType;
+
+		//Defining vertices and edges for the graph
+		typedef typename boost::graph_traits<GraphType>::vertex_descriptor Vertex;
+		typedef typename boost::graph_traits<GraphType>::edge_descriptor Edge;
+
+		//Defining vertex and edge iterators
+		typedef typename boost::graph_traits<GraphType>::vertex_iterator VIterator;
+		typedef typename boost::graph_traits<GraphType>::edge_iterator EIterator;
+		typedef typename boost::graph_traits<GraphType>::in_edge_iterator InEIterator;
+		typedef typename boost::graph_traits<GraphType>::out_edge_iterator OutEIterator;
+
+
 		GraphType qpn;
 	};
 
@@ -156,10 +158,10 @@ void qpn_descriptor<NodeValue, Direction>::writeGraphVizEdges(std::ostream& os)
 	EIterator it, it_end;
 	for (std::tie(it,it_end)=boost::edges(qpn); it!=it_end;it++)
 		{
-		Edge edge = qpn[*it];
-		qpn_node source = boost::get(boost::vertex_bundle,qpn, boost::source(*it,qpn));
-		qpn_node target = boost::get(boost::vertex_bundle,qpn, boost::target(*it,qpn));
-		os<<source.name<<"->"<<target.name<<edge<<";"<<endl();
+		qpn_edge edge = qpn[*it];
+		qpn_node<NodeValue> source = boost::get(boost::vertex_bundle,qpn, boost::source(*it,qpn));
+		qpn_node<NodeValue> target = boost::get(boost::vertex_bundle,qpn, boost::target(*it,qpn));
+		os<<source.name<<"->"<<target.name<<edge<<";"<<endl;
 		}
 	}
 
@@ -300,10 +302,10 @@ void qpn_descriptor<NodeValue, boost::undirectedS>::writeGraphVizEdges(std::ostr
 	EIterator it, it_end;
 	for (std::tie(it,it_end)=boost::edges(qpn); it!=it_end;it++)
 		{
-		Edge edge = qpn[*it];
-		qpn_node source = boost::get(boost::vertex_bundle,qpn, boost::source(*it,qpn));
-		qpn_node target = boost::get(boost::vertex_bundle,qpn, boost::target(*it,qpn));
-		os<<source.name<<"->"<<target.name<<edge<<";"<<endl();
+		qpn_edge edge = qpn[*it];
+		qpn_node<NodeValue> source = boost::get(boost::vertex_bundle,qpn, boost::source(*it,qpn));
+		qpn_node<NodeValue> target = boost::get(boost::vertex_bundle,qpn, boost::target(*it,qpn));
+		os<<source.name<<"->"<<target.name<<edge<<";"<<endl;
 		}
 	}
 

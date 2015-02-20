@@ -39,7 +39,7 @@ class meta_qpn
 
 	private:
 		std::list<qpn_directed_type*> qpn_directed;
-		std::list<qpn_directed_type*> qpn_undirected;
+		std::list<qpn_undirected_type*> qpn_undirected;
 	};
 
 
@@ -51,7 +51,7 @@ void meta_qpn<NodeValue>::addQpn(qpn_directed_type* new_qpn)
 			{
 			if(!qpn_undirected.empty())
 				{
-				for(std::list<qpn_type*>::iterator it = qpn_undirected.begin();  it!=qpn_undirected.cend();it++){
+				for(std::list<qpn_undirected_type*>::iterator it = qpn_undirected.begin();  it!=qpn_undirected.cend();it++){
 					copyNode(*it, new_qpn);
 					}
 				}
@@ -127,7 +127,7 @@ void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::strin
 template < typename NodeValue>
 void meta_qpn<NodeValue>::writeGraphViz(std::ostream& out)
 	{
-	for(std::list<qpn_type*>::iterator it = qpn_directed.begin(); it!=qpn_directed.cend(); it++)
+	for(std::list<qpn_directed_type*>::iterator it = qpn_directed.begin(); it!=qpn_directed.cend(); it++)
 		{
 		(*it)->writeGraphVizNodes(out);
 		}

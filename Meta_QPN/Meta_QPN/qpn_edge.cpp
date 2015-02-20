@@ -24,4 +24,5 @@ std::ostream& qpn_edge::writeGraphVizFormat(std::ostream& os)const
  std::ostream& operator<<(std::ostream& os, const qpn_edge& edge)
 	{
 	os<< edge.writeGraphVizFormat(os);
+	return os;
 	}
