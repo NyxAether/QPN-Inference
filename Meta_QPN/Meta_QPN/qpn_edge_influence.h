@@ -9,8 +9,14 @@ struct qpn_edge_influence :
 		~qpn_edge_influence(void);
 
 		Sign getSign();
-		std::ostream& writeGraphVizFormat(std::ostream& os);
 
+		std::ostream& writeGraphVizFormat(std::ostream& os) const;
+
+	//	virtual qpn_edge_influence& operator=(qpn_edge& edge);
+
+
+
+		//virtual void assign( qpn_edge& edge);
 		Sign sign;
 	};
 

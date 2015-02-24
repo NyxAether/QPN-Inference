@@ -78,13 +78,13 @@ void meta_qpn<NodeValue>::addQpn(qpn_undirected_type* new_qpn)
 template < typename NodeValue>
 void meta_qpn<NodeValue>::observeNodeValue(std::string nName, NodeValue value)
 	{
-
+	qpn_directed.front()->observeNodeValue(nName, value);
 	}
 
 template < typename NodeValue>
 void meta_qpn<NodeValue>::observeNodeSign(std::string nName, Sign sign)
 	{
-	qpn[nName].assign = sign;
+	qpn_directed.front()->observeNodeVariation(nName, sign);
 	std::map<std::string, bool> colorMap = std::map<std::string, bool>();
 	colorMap[nName]=true;
 	propagate(nName,colorMap,true);
@@ -95,30 +95,30 @@ void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::strin
 	{
 	colorMap[nName]=true;
 	//Directed
-	for (std::list<qpn_directed_type*>::iterator it_qpn = qpn_directed.begin();it_qpn != qpn_directed.cend();it_qpn++)
+	for (std::list<qpn_directed_type*>::iterator it_qpn_dir = qpn_directed.begin();it_qpn_dir != qpn_directed.cend();it_qpn_dir++)
 		{
 		std::map<std::string, bool> nextNodes = std::map<std::string, bool> ();
-		if(*it_qpn->exists(nName))
+		if((*it_qpn_dir)->exists(nName))
 			{
-			*it_qpn->propagate(nName,colorMap, fromChild, nextNodes)
-				for(std::map<std::string, bool>::iterator it_nName;it_nName!=nextNodes.cend();it_nName++)
+			(*it_qpn_dir)->propagate(nName,colorMap, fromChild, nextNodes);
+				for(std::map<std::string, bool>::iterator it_nName = nextNodes.begin();it_nName!=nextNodes.cend();it_nName++)
 					{
-					propagate(it_nName->first,std::map<std::string, bool>(colorMap),it_nName->second)
+					propagate((*it_nName).first,std::map<std::string, bool>(colorMap),it_nName->second);
 					}
 			}
 		}
 
 	//Undirected
-	for (std::list<qpn_undirected_type*>::iterator it_qpn = qpn_directed.begin();it_qpn != qpn_undirected.cend();it_qpn++)
+	for (std::list<qpn_undirected_type*>::iterator it_qpn_undir = qpn_undirected.begin();it_qpn_undir != qpn_undirected.cend();it_qpn_undir++)
 		{
 		std::map<std::string, bool> nextNodes = std::map<std::string, bool> ();
-		if(*it_qpn->exists(nName))
+		if((*it_qpn_undir)->exists(nName))
 			{
-			*it_qpn->propagate(nName,colorMap, false, nextNodes)
-				for(std::map<std::string, bool>::iterator it_nName;it_nName!=nextNodes.cend();it_nName++)
+			(*it_qpn_undir)->propagate(nName,colorMap, false, nextNodes);
+				for(std::map<std::string, bool>::iterator it_nName = nextNodes.begin();it_nName!=nextNodes.cend();it_nName++)
 					{
 					//In qpns undirected, from child need to be false everytime due to the indirection of the function target, source, out_egde, in_edge in those case.
-					propagate(it_nName->first,std::map<std::string, bool>(colorMap),false)
+					propagate((*it_nName).first,std::map<std::string, bool>(colorMap),false);
 					}
 			}
 		}
@@ -127,9 +127,16 @@ void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::strin
 template < typename NodeValue>
 void meta_qpn<NodeValue>::writeGraphViz(std::ostream& out)
 	{
+	out<<"digraph G {"<<std::endl;
+	qpn_directed.front()->writeGraphVizNodes(out);
 	for(std::list<qpn_directed_type*>::iterator it = qpn_directed.begin(); it!=qpn_directed.cend(); it++)
 		{
-		(*it)->writeGraphVizNodes(out);
+		(*it)->writeGraphVizEdges(out);
 		}
+	for(std::list<qpn_undirected_type*>::iterator it = qpn_undirected.begin(); it!=qpn_undirected.cend(); it++)
+		{
+		(*it)->writeGraphVizEdges(out);
+		}
+	out<<"}"<<std::endl;
 	}
 

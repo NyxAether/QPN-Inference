@@ -2,7 +2,7 @@
 #include "qpn_edge.h"
 
 
-qpn_edge::qpn_edge(void)
+qpn_edge::qpn_edge(void):name("qpn_edge")
 	{
 	}
 
@@ -18,11 +18,23 @@ Sign qpn_edge::getSign()
 
 std::ostream& qpn_edge::writeGraphVizFormat(std::ostream& os)const
 	{
-		return os;
+		return os<<"test";
 	}
+
+//qpn_edge& qpn_edge::operator=(qpn_edge& edge)
+//	{
+//		edge.assign(*this);
+//		return edge;
+//	}
+
+//inline void qpn_edge::assign( qpn_edge& edge)
+//	{
+//	edge.name = name;
+//	}
+
 
  std::ostream& operator<<(std::ostream& os, const qpn_edge& edge)
 	{
-	os<< edge.writeGraphVizFormat(os);
-	return os;
+	return edge.writeGraphVizFormat(os);
+
 	}

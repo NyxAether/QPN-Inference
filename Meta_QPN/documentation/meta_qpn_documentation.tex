@@ -52,7 +52,7 @@
 \newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
 \makeatother
 
-\newcommand{\reporttitle}{Définitions et autres notes pour la lecture d'articles}     % Titre
+\newcommand{\reporttitle}{Documentation sur l'utilisation du MétaQPN}     % Titre
 \newcommand{\reportauthor}{Romain \textsc{Rincé}} % Auteur
 \newcommand{\reportsubject}{} % Sujet
 \newcommand{\HRule}{\rule{\linewidth}{0.3mm}}
@@ -112,6 +112,7 @@
 
 \end{center}
 
+
   
 %\cleardoublepage
 %\null
@@ -130,113 +131,46 @@
 %
 %
 %\newpage
-
-\section{Règles essentielles}
-
-\subsection*{Règle de Bayes}\begin{equation}
-P(x|y) = \frac{P(y|x).P(x)}{P(y)}
-\end{equation}
-
-\begin{equation}
-P(x|y) = \frac{P(xy)}{P(y)}
-\end{equation}
-
-\subsection*{Opérateurs}
-
-\begin{table}[h]
-\centering
-\begin{minipage}{0.4\textwidth}
-\flushright
-
-\begin{tabular}{c|cccc}
-$\otimes$ & $+$ & $-$ & $0$ & ?\\
-\hline
-$+$ & $+$ & $-$ & $0$ & ?\\
-$-$ & $-$ & $+$ & $0$ & ?\\
-$0$ & $0$ & $0$ & $0$ & $0$\\
-? & ? & ? & $0$ & ?\\
-
-\end{tabular}
-\end{minipage}\hspace{1em}
-\begin{minipage}{0.4\textwidth}
-\flushleft
-
-\begin{tabular}{c|cccc}
-$\oplus$ & $+$ & $-$ & $0$ & ?\\
-\hline
-$+$ & $+$ & ? & $+$ & ?\\
-$-$ & ? & $-$ & $-$ & ?\\
-$0$ & $+$ & $-$ & $0$ & ?\\
-? & ? & ? & ? & ?\\
-
-\end{tabular}
-\end{minipage}
-\end{table}
-
-\subsection*{Influence}
-\begin{align*}
-&\forall x \in \cup_{C\in V(t)\backslash \lbrace A \rbrace } \pi_G(C) \backslash V(t)\\
-&S_G^+(A,B,t) \iff P(b|ax)\geq P(b|\bar{a}x)
-\end{align*}
-
-\subsection*{Synergies}
-\begin{align*}
-\intertext{Pour un sous-graphe}
-A \rightarrow C, B \rightarrow C
-\intertext{On défini la \textbf{synergie additive} :}
-&\forall x \in \pi_G(C) \backslash A,B\})\\
-&Y_G^+(\lbrace A,B\rbrace ,C) \iff P(c|abx) + P(c|\bar{a}\bar{b}x) \geq P(c|a\bar{b}x + P(c|\bar{a}bx)
-\end{align*}
-
-\begin{align*}
-\intertext{On défini la \textbf{synergie produit} :}
-&\forall x \in \pi_G(C) \backslash A,B\})\\
-&X_G^-(\lbrace A,B\rbrace ,C) \iff P(c_0|abx) . P(c_0|\bar{a}\bar{b}x) \leq P(c_0|a\bar{b}x . P(c_0|\bar{a}bx)
-\end{align*}
+\section{Présentation}
+La structure MétaQPN a pour objectif de pouvoir définir rapidement de nouveaux types de QPN sans avoir à ré-implémenter tous les algorithmes de parcours et de gestion des nœuds et arêtes.
 
 
-\section{Choix des voisins pour la propagation}
-Si A reçoit un message de B :
-\begin{align*}
-\intertext{Soit}
-&G=(V_G, A_G)\\
-&A,B\in V_G\\
-&O \subseteq V_G\quad \text{les noeuds observés}\\
-&X = \{X_i|X_i\in \sigma_G(A), \sigma_G^*(X_i)\cap O \neq \emptyset\}\quad \text{les enfants de A ayant un descendant observé}
-\intertext{Les voisins de A sont définis par :}
-&N = \left\{
-\begin{array}{l l}
-\sigma_G(A) \cup (\pi_G(X)\backslash\{A\}) & \text{if}\ B\rightarrow A\in A(G);\\
-\pi_G(A) \cup (\sigma_G(A)\backslash \{B\})\cup (\pi_G(X)\backslash\{A\}) & \text{if}\ A \rightarrow B \in A(G).
-\end{array} 
-\right. \\
-&\intertext{C'est à dire :}
-&N = \left\{
-\begin{array}{l l}
-\text{Les fils de $A$ et leurs parents s'ils ont un descendant observé} & \text{if}\ B\rightarrow A\in A(G);\\
-\text{Idem $+$ les parents de $A$} & \text{if}\ A \rightarrow B \in A(G).
-\end{array} 
-\right. \\
-&\intertext{Les voisins \textbf{actifs} de A sont définis par $N\backslash O$}
-\end{align*}
+\section{Création d'un nouveau type de QPN}
+La définition de QPN que nous utilisons est légèrement modifiée dans le code puisque un QPN est défini par un type de relation qui existe entre les nœuds de votre graphe. Si vous souhaitez créé un QPN qui possède plus d'un type de relation, il vous faudra donc créer autant de QPNs dans le code. Ces QPNs sont ensuite fourni au MétaQPN qui se charge de leur gestion. 
 
-\section{Influences non-monotones}
-Pour un graphe $A \rightarrow B, C\rightarrow B$
-\begin{align*}
-\intertext{On défini une \textbf{influence non-monotone} :}
-&y,y' \in \pi_G(B) \backslash \{A\})\\
-&P(b|ay) > P(b|\bar{a}y) \quad\text{et}\quad P(b|ay') < P(b|\bar{a}y')
-\end{align*}
-\paragraph{ Influences non-monotones à un actionneur}
-\begin{align*}
-S^{\sim_C}(A,B) \wedge Y^\delta(\{A,C\},B) \wedge C = c_i \implies S^{\delta \otimes sign[c_i]}(A,B)
-\end{align*}
-\paragraph{ Influences non-monotones à plusieurs actionneurs}
-\begin{align*}
-\intertext{La relation est généralisable pour plusieurs actionneurs $P_i \in P$:}
-&S^{\sim_P}(A,B) \wedge \underset{P_i\in P}{\bigwedge} Y^{\delta_i}(\{A, P_i\},B) \wedge P = \underset{P_i\in P}{\bigwedge}p_{ij} \implies S^{\oplus_{P_i\in P}(\delta_i\otimes sign[p_{ij}])}(A,B)
-\end{align*}
+Ainsi, si vous souhaitez créer une modèle de QPN simple qui gère les influences et la synergie produit, il vous sera nécessaire de créer un modèle de QPN pour les influences et un pour les synergies. Cela peut sembler compliqué, mais vous n'aurez besoin que de très peu de code pour chaque QPN implémenté.
 
-Lorsque un ou plusieurs actionneurs ne sont pas définie, l'influence propage le signe "\emph{?}".
+\subsection{Création du type d'arc}
+Avant de définir votre QPN, vous devez créer un type d'arc qui définira \emph{in fine} votre graphe. 
+
+Pour ce faire créer une classe héritant de \texttt{qpn\_edge} et redéfinissez les méthodes \texttt{Sign getSign();} et \texttt{ostream\& writeGraphVizFormat(ostream\& os) const;}.
+
+La première méthode doit pouvoir renvoyer le signe d'un arc au moment ou il est demandé (celui-ci pouvant dépendre du contexte). Lors de la construction de l'objet, penser donc à donner toutes les informations ou accès nécessaire à votre arc pour qu'il puisse répondre. cf. \ref{subsec:implement_new_qpn}
+
+La seconde méthode doit fournir les options qui seront nécessaire pour l'affichage des arcs avec GraphViz. Par exemple le signe pour les influences\footnote{label="-" par exemple}.
+
+\subsection{Implémenter le nouveau QPN}\label{subsec:implement_new_qpn}
+Une fois votre structure d'arc définie, il vous vaudra créer la structure QPN qui va les utiliser.
+
+Pour cela implémenter une classe qui hérite de \texttt{qpn\_descriptor}. \texttt{qpn\_descriptor} est défini avec deux templates. La première fixe le type de données dans le graphe qu'il est préférable de laisser générique afin de rester cohérent par la suite, mais cela vous regarde. Le second template doit être spécifié puisqu'il défini si votre graphe gère des arcs orientés ou non. Il peut donc être soit de type \texttt{boost::bidirectionalS} ou \texttt{boost::undirected}.
+
+Votre QPN doit implémenter deux méthodes virtuelles de \texttt{qpn\_descriptor} :
+\begin{itemize}
+\item \texttt{void addEdge(qpn\_edge\& new\_edge,  vector<string>\& args )} qui définie comment créer et ajouter un nouvel arc au graphe. Pour créer l'arc dans le graphe, il vous sera nécessaire de l'ajouter dans la structure de Boost Graph grâce à \texttt{add\_edge\_by\_label} par exemple qui vous renvoie un objet de type \texttt{Edge}. Cet objet doit être ajouté à \texttt{edgeMap} en tant que clef et votre structure d'arbre en tant que valeur.
+
+\item \texttt{void writeGraphVizEdges(ostream\& os)} qui définie comment afficher toutes les arêtes de votre graphe.
+\end{itemize}
+
+Le qpn (nœud et arc) est accessible à partir de l'attribut \texttt{qpn} défini dans le \texttt{qpn\_descriptor}.
+Votre QPN est prêt à être utilisé
+ 
+\section{Utiliser votre nouveau QPN}
+Pour utiliser votre graphe, vous devez avoir une instance de \texttt{meta\_qpn}, vous pouvez alors créer votre QPN et lui ajouter toutes les relations que vous souhaitez avec la méthode \texttt{addEdge} que vous avez normalement définie. 
+
+Une fois les arcs créés, ajoutez votre QPN au meta\_qpn avec la méthode \texttt{addQpn(new\_qpn)}.
+Faites de même avec tous les autres QPNs que vous avez pu créer. 
+
+À partir du méta\_qpn vous pouvez définir des nœuds observés (\texttt{observeNodeValue}) ou une variation de signe sur un nœud (\texttt{observeNodeSign}). Cette dernière méthode ayant pour effet de propager le signe, il est préférable de la lancer à la fin. Enfin \texttt{writeGraphViz(ostream\& out)} vous permet d'afficher le graphe au format GraphViz sur le flux de votre choix.
+
 
 \end{document}
