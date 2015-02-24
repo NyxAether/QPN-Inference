@@ -1,0 +1,242 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{ucs}
+\usepackage{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage[english,francais]{babel}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage[french]{varioref}
+\usepackage{fancyhdr}
+\usepackage{eurosym}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{color}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning,automata,shadows}
+\usepackage{parskip}
+
+\usepackage{amsmath,bm,times}
+%\pagestyle{fancy}
+
+%pour avancer ou reculer une date
+\usepackage{advdate}
+\newcommand{\advanceday}[1][-5]{%
+\begingroup
+\AdvanceDate[#1]%
+\today%
+\endgroup
+}%
+
+
+% \tikzset{
+%      frame/.style={
+%        rectangle, draw, 
+%        text width=5em, text centered,
+%        minimum height=4em,drop shadow,fill=white,
+%        rounded corners,
+%      },
+%      line/.style={
+%    	draw, -latex',rounded corners=2mm,
+%      }
+%}
+
+
+\makeatletter
+\newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
+\makeatother
+
+\newcommand{\reporttitle}{Définitions et autres notes pour la lecture d'articles}     % Titre
+\newcommand{\reportauthor}{Romain \textsc{Rincé}} % Auteur
+\newcommand{\reportsubject}{} % Sujet
+\newcommand{\HRule}{\rule{\linewidth}{0.3mm}}
+
+
+\hypersetup{
+    pdftitle={\reporttitle},%
+    pdfauthor={\reportauthor},%
+    pdfsubject={\reportsubject},%
+    pdfkeywords={rapport} {vos} {mots} {clés},
+    colorlinks=true,                % colorise les liens
+    breaklinks=true,                % permet les retours à la ligne pour les liens trop longs
+    urlcolor= blue,                 % couleur des hyperliens
+    linkcolor= BrickRed,                % couleur des liens internes aux documents (index, figures, tableaux, equations,...)
+    citecolor= green 
+}
+
+%Couverture 
+\widowpenalty=10000
+\clubpenalty=10000
+
+%\setlength{\parskip}{1ex} % Espace entre les paragraphes
+%\setlength{\parindent}{0pt}
+
+\begin{document}
+
+
+\begin{center}
+
+
+%    \includegraphics [width=43mm]{UnivNantes.jpg} \\[3.2cm]
+    %\textsc{Université de Nantes}
+
+
+%\textsc{\Large \reportsubject}\\[0.4cm]
+\HRule \\[0.3cm]
+{\bfseries \reporttitle}\\[0.3cm]
+\HRule \\[2ex]
+\emph{Auteur : } \reportauthor
+%\begin{minipage}[t]{0.3\textwidth}
+%  \begin{flushleft} \large
+%    \emph{Auteur :}\\
+%    \reportauthor
+%  \end{flushleft}
+%\end{minipage}
+%\begin{minipage}[t]{0.6\textwidth}
+%  \begin{flushright} \large
+%    \emph{Directeur de Recherche :} \\
+%    Régnier \textsc{Pirard}
+%   
+%  \end{flushright}
+%\end{minipage}
+%
+%\vfill
+%
+%{\large 2014-2015}
+
+\end{center}
+
+  
+%\cleardoublepage
+%\null
+
+%\lhead{\reportauthor}
+%\rhead{\reportsubject}
+%\lfoot{Université de Nantes}
+%\rfoot{2014-2015}
+%	
+%    
+%    
+%  \cleardoublepage % Dans le cas du recto verso, ajoute une page blanche si besoin
+%  \tableofcontents % Table des matières
+%  %\sloppy          % Justification moins stricte : des mots ne dépasseront pas des subsection*es
+%
+%
+%
+%\newpage
+
+\section{Règles essentielles}
+
+\subsection*{Règle de Bayes}\begin{equation}
+P(x|y) = \frac{P(y|x).P(x)}{P(y)}
+\end{equation}
+
+\begin{equation}
+P(x|y) = \frac{P(xy)}{P(y)}
+\end{equation}
+
+\subsection*{Opérateurs}
+
+\begin{table}[h]
+\centering
+\begin{minipage}{0.4\textwidth}
+\flushright
+
+\begin{tabular}{c|cccc}
+$\otimes$ & $+$ & $-$ & $0$ & ?\\
+\hline
+$+$ & $+$ & $-$ & $0$ & ?\\
+$-$ & $-$ & $+$ & $0$ & ?\\
+$0$ & $0$ & $0$ & $0$ & $0$\\
+? & ? & ? & $0$ & ?\\
+
+\end{tabular}
+\end{minipage}\hspace{1em}
+\begin{minipage}{0.4\textwidth}
+\flushleft
+
+\begin{tabular}{c|cccc}
+$\oplus$ & $+$ & $-$ & $0$ & ?\\
+\hline
+$+$ & $+$ & ? & $+$ & ?\\
+$-$ & ? & $-$ & $-$ & ?\\
+$0$ & $+$ & $-$ & $0$ & ?\\
+? & ? & ? & ? & ?\\
+
+\end{tabular}
+\end{minipage}
+\end{table}
+
+\subsection*{Influence}
+\begin{align*}
+&\forall x \in \cup_{C\in V(t)\backslash \lbrace A \rbrace } \pi_G(C) \backslash V(t)\\
+&S_G^+(A,B,t) \iff P(b|ax)\geq P(b|\bar{a}x)
+\end{align*}
+
+\subsection*{Synergies}
+\begin{align*}
+\intertext{Pour un sous-graphe}
+A \rightarrow C, B \rightarrow C
+\intertext{On défini la \textbf{synergie additive} :}
+&\forall x \in \pi_G(C) \backslash A,B\})\\
+&Y_G^+(\lbrace A,B\rbrace ,C) \iff P(c|abx) + P(c|\bar{a}\bar{b}x) \geq P(c|a\bar{b}x + P(c|\bar{a}bx)
+\end{align*}
+
+\begin{align*}
+\intertext{On défini la \textbf{synergie produit} :}
+&\forall x \in \pi_G(C) \backslash A,B\})\\
+&X_G^-(\lbrace A,B\rbrace ,C) \iff P(c_0|abx) . P(c_0|\bar{a}\bar{b}x) \leq P(c_0|a\bar{b}x . P(c_0|\bar{a}bx)
+\end{align*}
+
+
+\section{Choix des voisins pour la propagation}
+Si A reçoit un message de B :
+\begin{align*}
+\intertext{Soit}
+&G=(V_G, A_G)\\
+&A,B\in V_G\\
+&O \subseteq V_G\quad \text{les noeuds observés}\\
+&X = \{X_i|X_i\in \sigma_G(A), \sigma_G^*(X_i)\cap O \neq \emptyset\}\quad \text{les enfants de A ayant un descendant observé}
+\intertext{Les voisins de A sont définis par :}
+&N = \left\{
+\begin{array}{l l}
+\sigma_G(A) \cup (\pi_G(X)\backslash\{A\}) & \text{if}\ B\rightarrow A\in A(G);\\
+\pi_G(A) \cup (\sigma_G(A)\backslash \{B\})\cup (\pi_G(X)\backslash\{A\}) & \text{if}\ A \rightarrow B \in A(G).
+\end{array} 
+\right. \\
+&\intertext{C'est à dire :}
+&N = \left\{
+\begin{array}{l l}
+\text{Les fils de $A$ et leurs parents s'ils ont un descendant observé} & \text{if}\ B\rightarrow A\in A(G);\\
+\text{Idem $+$ les parents de $A$} & \text{if}\ A \rightarrow B \in A(G).
+\end{array} 
+\right. \\
+&\intertext{Les voisins \textbf{actifs} de A sont définis par $N\backslash O$}
+\end{align*}
+
+\section{Influences non-monotones}
+Pour un graphe $A \rightarrow B, C\rightarrow B$
+\begin{align*}
+\intertext{On défini une \textbf{influence non-monotone} :}
+&y,y' \in \pi_G(B) \backslash \{A\})\\
+&P(b|ay) > P(b|\bar{a}y) \quad\text{et}\quad P(b|ay') < P(b|\bar{a}y')
+\end{align*}
+\paragraph{ Influences non-monotones à un actionneur}
+\begin{align*}
+S^{\sim_C}(A,B) \wedge Y^\delta(\{A,C\},B) \wedge C = c_i \implies S^{\delta \otimes sign[c_i]}(A,B)
+\end{align*}
+\paragraph{ Influences non-monotones à plusieurs actionneurs}
+\begin{align*}
+\intertext{La relation est généralisable pour plusieurs actionneurs $P_i \in P$:}
+&S^{\sim_P}(A,B) \wedge \underset{P_i\in P}{\bigwedge} Y^{\delta_i}(\{A, P_i\},B) \wedge P = \underset{P_i\in P}{\bigwedge}p_{ij} \implies S^{\oplus_{P_i\in P}(\delta_i\otimes sign[p_{ij}])}(A,B)
+\end{align*}
+
+Lorsque un ou plusieurs actionneurs ne sont pas définie, l'influence propage le signe "\emph{?}".
+
+\end{document}
