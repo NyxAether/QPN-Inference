@@ -12,10 +12,10 @@ template < typename NodeValue, typename Direction >
 class qpn_descriptor
 	{
 
-	protected:
+	public:
 		//Defining the graph type used for QPN instantiation
 		typedef boost::labeled_graph<
-			boost::adjacency_list<boost::vecS, boost::vecS,  boost::bidirectionalS, qpn_node<NodeValue>, qpn_edge*>, std::string> GraphType;
+			boost::adjacency_list<boost::vecS, boost::vecS,  boost::bidirectionalS, boost::property<boost::vertex_name_t, std::string>, qpn_edge*>, std::string> GraphType;
 
 		//Defining vertices and edges for the graph
 		typedef typename boost::graph_traits<GraphType>::vertex_descriptor Vertex;
@@ -28,11 +28,11 @@ class qpn_descriptor
 		typedef typename boost::graph_traits<GraphType>::out_edge_iterator OutEIterator;
 
 	public:
-		qpn_descriptor(void):qpn(GraphType()), edgeMap(std::map<Edge, qpn_edge*>()){};
+		qpn_descriptor(void):qpn(GraphType()), nodeMap(std::map<std::string, qpn_node<NodeValue>*>()), edgeMap(std::map<Edge, qpn_edge*>()){};
 		virtual ~qpn_descriptor(void){};
 
 		virtual void addVertex(const std::string nName); 
-		virtual void addVertex(qpn_node<NodeValue>& node); 
+		virtual void addVertex(qpn_node<NodeValue>* node); 
 		virtual void addEdge(qpn_edge* new_edge,  std::vector<std::string>& args)= 0;
 		virtual void observeNodeValue(const std::string nName, NodeValue value);
 		virtual void observeNodeVariation(const std::string nName, const Sign& sign);
@@ -41,7 +41,8 @@ class qpn_descriptor
 		virtual void propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild, std::map<std::string, bool>& nextNodes);
 
 
-		virtual typename qpn_node<NodeValue>& getNode(const std::string nName);
+		virtual typename qpn_node<NodeValue>* getNode(const std::string nName);
+		virtual void setNode(const std::string nName, typename qpn_node<NodeValue>* node) ;
 		virtual std::list<std::string>* nodeNames();
 		virtual bool exists(const std::string nName) const;
 
@@ -52,39 +53,50 @@ class qpn_descriptor
 	protected:
 		GraphType qpn;
 		std::map<Edge, qpn_edge*> edgeMap;
+		std::map<std::string, qpn_node<NodeValue>*> nodeMap;
 	};
+
 
 
 template <typename NodeValue,  typename Direction>
 void qpn_descriptor<NodeValue,Direction>::addVertex(const std::string nName)
 	{
-	boost::add_vertex(nName, qpn);
-	qpn[nName].name =nName;
+	Vertex v =boost::add_vertex(nName, qpn);
+	get(boost::vertex_name, qpn)[v]=nName;
+	nodeMap[nName] = new qpn_node<NodeValue>();
+	nodeMap[nName]->name =nName;
 	}
 
 template <typename NodeValue,  typename Direction>
-void qpn_descriptor<NodeValue,Direction>::addVertex(qpn_node<NodeValue>& node)
+void qpn_descriptor<NodeValue,Direction>::addVertex(qpn_node<NodeValue>* node)
 	{
-	addVertex(node.name);
-	qpn[node.name] = node;
+	Vertex v =boost::add_vertex(node->name, qpn);
+	get(boost::vertex_name, qpn)[v]=node->name;
+	nodeMap[node->name] = node;
 	}
 
 template <typename NodeValue,  typename Direction>
 void qpn_descriptor<NodeValue,Direction>::observeNodeValue(const std::string nName, NodeValue value)
 	{
-	qpn[nName].setValue(value);
+	nodeMap[nName]->setValue(value);
 	}
 
 template <typename NodeValue,  typename Direction>
 void qpn_descriptor<NodeValue,Direction>::observeNodeVariation(const std::string nName, const Sign& sign)
 	{
-	qpn[nName].sign = sign; //There is no more modification because it's the role of the meta_qpn to propagate the sign
+	nodeMap[nName]->sign = sign; //There is no more modification because it's the role of the meta_qpn to propagate the sign
 	}
 
 template <typename NodeValue,  typename Direction>
-qpn_node<NodeValue>& qpn_descriptor<NodeValue, Direction>::getNode(const std::string nName)
+qpn_node<NodeValue>* qpn_descriptor<NodeValue, Direction>::getNode(const std::string nName)
 	{
-	return qpn[nName];
+	return nodeMap[nName];
+	}
+
+template < typename NodeValue, typename Direction >
+void qpn_descriptor<NodeValue, Direction>::setNode(const std::string nName, typename qpn_node<NodeValue>* node)
+	{
+	nodeMap[nName]=node;
 	}
 
 template <typename NodeValue,  typename Direction>
@@ -94,7 +106,7 @@ std::list<std::string>* qpn_descriptor<NodeValue, Direction>::nodeNames()
 	VIterator it, it_end;
 	for(boost::tie(it, it_end) = vertices(qpn); it!=it_end; it++)
 		{
-		nNames->push_back(boost::get(boost::vertex_bundle,qpn, *it).name);
+		nNames->push_back(boost::get(boost::vertex_name,qpn, *it));
 		}
 	return nNames;
 	}
@@ -110,18 +122,18 @@ template < typename NodeValue,  typename Direction >
 void qpn_descriptor<NodeValue, Direction>::propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild, std::map<std::string, bool>& nextNodes)
 	{
 	Vertex vertex = qpn.vertex(nName);
-	qpn_node<NodeValue>& node = qpn[nName];
+	qpn_node<NodeValue>* node = nodeMap[nName];
 	if(fromChild){
 		InEIterator in_it, in_end;
 		for(boost::tie(in_it, in_end) = boost::in_edges(vertex,qpn); in_it != in_end ; in_it++){
 			qpn_edge& edge=*edgeMap[*in_it] ;
 			Vertex source = boost::source(*in_it,qpn);
-			qpn_node<NodeValue> source_node = boost::get(boost::vertex_bundle,qpn,source);
-			Sign newSign = (node.sign * edge.getSign()) + source_node.sign;
-			if(!source_node.valIsSet && !colorMap[source_node.name] && newSign != source_node.sign)
+			qpn_node<NodeValue>* source_node = nodeMap[boost::get(boost::vertex_name,qpn,source)];
+			Sign newSign = (node->sign * edge.getSign()) + source_node->sign;
+			if(!source_node->valIsSet && !colorMap[source_node->name] && newSign != source_node->sign)
 				{
-				qpn[source_node.name].sign = newSign;
-				nextNodes[source_node.name] = true;//Define  where the sign come from;
+				nodeMap[source_node->name]->sign = newSign;
+				nextNodes[source_node->name] = true;//Define  where the sign come from;
 				}
 			}
 		}
@@ -129,12 +141,12 @@ void qpn_descriptor<NodeValue, Direction>::propagate(const std::string nName, st
 	for(boost::tie(out_it, out_end) = boost::out_edges(vertex,qpn); out_it != out_end ; out_it++){
 		qpn_edge& edge=*edgeMap[*out_it] ;
 		Vertex target = boost::target(*out_it,qpn);
-		qpn_node<NodeValue> target_node = boost::get(boost::vertex_bundle,qpn,target);
-		Sign newSign = (node.sign * edge.getSign()) + target_node.sign;
-		if(!target_node.valIsSet && !colorMap[target_node.name] && newSign != target_node.sign)
+		qpn_node<NodeValue>* target_node = nodeMap[boost::get(boost::vertex_name,qpn,target)];
+		Sign newSign = (node->sign * edge.getSign()) + target_node->sign;
+		if(!target_node->valIsSet && !colorMap[target_node->name] && newSign != target_node->sign)
 			{
-			qpn[target_node.name].sign = newSign;
-			nextNodes[target_node.name] = false;//Define  where the sign come from;
+			nodeMap[target_node->name]->sign = newSign;
+			nextNodes[target_node->name] = false;//Define  where the sign come from;
 			}
 		}
 	}
@@ -146,8 +158,8 @@ void qpn_descriptor<NodeValue, Direction>::writeGraphVizNodes(std::ostream& os)
 	VIterator it, it_end;
 	for(std::tie(it,it_end) = boost::vertices(qpn); it!=it_end; it++)
 		{
-		qpn_node<NodeValue> node =boost::get(boost::vertex_bundle, qpn, *it);
-		os<<node.name<<node<<";"<<endl;
+		qpn_node<NodeValue>* node =nodeMap[boost::get(boost::vertex_name, qpn, *it)];
+		os<<node->name<<(*node)<<";"<<endl;
 		}
 	}
 
@@ -157,28 +169,28 @@ void qpn_descriptor<NodeValue, Direction>::writeGraphVizNodes(std::ostream& os)
 template < typename NodeValue>
 class qpn_descriptor <NodeValue, boost::undirectedS>
 	{
+	public:
+		//Defining the graph type used for QPN instantiation
+		typedef boost::labeled_graph<
+			boost::adjacency_list<boost::vecS, boost::vecS,  boost::undirectedS, boost::property<boost::vertex_name_t, std::string>, qpn_edge*>, std::string> GraphType;
 
-	//Defining the graph type used for QPN instantiation
-	typedef boost::labeled_graph<
-		boost::adjacency_list<boost::vecS, boost::vecS,  boost::undirectedS, qpn_node<NodeValue>, qpn_edge*>, std::string> GraphType;
+		//Defining vertices and edges for the graph
+		typedef typename boost::graph_traits<GraphType>::vertex_descriptor Vertex;
+		typedef typename boost::graph_traits<GraphType>::edge_descriptor Edge;
 
-	//Defining vertices and edges for the graph
-	typedef typename boost::graph_traits<GraphType>::vertex_descriptor Vertex;
-	typedef typename boost::graph_traits<GraphType>::edge_descriptor Edge;
-
-	//Defining vertex and edge iterators
-	typedef typename boost::graph_traits<GraphType>::vertex_iterator VIterator;
-	typedef typename boost::graph_traits<GraphType>::edge_iterator EIterator;
-	typedef typename boost::graph_traits<GraphType>::in_edge_iterator InEIterator;
-	typedef typename boost::graph_traits<GraphType>::out_edge_iterator OutEIterator;
+		//Defining vertex and edge iterators
+		typedef typename boost::graph_traits<GraphType>::vertex_iterator VIterator;
+		typedef typename boost::graph_traits<GraphType>::edge_iterator EIterator;
+		typedef typename boost::graph_traits<GraphType>::in_edge_iterator InEIterator;
+		typedef typename boost::graph_traits<GraphType>::out_edge_iterator OutEIterator;
 
 	public:
-		qpn_descriptor(void):qpn(GraphType()),edgeMap(std::map<Edge, qpn_edge>()){};
+		qpn_descriptor(void):qpn(GraphType()),nodeMap(std::map<std::string, qpn_node<NodeValue>*>()),edgeMap(std::map<Edge, qpn_edge*>()){};
 		virtual ~qpn_descriptor(void){};
 
 		virtual void addVertex(const std::string nName); 
-		virtual void addVertex(qpn_node<NodeValue>& node); 
-		virtual void addEdge(qpn_edge* new_edge, const std::vector<std::string>& args)= 0;
+		virtual void addVertex(qpn_node<NodeValue>* node); 
+		virtual void addEdge(qpn_edge* new_edge,  std::vector<std::string>& args)= 0;
 		virtual void observeNodeValue(const std::string nName, NodeValue value);
 		virtual void observeNodeVariation(const std::string nName, const Sign& sign);
 
@@ -186,7 +198,8 @@ class qpn_descriptor <NodeValue, boost::undirectedS>
 		virtual void propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild, std::map<std::string, bool>& nextNodes);
 
 
-		virtual typename qpn_node<NodeValue>& getNode(const std::string nName);
+		virtual typename qpn_node<NodeValue>* getNode(const std::string nName);
+		virtual void setNode(const std::string nName, typename qpn_node<NodeValue>* node);
 		virtual std::list<std::string>* nodeNames();
 		virtual bool exists(const std::string nName) const;
 
@@ -196,39 +209,49 @@ class qpn_descriptor <NodeValue, boost::undirectedS>
 	protected:
 		GraphType qpn;
 		std::map<Edge, qpn_edge*> edgeMap;
+		std::map<std::string, qpn_node<NodeValue>*> nodeMap;
 	};
 
 
 template <typename NodeValue>
 void qpn_descriptor<NodeValue,boost::undirectedS>::addVertex(const std::string nName)
 	{
-	boost::add_vertex(nName, qpn);
-	qpn[nName].name =nName;
+	Vertex v = boost::add_vertex(nName, qpn);
+	get(boost::vertex_name, qpn)[v]=nName;
+	nodeMap[nName] = new qpn_node<NodeValue>;
+	nodeMap[nName]->name =nName;
 	}
 
 template <typename NodeValue>
-void qpn_descriptor<NodeValue,boost::undirectedS>::addVertex(qpn_node<NodeValue>& node)
+void qpn_descriptor<NodeValue,boost::undirectedS>::addVertex(qpn_node<NodeValue>* node)
 	{
-	addVertex(node.name);
-	qpn[node.name] = node;
+	Vertex v =boost::add_vertex(node->name, qpn);
+	get(boost::vertex_name, qpn)[v]=node->name;
+	nodeMap[node->name] = node;
 	}
 
 template <typename NodeValue>
 void qpn_descriptor<NodeValue,boost::undirectedS>::observeNodeValue(const std::string nName, NodeValue value)
 	{
-qpn[nName].setValue(value);
+	nodeMap[nName]->setValue(value);
 	}
 
 template <typename NodeValue>
 void qpn_descriptor<NodeValue,boost::undirectedS>::observeNodeVariation(const std::string nName, const Sign& sign)
 	{
-	qpn[nName].sign = sign; //There is no more modification because it's the role of the meta_qpn to propagate the sign
+	nodeMap[nName]->sign = sign; //There is no more modification because it's the role of the meta_qpn to propagate the sign
 	}
 
 template <typename NodeValue>
-qpn_node<NodeValue>& qpn_descriptor<NodeValue, boost::undirectedS>::getNode(const std::string nName)
+qpn_node<NodeValue>* qpn_descriptor<NodeValue, boost::undirectedS>::getNode(const std::string nName)
 	{
-	return qpn[nName];
+	return nodeMap[nName];
+	}
+
+template < typename NodeValue>
+void qpn_descriptor<NodeValue, boost::undirectedS>::setNode(const std::string nName, typename qpn_node<NodeValue>* node)
+	{
+	nodeMap[nName]=node;
 	}
 
 template <typename NodeValue>
@@ -238,7 +261,7 @@ std::list<std::string>* qpn_descriptor<NodeValue, boost::undirectedS>::nodeNames
 	VIterator it, it_end;
 	for(boost::tie(it, it_end) = vertices(qpn); it!=it_end; it++)
 		{
-		nNames->push_back(boost::get(boost::vertex_bundle,qpn, *it).name);
+		nNames->push_back(boost::get(boost::vertex_name,qpn, *it));
 		}
 	return nNames;
 	}
@@ -253,18 +276,19 @@ template < typename NodeValue>
 void qpn_descriptor< NodeValue, boost::undirectedS>::propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild, std::map<std::string, bool>& nextNodes)
 	{
 	Vertex vertex = qpn.vertex(nName);
-	qpn_node<NodeValue>& node = qpn[nName];
+	qpn_node<NodeValue>* node = nodeMap[nName];
 
 	OutEIterator out_it, out_end;
 	for(boost::tie(out_it, out_end) = boost::out_edges(vertex,qpn); out_it != out_end ; out_it++){
 		qpn_edge& edge=*edgeMap[*out_it] ;
 		Vertex target = boost::target(*out_it,qpn);
-		qpn_node<NodeValue> target_node = boost::get(boost::vertex_bundle,qpn,target);
-		Sign newSign = (node.sign * edge.getSign()) + target_node.sign;
-		if(!target_node.valIsSet && !colorMap[target_node.name] && newSign != target_node.sign)
+		qpn_node<NodeValue>* target_node = nodeMap[boost::get(boost::vertex_name,qpn,target)];
+		Sign newSign = (node->sign * edge.getSign()) + target_node->sign;
+		std::cout<<node->sign<<edge.getSign()<< target_node->sign;
+		if(!target_node->valIsSet && !colorMap[target_node->name] && newSign != target_node->sign)
 			{
-			qpn[target_node.name].sign = newSign;
-			nextNodes[target_node.name] = true;//Define  where the sign come from;
+			nodeMap[target_node->name]->sign = newSign;
+			nextNodes[target_node->name] = true;//Define  where the sign come from;
 			}
 		}
 	}
@@ -278,8 +302,8 @@ void qpn_descriptor<NodeValue, boost::undirectedS>::writeGraphVizNodes(std::ostr
 	VIterator it, it_end;
 	for(std::tie(it,it_end) = boost::vertices(qpn); it!=it_end; it++)
 		{
-		qpn_node<NodeValue> node =boost::get(boost::vertex_bundle, qpn, *it);
-		os<<node.name<<node<<";"<<endl;
+		qpn_node<NodeValue>* node =nodeMap[boost::get(boost::vertex_name, qpn, *it)];
+		os<<node->name<<(*node)<<";"<<endl;
 		}
 	}
 

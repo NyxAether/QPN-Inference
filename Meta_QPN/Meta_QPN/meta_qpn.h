@@ -32,7 +32,12 @@ class meta_qpn
 				{
 				if(! to->exists(*nName))
 					{
-					to->addVertex(to->getNode(*nName));
+					to->addVertex(from->getNode(*nName));
+					}
+				else
+					{
+					std::cout<<(*nName);
+					from->setNode(*nName, to->getNode(*nName));
 					}
 				}
 			};

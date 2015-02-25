@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "boost\spirit\home\classic\dynamic\impl\conditions.ipp"
 #include "qpn_influence.h"
+#include "qpn_product_synergy.h"
 #include "meta_qpn.h"
 #include "qpn_descriptor.h"
   #include <fstream> 
@@ -14,46 +15,63 @@ using namespace boost;
 int _tmain(int argc, _TCHAR* argv[])
 	{
 	meta_qpn< int> qpn_manager = meta_qpn< int>();
-	qpn_descriptor<int , boost::bidirectionalS>* qpn =new qpn_influence<int>(); 
-	qpn->addVertex("X1");
-	qpn->addVertex("X2");
-	qpn->addVertex("X3");
-	qpn->addVertex("X4");
-	qpn->addVertex("X5");
+
+	//Influences
+	qpn_descriptor<int , boost::bidirectionalS>* qpn_influences =new qpn_influence<int>(); 
+	qpn_influences->addVertex("X1");
+	qpn_influences->addVertex("X2");
+	qpn_influences->addVertex("X3");
+	qpn_influences->addVertex("X4");
+	qpn_influences->addVertex("X5");
 
 	vector<string> v = vector<string>();
 	v.push_back("X1");
 	v.push_back("X2");
 	qpn_edge_influence* edge = new qpn_edge_influence(Sign::PLUS_SIGN);
-	qpn->addEdge(edge, v);
+	qpn_influences->addEdge(edge, v);
 
 	v = vector<string>();
 	v.push_back("X1");
 	v.push_back("X3");
 	 edge = new qpn_edge_influence(Sign::MINUS_SIGN);
-	qpn->addEdge(edge, v);
+	qpn_influences->addEdge(edge, v);
 
 	 v = vector<string>();
 	v.push_back("X3");
 	v.push_back("X4");
 	 edge = new qpn_edge_influence(Sign::MINUS_SIGN);
-	qpn->addEdge(edge, v);
+	qpn_influences->addEdge(edge, v);
 
 	v = vector<string>();
 	v.push_back("X2");
 	v.push_back("X4");
 	edge = new qpn_edge_influence(Sign::PLUS_SIGN);
-	qpn->addEdge(edge, v);
+	qpn_influences->addEdge(edge, v);
 
 	v = vector<string>();
 	v.push_back("X5");
 	v.push_back("X2");
 	edge = new qpn_edge_influence(Sign::MINUS_SIGN);
-	qpn->addEdge(edge, v);
+	qpn_influences->addEdge(edge, v);
 
-	qpn->observeNodeValue("X4",0);
+	qpn_influences->observeNodeValue("X4",0);
+	qpn_manager.addQpn(qpn_influences);
 
-	qpn_manager.addQpn(qpn);
+	//Synergies
+	qpn_descriptor<int , boost::undirectedS>* qpn_synergies =new qpn_product_synergy<int>(); 
+
+	v = vector<string>();
+	v.push_back("X2");
+	v.push_back("X3");
+	v.push_back("X4");
+	map<int,Sign> signMap = map<int,Sign>();
+	signMap[0]=Sign::MINUS_SIGN;
+	signMap[1]=Sign::PLUS_SIGN;
+	qpn_edge_product_synergy<int>* esyn = new qpn_edge_product_synergy<int>(signMap);
+	qpn_synergies->addEdge(esyn, v);
+
+	qpn_manager.addQpn(qpn_synergies);
+	
 	qpn_manager.observeNodeSign("X5",Sign::MINUS_SIGN);
 	ofstream outf =ofstream("net.gv");
 	qpn_manager.writeGraphViz(outf);

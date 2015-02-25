@@ -76,9 +76,9 @@ void qpn_influence<NodeValue>::writeGraphVizEdges(std::ostream& os)
 	for (std::tie(it,it_end)=boost::edges(qpn); it!=it_end;it++)
 		{
 		qpn_edge& edge = *edgeMap[*it];
-		qpn_node<NodeValue> source = boost::get(boost::vertex_bundle,qpn, boost::source(*it,qpn));
-		qpn_node<NodeValue> target = boost::get(boost::vertex_bundle,qpn, boost::target(*it,qpn));
-		os<<source.name<<"->"<<target.name<<"["<<edge<<"];"<<endl;
+		qpn_node<NodeValue>* source = nodeMap[boost::get(boost::vertex_name,qpn, boost::source(*it,qpn))];
+		qpn_node<NodeValue>* target = nodeMap[boost::get(boost::vertex_name,qpn, boost::target(*it,qpn))];
+		os<<source->name<<"->"<<target->name<<"["<<edge<<"];"<<endl;
 		}
 	}
 
