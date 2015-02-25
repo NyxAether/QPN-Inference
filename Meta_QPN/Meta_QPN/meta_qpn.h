@@ -19,7 +19,9 @@ class meta_qpn
 		
 		void observeNodeSign(std::string nName, Sign sign);
 
-		void propagate(const std::string nName, std::map<std::string, bool> colorMap, bool fromChild);
+		void propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild);
+
+		bool hasDescendent(const std::string nName, std::map<std::string, bool>& colorMap);
 
 		void  writeGraphViz(std::ostream& out);
 
@@ -36,7 +38,6 @@ class meta_qpn
 					}
 				else
 					{
-					std::cout<<(*nName);
 					from->setNode(*nName, to->getNode(*nName));
 					}
 				}
@@ -96,7 +97,7 @@ void meta_qpn<NodeValue>::observeNodeSign(std::string nName, Sign sign)
 	}
 
 template < typename NodeValue>
-void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::string, bool> colorMap, bool fromChild)
+void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild)
 	{
 	colorMap[nName]=true;
 	//Directed
@@ -105,7 +106,7 @@ void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::strin
 		std::map<std::string, bool> nextNodes = std::map<std::string, bool> ();
 		if((*it_qpn_dir)->exists(nName)) //if the current node exist in it
 			{
-			(*it_qpn_dir)->propagate(nName,colorMap, fromChild, nextNodes);// The sign is propagate for each edges
+			(*it_qpn_dir)->propagate(nName,colorMap, (fromChild ||hasDescendent(nName,std::map<std::string, bool> ())), nextNodes);// The sign is propagate for each edges
 				for(std::map<std::string, bool>::iterator it_nName = nextNodes.begin();it_nName!=nextNodes.cend();it_nName++) // and propagate is launch again on each node modified
 					{
 					propagate((*it_nName).first,std::map<std::string, bool>(colorMap),it_nName->second);
@@ -127,6 +128,31 @@ void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::strin
 					}
 			}
 		}
+	}
+
+
+template < typename NodeValue>
+bool meta_qpn<NodeValue>::hasDescendent(const std::string nName, std::map<std::string, bool>& colorMap)
+	{
+	colorMap[nName]=true;
+	//Directed
+	for (std::list<qpn_directed_type*>::iterator it_qpn_dir = qpn_directed.begin();it_qpn_dir != qpn_directed.cend();it_qpn_dir++) //For each QPN
+		{
+		if((*it_qpn_dir)->exists(nName))
+			{
+			list<qpn_node<NodeValue>> children =list<qpn_node<NodeValue>>();
+			(*it_qpn_dir)->getChildren(nName, children);
+				for(list< qpn_node<NodeValue>>::iterator child = children.begin();child!=children.cend(); child++)
+					{
+					if(child->valIsSet)
+						return true;
+					if(!colorMap[child->name])
+						if(hasDescendent(child->name, std::map<std::string, bool>(colorMap)))
+							return true;
+					}
+			}
+		}
+	return false;
 	}
 
 template < typename NodeValue>

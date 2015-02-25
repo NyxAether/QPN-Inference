@@ -43,6 +43,9 @@ class qpn_descriptor
 
 		virtual typename qpn_node<NodeValue>* getNode(const std::string nName);
 		virtual void setNode(const std::string nName, typename qpn_node<NodeValue>* node) ;
+
+		virtual void getChildren(const std::string nName,  std::list< qpn_node<NodeValue>>& children);
+
 		virtual std::list<std::string>* nodeNames();
 		virtual bool exists(const std::string nName) const;
 
@@ -97,6 +100,17 @@ template < typename NodeValue, typename Direction >
 void qpn_descriptor<NodeValue, Direction>::setNode(const std::string nName, typename qpn_node<NodeValue>* node)
 	{
 	nodeMap[nName]=node;
+	}
+
+
+
+template < typename NodeValue, typename Direction >
+void qpn_descriptor<NodeValue, Direction>::getChildren(const std::string nName,  std::list<  qpn_node<NodeValue>>& children)
+	{
+	OutEIterator out_it, out_end;
+	for(boost::tie(out_it, out_end) = boost::out_edges(qpn.vertex(nName),qpn); out_it != out_end ; out_it++){
+		children.push_back(*(nodeMap[boost::get(boost::vertex_name,qpn,boost::target(*out_it,qpn))]));
+		}
 	}
 
 template <typename NodeValue,  typename Direction>
@@ -302,7 +316,7 @@ void qpn_descriptor< NodeValue, boost::undirectedS>::propagate(const std::string
 		Vertex target = boost::target(*out_it,qpn);
 		qpn_node<NodeValue>* target_node = nodeMap[boost::get(boost::vertex_name,qpn,target)];
 		Sign newSign = (node->sign * edge.getSign()) + target_node->sign;
-		std::cout<<node->sign<<edge.getSign()<< target_node->sign;
+
 		if(!target_node->valIsSet && !colorMap[target_node->name] && newSign != target_node->sign)
 			{
 			nodeMap[target_node->name]->sign = newSign;

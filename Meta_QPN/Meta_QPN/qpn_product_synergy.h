@@ -36,7 +36,7 @@ void qpn_product_synergy<NodeValue>::addEdge(qpn_edge* new_edge, std::vector<std
 	qpn_edge_product_synergy<NodeValue> *cast_edge = dynamic_cast<qpn_edge_product_synergy<NodeValue> *>(new_edge);
 	if (NULL != cast_edge)
 	{
-	cast_edge->linkedNode = nodeMap[args[2]];
+	cast_edge->linkedNode = &(nodeMap[args[2]]);
 		edgeMap[e] = cast_edge;
 	}
 	}
