@@ -1,7 +1,6 @@
 // Meta_QPN.cpp : définit le point d'entrée pour l'application console.
 //
 
-#include "stdafx.h"
 #include "boost\spirit\home\classic\dynamic\impl\conditions.ipp"
 #include "qpn_influence.h"
 #include "qpn_product_synergy.h"
@@ -12,7 +11,7 @@
 using namespace std;
 using namespace boost;
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 	{
 	meta_qpn< int> qpn_manager = meta_qpn< int>();
 
@@ -54,7 +53,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	edge = new qpn_edge_influence(Sign::MINUS_SIGN);
 	qpn_influences->addEdge(edge, v);
 
-	qpn_influences->observeNodeValue("X4",0);
+
 	qpn_manager.addQpn(qpn_influences);
 
 	//Synergies
@@ -72,7 +71,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	qpn_manager.addQpn(qpn_synergies);
 	
-	qpn_manager.observeNodeSign("X5",Sign::MINUS_SIGN);
+	//Observe values and signs
+	qpn_manager.observeNodeValue("X4",1);
+	qpn_manager.observeNodeSign("X5",Sign::MINUS_SIGN); 
 	ofstream outf =ofstream("net.gv");
 	qpn_manager.writeGraphViz(outf);
 	return 0;

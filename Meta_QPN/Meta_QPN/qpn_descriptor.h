@@ -166,6 +166,9 @@ void qpn_descriptor<NodeValue, Direction>::writeGraphVizNodes(std::ostream& os)
 
 
 
+
+
+
 template < typename NodeValue>
 class qpn_descriptor <NodeValue, boost::undirectedS>
 	{
@@ -212,13 +215,12 @@ class qpn_descriptor <NodeValue, boost::undirectedS>
 		std::map<std::string, qpn_node<NodeValue>*> nodeMap;
 	};
 
-
 template <typename NodeValue>
 void qpn_descriptor<NodeValue,boost::undirectedS>::addVertex(const std::string nName)
 	{
-	Vertex v = boost::add_vertex(nName, qpn);
+	Vertex v =boost::add_vertex(nName, qpn);
 	get(boost::vertex_name, qpn)[v]=nName;
-	nodeMap[nName] = new qpn_node<NodeValue>;
+	nodeMap[nName] = new qpn_node<NodeValue>();
 	nodeMap[nName]->name =nName;
 	}
 
@@ -272,6 +274,22 @@ bool qpn_descriptor<NodeValue, boost::undirectedS>::exists(const std::string nNa
 	return qpn.vertex(nName) != boost::graph_traits<GraphType>::null_vertex();
 	}
 
+
+
+
+template < typename NodeValue>
+void qpn_descriptor<NodeValue, boost::undirectedS>::writeGraphVizNodes(std::ostream& os)
+	{
+	VIterator it, it_end;
+	for(std::tie(it,it_end) = boost::vertices(qpn); it!=it_end; it++)
+		{
+		qpn_node<NodeValue>* node =nodeMap[boost::get(boost::vertex_name, qpn, *it)];
+		os<<node->name<<(*node)<<";"<<endl;
+		}
+	}
+
+
+
 template < typename NodeValue>
 void qpn_descriptor< NodeValue, boost::undirectedS>::propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild, std::map<std::string, bool>& nextNodes)
 	{
@@ -290,20 +308,6 @@ void qpn_descriptor< NodeValue, boost::undirectedS>::propagate(const std::string
 			nodeMap[target_node->name]->sign = newSign;
 			nextNodes[target_node->name] = true;//Define  where the sign come from;
 			}
-		}
-	}
-
-
-
-
-template < typename NodeValue>
-void qpn_descriptor<NodeValue, boost::undirectedS>::writeGraphVizNodes(std::ostream& os)
-	{
-	VIterator it, it_end;
-	for(std::tie(it,it_end) = boost::vertices(qpn); it!=it_end; it++)
-		{
-		qpn_node<NodeValue>* node =nodeMap[boost::get(boost::vertex_name, qpn, *it)];
-		os<<node->name<<(*node)<<";"<<endl;
 		}
 	}
 

@@ -100,13 +100,13 @@ void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::strin
 	{
 	colorMap[nName]=true;
 	//Directed
-	for (std::list<qpn_directed_type*>::iterator it_qpn_dir = qpn_directed.begin();it_qpn_dir != qpn_directed.cend();it_qpn_dir++)
+	for (std::list<qpn_directed_type*>::iterator it_qpn_dir = qpn_directed.begin();it_qpn_dir != qpn_directed.cend();it_qpn_dir++) //For each QPN
 		{
 		std::map<std::string, bool> nextNodes = std::map<std::string, bool> ();
-		if((*it_qpn_dir)->exists(nName))
+		if((*it_qpn_dir)->exists(nName)) //if the current node exist in it
 			{
-			(*it_qpn_dir)->propagate(nName,colorMap, fromChild, nextNodes);
-				for(std::map<std::string, bool>::iterator it_nName = nextNodes.begin();it_nName!=nextNodes.cend();it_nName++)
+			(*it_qpn_dir)->propagate(nName,colorMap, fromChild, nextNodes);// The sign is propagate for each edges
+				for(std::map<std::string, bool>::iterator it_nName = nextNodes.begin();it_nName!=nextNodes.cend();it_nName++) // and propagate is launch again on each node modified
 					{
 					propagate((*it_nName).first,std::map<std::string, bool>(colorMap),it_nName->second);
 					}
@@ -123,7 +123,7 @@ void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::strin
 				for(std::map<std::string, bool>::iterator it_nName = nextNodes.begin();it_nName!=nextNodes.cend();it_nName++)
 					{
 					//In qpns undirected, from child need to be false everytime due to the indirection of the function target, source, out_egde, in_edge in those case.
-					propagate((*it_nName).first,std::map<std::string, bool>(colorMap),false);
+					propagate((*it_nName).first,std::map<std::string, bool>(colorMap),it_nName->second);
 					}
 			}
 		}
