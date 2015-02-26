@@ -13,7 +13,7 @@ struct qpn_edge_nm_influence :
 	public:
 
 
-		qpn_edge_nm_influence(void):provokers(provokers_type()){};
+		
 		qpn_edge_nm_influence(provokers_type provokers):provokers(provokers){};
 		~qpn_edge_nm_influence(void){};
 
@@ -21,6 +21,7 @@ struct qpn_edge_nm_influence :
 
 		std::ostream& writeGraphVizFormat(std::ostream& os) const;
 	private:
+		qpn_edge_nm_influence(void):provokers(provokers_type()){};
 		provokers_type provokers;
 
 	};
@@ -29,7 +30,7 @@ template <typename NodeValue>
 Sign qpn_edge_nm_influence<NodeValue>::getSign()
 	{
 	Sign toReturn = Sign::ZERO_SIGN;
-	for(provokers_type::iterator provoker = provokers.begin(); begin!= provokers.cend(); provoker++)
+	for(provokers_type::iterator provoker = provokers.begin(); provoker!= provokers.cend(); provoker++)
 		{
 		qpn_node<NodeValue>* node_p = *(std::get<0>(*provoker));
 
@@ -37,10 +38,10 @@ Sign qpn_edge_nm_influence<NodeValue>::getSign()
 			{
 			qpn_edge_additive_synergy* edge_p = std::get<1>(*provoker);
 			std::map<NodeValue, Sign> signs_p = std::get<2>(*provoker);
-			toReturn = toReturn + (edge_p->getRealSign() * signs_p[node_p->value])
+			toReturn = toReturn + (edge_p->getRealSign() * signs_p[node_p->value]);
 			}
 		else
-			return Sign::QMARK_SIGN
+			return Sign::QMARK_SIGN;
 		}
 	return toReturn;
 	}
@@ -51,7 +52,7 @@ std::ostream& qpn_edge_nm_influence<NodeValue>::writeGraphVizFormat(std::ostream
 	{
 
 	os<<"label=\"";
-	for(provokers_type::iterator provoker = provokers.begin(); begin!= provokers.cend(); )
+	for(provokers_type::const_iterator provoker = provokers.cbegin(); provoker!= provokers.cend(); )
 		{
 		qpn_node<NodeValue>* node_p = *(std::get<0>(*provoker));
 		std::map<NodeValue, Sign> signs_p = std::get<2>(*provoker);

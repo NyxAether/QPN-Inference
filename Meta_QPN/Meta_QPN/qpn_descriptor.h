@@ -42,6 +42,7 @@ class qpn_descriptor
 
 
 		virtual typename qpn_node<NodeValue>* getNode(const std::string nName);
+		virtual typename qpn_node<NodeValue>** getPNode(const std::string nName);
 		virtual void setNode(const std::string nName, typename qpn_node<NodeValue>* node) ;
 
 		virtual void getChildren(const std::string nName,  std::list< qpn_node<NodeValue>>& children);
@@ -94,6 +95,13 @@ template <typename NodeValue,  typename Direction>
 qpn_node<NodeValue>* qpn_descriptor<NodeValue, Direction>::getNode(const std::string nName)
 	{
 	return nodeMap[nName];
+	}
+
+
+template < typename NodeValue, typename Direction >
+typename qpn_node<NodeValue>** qpn_descriptor<NodeValue, Direction>::getPNode(const std::string nName)
+	{
+		return &(nodeMap[nName]);
 	}
 
 template < typename NodeValue, typename Direction >

@@ -79,8 +79,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	v = vector<string>();
 	v.push_back("X1");
 	v.push_back("X5");
-	qpn_edge_additive_synergy* eas = new qpn_edge_additive_synergy(Sign::PLUS_SIGN, "X2");
-	qpn_synergies->addEdge(eas,v);
+	qpn_edge_additive_synergy* eas1 = new qpn_edge_additive_synergy(Sign::PLUS_SIGN, "X2");
+	qpn_synergies->addEdge(eas1,v);
+	v = vector<string>();
+	v.push_back("X6");
+	v.push_back("X5");
+	qpn_edge_additive_synergy* eas2 = new qpn_edge_additive_synergy(Sign::MINUS_SIGN, "X2");
+	qpn_synergies->addEdge(eas2,v);
 	qpn_manager.addQpn(qpn_synergies);
 
 	//Non-monotonic influences
@@ -91,15 +96,21 @@ int _tmain(int argc, _TCHAR* argv[])
 	v = vector<string>();
 	v.push_back("X5");
 	v.push_back("X2");
-	provoker_type provoker =provoker_type(qpn_manager.getNode("X1"),eas, signMap);
-	//provokers_type provokers = provokers_type();
-	//provokers.push_back(provoker);
-	//qpn_edge_nm_influence<int>* enmi = new qpn_edge_nm_influence<int>(provokers());
-	//qpn_manager.addQpn(enmi);
+	
+	provokers_type provokers = provokers_type();
+	provokers.push_back(provoker_type(qpn_manager.getNode("X1"),eas1, signMap));
+	map<int,Sign> signMap2 = map<int,Sign>();
+	signMap2[0]=Sign::PLUS_SIGN;
+	signMap2[1]=Sign::ZERO_SIGN;
+	provokers.push_back(provoker_type(qpn_manager.getNode("X6"),eas2, signMap2));
+	qpn_edge_nm_influence<int>* enmi = new qpn_edge_nm_influence<int>(provokers);
+	qpn_influences->addEdge(enmi, v);
+	qpn_manager.addQpn(qpn_influences);
 
-	//qpn_manager.observeNodeValue("X4",0);
-	qpn_manager.observeNodeValue("X3",0);
-	qpn_manager.observeNodeSign("X1",Sign::MINUS_SIGN); 
+	qpn_manager.observeNodeValue("X1",1);
+	qpn_manager.observeNodeValue("X4",0);
+		qpn_manager.observeNodeValue("X6",0);
+	qpn_manager.observeNodeSign("X3",Sign::MINUS_SIGN); 
 	ofstream outf =ofstream("net.gv");
 	qpn_manager.writeGraphViz(outf);
 	return 0;
