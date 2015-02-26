@@ -25,6 +25,8 @@ class meta_qpn
 
 		void  writeGraphViz(std::ostream& out);
 
+		qpn_node<NodeValue>* getNode(std::string nName);
+
 	protected:
 		template<typename NodeValue, typename T1, typename T2>
 		void copyNode(qpn_descriptor<NodeValue, T1>* from, qpn_descriptor<NodeValue, T2>* to)
@@ -171,3 +173,15 @@ void meta_qpn<NodeValue>::writeGraphViz(std::ostream& out)
 	out<<"}"<<std::endl;
 	}
 
+
+template < typename NodeValue>
+qpn_node<NodeValue>* meta_qpn<NodeValue>::getNode(std::string nName)
+	{
+	qpn_directed_type* qpn = qpn_directed.front();
+	if(qpn->exists(nName))
+		return qpn->getNode(nName);
+	else{
+		qpn->addVertex(nName);
+		return qpn->getNode(nName);
+		}
+	}

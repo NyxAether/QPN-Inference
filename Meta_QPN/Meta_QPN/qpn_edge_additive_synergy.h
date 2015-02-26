@@ -1,6 +1,6 @@
 #pragma once
 #include "qpn_edge.h"
-#include "qpn_additive_synergy.h"
+
 
 struct qpn_edge_additive_synergy :
 	public qpn_edge

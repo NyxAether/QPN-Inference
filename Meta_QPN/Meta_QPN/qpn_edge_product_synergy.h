@@ -1,6 +1,5 @@
 #pragma once
 #include "qpn_edge.h"
-#include "qpn_product_synergy.h"
 template <typename NodeValue>
 struct qpn_edge_product_synergy :
 	public qpn_edge
