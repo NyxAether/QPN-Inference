@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\edges">
+      <UniqueIdentifier>{de671720-0753-4abc-a727-a41340b91aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\qpn">
+      <UniqueIdentifier>{f85d910d-450d-402b-82f4-8f6f6d86db6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\meta_qpn">
+      <UniqueIdentifier>{50e48557-c73b-4f10-9a52-1c5aeb073774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\nodes">
+      <UniqueIdentifier>{a672df69-28a5-4561-a654-da0ca074894d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\signs">
+      <UniqueIdentifier>{e68e24f3-0210-44d3-92d1-361db262d8e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\meta_qpn">
+      <UniqueIdentifier>{eaf147d7-b9ea-4a0e-8fbd-59b4dee5ac86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\edges">
+      <UniqueIdentifier>{8cc29fc4-5c7d-4322-93a3-06c49669f6d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\signs">
+      <UniqueIdentifier>{b25f355f-8f29-4c3b-8e6b-8e613cd81d95}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_edge.h">
+      <Filter>Fichiers d%27en-tête\edges</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_edge_product_synergy.h">
+      <Filter>Fichiers d%27en-tête\edges</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_edge_additive_synergy.h">
+      <Filter>Fichiers d%27en-tête\edges</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_edge_influence.h">
+      <Filter>Fichiers d%27en-tête\edges</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_edge_nm_influence.h">
+      <Filter>Fichiers d%27en-tête\edges</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_additive_synergy.h">
+      <Filter>Fichiers d%27en-tête\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_nm_influence.h">
+      <Filter>Fichiers d%27en-tête\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_descriptor.h">
+      <Filter>Fichiers d%27en-tête\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_influence.h">
+      <Filter>Fichiers d%27en-tête\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_product_synergy.h">
+      <Filter>Fichiers d%27en-tête\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="meta_qpn.h">
+      <Filter>Fichiers d%27en-tête\meta_qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_node.h">
+      <Filter>Fichiers d%27en-tête\nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_sign.h">
+      <Filter>Fichiers d%27en-tête\signs</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Meta_QPN_main.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="meta_qpn.cpp">
+      <Filter>Fichiers sources\meta_qpn</Filter>
+    </ClCompile>
+    <ClCompile Include="qpn_edge.cpp">
+      <Filter>Fichiers sources\edges</Filter>
+    </ClCompile>
+    <ClCompile Include="qpn_edge_influence.cpp">
+      <Filter>Fichiers sources\edges</Filter>
+    </ClCompile>
+    <ClCompile Include="qpn_edge_additive_synergy.cpp">
+      <Filter>Fichiers sources\edges</Filter>
+    </ClCompile>
+    <ClCompile Include="qpn_sign.cpp">
+      <Filter>Fichiers sources\signs</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
