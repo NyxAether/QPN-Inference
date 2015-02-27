@@ -46,7 +46,7 @@ void qpn_additive_synergy<NodeValue>::writeGraphVizEdges(std::ostream& os)
 		qpn_node<NodeValue>* source = nodeMap[boost::get(boost::vertex_name,qpn, boost::source(*it,qpn))];
 		qpn_node<NodeValue>* target = nodeMap[boost::get(boost::vertex_name,qpn, boost::target(*it,qpn))];
 		std::string dummy = source->name + target->name + edge->getAffectedNode();
-		os<<dummy<<"[shape=diamond, width=0, label=\""<<edge->getRealSign()<<"\"]"<<endl;
+		os<<dummy<<"[shape=diamond, width=0, label=\""<<edge->getRealSign()<<"\"];"<<endl;
 		os<<source->name<<"->"<<dummy<<"[dir=none];"<<endl;
 		os<<target->name<<"->"<<dummy<<"[dir=none];"<<endl;
 		os<<dummy<<"->"<<edge->getAffectedNode()<<";"<<endl;
