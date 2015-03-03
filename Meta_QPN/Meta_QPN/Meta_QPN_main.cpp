@@ -19,10 +19,10 @@ using namespace boost;
 
 int _tmain(int argc, _TCHAR* argv[])
 	{
-	meta_qpn< int> qpn_manager = meta_qpn< int>();
+	meta_qpn< bool> qpn_manager = meta_qpn< bool>();
 
 	////Influences
-	//qpn_descriptor<int , boost::bidirectionalS>* qpn_influences =new qpn_influence<int>(); 
+	//qpn_descriptor<bool , boost::bidirectionalS>* qpn_influences =new qpn_influence<bool>(); 
 	//qpn_influences->addVertex("X1");
 	//qpn_influences->addVertex("X2");
 	//qpn_influences->addVertex("X3");
@@ -64,21 +64,21 @@ int _tmain(int argc, _TCHAR* argv[])
 	//qpn_manager.addQpn(qpn_influences);
 
 	////Product Synergies
-	//qpn_descriptor<int , boost::undirectedS>* qpn_synergies =new qpn_product_synergy<int>(); 
+	//qpn_descriptor<bool , boost::undirectedS>* qpn_synergies =new qpn_product_synergy<bool>(); 
 
 	//v = vector<string>();
 	//v.push_back("X2");
 	//v.push_back("X3");
 	//v.push_back("X4");
-	//map<int,Sign> signMap = map<int,Sign>();
+	//map<bool,Sign> signMap = map<bool,Sign>();
 	//signMap[0]=Sign::MINUS_SIGN;
 	//signMap[1]=Sign::PLUS_SIGN;
-	//qpn_edge_product_synergy<int>* esyn = new qpn_edge_product_synergy<int>(signMap);
+	//qpn_edge_product_synergy<bool>* esyn = new qpn_edge_product_synergy<bool>(signMap);
 	//qpn_synergies->addEdge(esyn, v);
 	//qpn_manager.addQpn(qpn_synergies);
 
 	////Additive Synergies
-	//qpn_synergies =new qpn_additive_synergy<int>(); 
+	//qpn_synergies =new qpn_additive_synergy<bool>(); 
 	//v = vector<string>();
 	//v.push_back("X1");
 	//v.push_back("X5");
@@ -93,20 +93,20 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	////Non-monotonic influences
 
-	//typedef tuple<qpn_node<int>**, qpn_edge_additive_synergy*, map<int, Sign>> provoker_type;
+	//typedef tuple<qpn_node<bool>**, qpn_edge_additive_synergy*, map<bool, Sign>> provoker_type;
 	//typedef list<provoker_type> provokers_type;
-	//qpn_influences = new qpn_nm_influence<int>();
+	//qpn_influences = new qpn_nm_influence<bool>();
 	//v = vector<string>();
 	//v.push_back("X5");
 	//v.push_back("X2");
 	//
 	//provokers_type provokers = provokers_type();
 	//provokers.push_back(provoker_type(qpn_manager.getNode("X1"),eas1, signMap));
-	//map<int,Sign> signMap2 = map<int,Sign>();
+	//map<bool,Sign> signMap2 = map<bool,Sign>();
 	//signMap2[0]=Sign::PLUS_SIGN;
 	//signMap2[1]=Sign::ZERO_SIGN;
 	//provokers.push_back(provoker_type(qpn_manager.getNode("X6"),eas2, signMap2));
-	//qpn_edge_nm_influence<int>* enmi = new qpn_edge_nm_influence<int>(provokers);
+	//qpn_edge_nm_influence<bool>* enmi = new qpn_edge_nm_influence<bool>(provokers);
 	//qpn_influences->addEdge(enmi, v);
 	//qpn_manager.addQpn(qpn_influences);
 
@@ -115,7 +115,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//	qpn_manager.observeNodeValue("X6",0);
 	//qpn_manager.observeNodeSign("X3",Sign::MINUS_SIGN); 
 	
-	qpn_descriptor<int , boost::bidirectionalS>* qpn_influences =new qpn_influence<int>(); 
+	qpn_descriptor<bool , boost::bidirectionalS>* qpn_influences =new qpn_influence<bool>(); 
 
 	vector<string> v = vector<string>();
 	v.push_back("U");
@@ -124,7 +124,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	qpn_influences->addEdge(edge, v);
 
 	v = vector<string>();
-	v.push_back("L");
+	v.push_back("M");
 	v.push_back("D");
 	edge = new qpn_edge_influence(Sign::PLUS_SIGN);
 	qpn_influences->addEdge(edge, v);
@@ -144,51 +144,56 @@ int _tmain(int argc, _TCHAR* argv[])
 	qpn_manager.addQpn(qpn_influences);
 
 	//Product Synergies
-	qpn_descriptor<int , boost::undirectedS>* qpn_synergies =new qpn_product_synergy<int>(); 
+	qpn_descriptor<bool , boost::undirectedS>* qpn_synergies =new qpn_product_synergy<bool>(); 
 
 	v = vector<string>();
 	v.push_back("U");
 	v.push_back("L");
 	v.push_back("W");
-	map<int,Sign> signMap = map<int,Sign>();
+	map<bool,Sign> signMap = map<bool,Sign>();
 	signMap[0]=Sign::MINUS_SIGN;
 	signMap[1]=Sign::MINUS_SIGN;
-	qpn_edge_product_synergy<int>* esyn = new qpn_edge_product_synergy<int>(signMap);
+	qpn_edge_product_synergy<bool>* esyn = new qpn_edge_product_synergy<bool>(signMap);
 	qpn_synergies->addEdge(esyn, v);
 	qpn_manager.addQpn(qpn_synergies);
 
 
 	//Context specific
-	qpn_descriptor<int , boost::bidirectionalS>* qpn_contexts =new qpn_context_specific<int>(); 
+	qpn_descriptor<bool , boost::bidirectionalS>* qpn_contexts =new qpn_context_specific<bool>(); 
 
 	list<pair<list<pair<string,bool>>,Sign>> contexts = list<pair<list<pair<string,bool>>,Sign>>();
-	pair<string,bool> d, _d, _w, _d_w;
-	d = make_pair("D",true);
-	_d = make_pair("D",false);
+	pair<string,bool> d, _m, _w, _m_w;
+	//d = make_pair("D",true);
+	_m = make_pair("M",false);
 	_w = make_pair("W",false);
-	list<pair<string,bool>> dC = list<pair<string,bool>>();
-	list<pair<string,bool>> _dC = list<pair<string,bool>>();
+	//list<pair<string,bool>> dC = list<pair<string,bool>>();
+	list<pair<string,bool>> _mC = list<pair<string,bool>>();
 	list<pair<string,bool>> _wC = list<pair<string,bool>>();
-		list<pair<string,bool>> _d_wC = list<pair<string,bool>>();
-	dC.push_back(d);
-	_dC.push_back(_d);
+		list<pair<string,bool>> _m_wC = list<pair<string,bool>>();
+	//dC.push_back(d);
+	_mC.push_back(_m);
 	_wC.push_back(_w);
-	_d_wC.push_back(_d);
-	_d_wC.push_back(_w);
-	contexts.push_back(make_pair(dC,Sign::PLUS_SIGN));
-	contexts.push_back(make_pair(_dC,Sign::MINUS_SIGN));
+	_m_wC.push_back(_m);
+	_m_wC.push_back(_w);
+	//contexts.push_back(make_pair(dC,Sign::PLUS_SIGN));
+	contexts.push_back(make_pair(_mC,Sign::MINUS_SIGN));
 	contexts.push_back(make_pair(_wC,Sign::PLUS_SIGN));
-	contexts.push_back(make_pair(_d_wC,Sign::ZERO_SIGN));
+	contexts.push_back(make_pair(_m_wC,Sign::ZERO_SIGN));
 
-	list<qpn_node<int>**> nodes = list<qpn_node<int>**>();
-	nodes.push_back(qpn_manager.getNode("D"));
-	nodes.push_back(qpn_manager.getNode("L"));
+	list<qpn_node<bool>**> nodes = list<qpn_node<bool>**>();
+	nodes.push_back(qpn_manager.getNode("M"));
 	nodes.push_back(qpn_manager.getNode("W"));
-	qpn_edge_context_specific<int> ecs = qpn_edge_context_specific<int>(nodes,contexts);
+	qpn_edge_context_specific<bool>* ecs = new qpn_edge_context_specific<bool>(nodes,contexts);
 
-	qpn_manager.observeNodeValue("L",1);
-	qpn_manager.observeNodeValue("W",1);
-	qpn_manager.observeNodeSign("D",Sign::PLUS_SIGN);
+	v = vector<string>();
+	v.push_back("L");
+	v.push_back("D");
+	qpn_contexts->addEdge(ecs,v);
+
+	qpn_manager.addQpn(qpn_contexts);
+
+	qpn_manager.observeNodeValue("W",true);
+	qpn_manager.observeNodeSign("D",Sign::MINUS_SIGN);
 	ofstream outf =ofstream("net.gv");
 	qpn_manager.writeGraphViz(outf);
 	return 0;

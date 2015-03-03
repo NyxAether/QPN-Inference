@@ -13,7 +13,7 @@ struct qpn_edge_product_synergy :
 
 		std::ostream& writeGraphVizFormat(std::ostream& os) const;
 		qpn_node<NodeValue>** linkedNode;
-		
+
 		std::map<NodeValue, Sign> signMap;
 	};
 
@@ -22,11 +22,11 @@ std::ostream& qpn_edge_product_synergy<NodeValue>::writeGraphVizFormat(std::ostr
 	{
 	os<<"label=\""<<(*linkedNode)->name<<":";
 	for (std::map<NodeValue, Sign>::const_iterator signs = signMap.cbegin(); signs!= signMap.cend(); )
-	{
-	os<<"["<<signs->first<<", "<<signs->second<<"]";
-	if(++signs != signMap.cend())
-		os<<",";
-	}
+		{
+		os<<"["<<signs->first<<", "<<signs->second<<"]";
+		if(++signs != signMap.cend())
+			os<<",";
+		}
 	os<<"\",dir=none,style=dotted";
 	return os;
 	}

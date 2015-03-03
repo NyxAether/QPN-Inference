@@ -68,6 +68,7 @@ bool suffix_tree<T>::hasEmpty()
 template <typename T>
 bool suffix_tree<T>::hasDesc(std::string key, bool context_b)
 	{
+	//std::cout<<"hasDesc"<<key<<":"<<context_b<<(descendants[key].first != nullptr)<<(descendants[key].second != nullptr)<<std::endl;
 	if (context_b)
 	return (descendants[key].first != NULL);
 	else
@@ -77,7 +78,7 @@ bool suffix_tree<T>::hasDesc(std::string key, bool context_b)
 template <typename T>
 T& suffix_tree<T>::getValue()
 	{
-	return valDef;
+	return value;
 	}
 
 

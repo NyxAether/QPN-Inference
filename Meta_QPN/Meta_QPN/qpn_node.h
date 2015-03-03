@@ -12,6 +12,7 @@ struct qpn_node
 		virtual ~qpn_node(void){};
 		friend std::ostream& operator<<(std::ostream& os,const qpn_node<NodeValue>& v);
 		virtual void setValue(NodeValue val);
+		
 		std::string name;
 		bool valIsSet;
 		Sign sign;
