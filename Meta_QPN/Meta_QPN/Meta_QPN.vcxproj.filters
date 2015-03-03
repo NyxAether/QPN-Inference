@@ -87,6 +87,15 @@
     <ClInclude Include="qpn_sign.h">
       <Filter>Fichiers d%27en-tête\signs</Filter>
     </ClInclude>
+    <ClInclude Include="qpn_edge_context_specific.h">
+      <Filter>Fichiers d%27en-tête\edges</Filter>
+    </ClInclude>
+    <ClInclude Include="suffix_tree.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_context_specific.h">
+      <Filter>Fichiers d%27en-tête\qpn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Meta_QPN_main.cpp">

@@ -68,7 +68,7 @@ std::ostream& qpn_edge_nm_influence<NodeValue>::writeGraphVizFormat(std::ostream
 		if(++provoker != provokers.cend())
 			os<<"\n";
 		}
-	os<<"\"";
+	os<<"\",color=\"blue\"";
 	return os;
 	}
 
