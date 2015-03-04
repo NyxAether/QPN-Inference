@@ -34,5 +34,8 @@ std::ostream& qpn_edge_product_synergy<NodeValue>::writeGraphVizFormat(std::ostr
 template <typename NodeValue>
 Sign qpn_edge_product_synergy<NodeValue>::getSign()
 	{
-	return signMap[(*linkedNode)->getValue()];
+	if((*linkedNode)->isValObserved())
+		return signMap[(*linkedNode)->getValue()];
+	else
+		return Sign::ZERO_SIGN;
 	}

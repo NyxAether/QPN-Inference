@@ -199,8 +199,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	qpn_manager.addQpn(qpn_contexts);
 
-	qpn_manager.observeNodeValue("M",false);
-	qpn_manager.observeNodeSign("D",Sign::MINUS_SIGN);
+	qpn_manager.observeNodeValue("W",true);
+	qpn_manager.observeNodeSign("L",Sign::MINUS_SIGN);
 	ofstream outf =ofstream("net.gv");
 	qpn_manager.writeGraphViz(outf);
 	return 0;

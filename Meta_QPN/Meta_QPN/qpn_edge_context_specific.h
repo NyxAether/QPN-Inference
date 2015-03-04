@@ -86,7 +86,7 @@ Sign qpn_edge_context_specific<NodeValue>::getSign()
 	{
 	std::cout<<std::endl<<"sign deb"<<std::endl;
 	root->display();
-	Sign sign = Sign::ZERO_SIGN;
+	Sign sign = Sign::QMARK_SIGN;
 	int motif_size = 0;
 	//Calculate nodes in context
 	std::list<std::string> context_nodes =std::list<std::string>();
@@ -108,7 +108,7 @@ Sign qpn_edge_context_specific<NodeValue>::getSign() const
 	{
 	std::cout<<std::endl<<"sign deb"<<std::endl;
 	root->display();
-	Sign sign = Sign::ZERO_SIGN;
+	Sign sign = Sign::QMARK_SIGN;
 	int motif_size = 0;
 	//Calculate nodes in context
 	std::list<std::string> context_nodes =std::list<std::string>();
