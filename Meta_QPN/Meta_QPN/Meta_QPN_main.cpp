@@ -140,7 +140,14 @@ int _tmain(int argc, _TCHAR* argv[])
 	v.push_back("D");
 	edge = new qpn_edge_influence(Sign::PLUS_SIGN);
 	qpn_influences->addEdge(edge, v);
-	
+
+	//v = vector<string>();
+	//v.push_back("L");
+	//v.push_back("D");
+	//edge = new qpn_edge_influence(Sign::MINUS_SIGN);
+	//qpn_influences->addEdge(edge, v);
+
+
 	qpn_manager.addQpn(qpn_influences);
 
 	//Product Synergies
@@ -155,7 +162,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	signMap[1]=Sign::MINUS_SIGN;
 	qpn_edge_product_synergy<bool>* esyn = new qpn_edge_product_synergy<bool>(signMap);
 	qpn_synergies->addEdge(esyn, v);
-	qpn_manager.addQpn(qpn_synergies);
+	//qpn_manager.addQpn(qpn_synergies);
 
 
 	//Context specific
@@ -192,7 +199,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	qpn_manager.addQpn(qpn_contexts);
 
-	qpn_manager.observeNodeValue("W",true);
+	qpn_manager.observeNodeValue("M",false);
 	qpn_manager.observeNodeSign("D",Sign::MINUS_SIGN);
 	ofstream outf =ofstream("net.gv");
 	qpn_manager.writeGraphViz(outf);
