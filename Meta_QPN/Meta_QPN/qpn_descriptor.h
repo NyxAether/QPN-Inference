@@ -68,15 +68,15 @@ void qpn_descriptor<NodeValue,Direction>::addVertex(const std::string nName)
 	Vertex v =boost::add_vertex(nName, qpn);
 	get(boost::vertex_name, qpn)[v]=nName;
 	nodeMap[nName] = new qpn_node<NodeValue>();
-	nodeMap[nName]->name =nName;
+	nodeMap[nName]->setName(nName);
 	}
 
 template <typename NodeValue,  typename Direction>
 void qpn_descriptor<NodeValue,Direction>::addVertex(qpn_node<NodeValue>* node)
 	{
-	Vertex v =boost::add_vertex(node->name, qpn);
-	get(boost::vertex_name, qpn)[v]=node->name;
-	nodeMap[node->name] = node;
+	Vertex v =boost::add_vertex(node->getName(), qpn);
+	get(boost::vertex_name, qpn)[v]=node->getName();
+	nodeMap[node->getName()] = node;
 	}
 
 template <typename NodeValue,  typename Direction>
@@ -88,7 +88,8 @@ void qpn_descriptor<NodeValue,Direction>::observeNodeValue(const std::string nNa
 template <typename NodeValue,  typename Direction>
 void qpn_descriptor<NodeValue,Direction>::observeNodeVariation(const std::string nName, const Sign& sign)
 	{
-	nodeMap[nName]->sign = sign; //There is no more modification because it's the role of the meta_qpn to propagate the sign
+	nodeMap[nName]->setSign(sign); //There is no more modification because it's the role of the meta_qpn to propagate the sign
+	nodeMap[nName]->setSignObserved(true);
 	}
 
 template <typename NodeValue,  typename Direction>
@@ -151,11 +152,11 @@ void qpn_descriptor<NodeValue, Direction>::propagate(const std::string nName, st
 			qpn_edge& edge=*edgeMap[*in_it] ;
 			Vertex source = boost::source(*in_it,qpn);
 			qpn_node<NodeValue>* source_node = nodeMap[boost::get(boost::vertex_name,qpn,source)];
-			Sign newSign = (node->sign * edge.getSign()) + source_node->sign;
-			if(!source_node->valIsSet && !colorMap[source_node->name] && newSign != source_node->sign)
+			Sign newSign = (node->getSign() * edge.getSign()) + source_node->getSign();
+			if(! (source_node->isValObserved()) && !colorMap[source_node->getName()] && newSign != (source_node->getSign()))
 				{
-				nodeMap[source_node->name]->sign = newSign;
-				nextNodes[source_node->name] = true;//Define  where the sign come from;
+				nodeMap[source_node->getName()]->setSign(newSign);
+				nextNodes[source_node->getName()] = true;//Define  where the sign come from;
 				}
 			}
 		}
@@ -164,11 +165,11 @@ void qpn_descriptor<NodeValue, Direction>::propagate(const std::string nName, st
 		qpn_edge& edge=*edgeMap[*out_it] ;
 		Vertex target = boost::target(*out_it,qpn);
 		qpn_node<NodeValue>* target_node = nodeMap[boost::get(boost::vertex_name,qpn,target)];
-		Sign newSign = (node->sign * edge.getSign()) + target_node->sign;
-		if(!target_node->valIsSet && !colorMap[target_node->name] && newSign != target_node->sign)
+		Sign newSign = (node->getSign() * edge.getSign()) + target_node->getSign();
+		if(!target_node->isValObserved() && !colorMap[target_node->getName()] && newSign != target_node->getSign())
 			{
-			nodeMap[target_node->name]->sign = newSign;
-			nextNodes[target_node->name] = false;//Define  where the sign come from;
+			nodeMap[target_node->getName()]->setSign(newSign);
+			nextNodes[target_node->getName()] = false;//Define  where the sign come from;
 			}
 		}
 	}
@@ -181,7 +182,7 @@ void qpn_descriptor<NodeValue, Direction>::writeGraphVizNodes(std::ostream& os)
 	for(std::tie(it,it_end) = boost::vertices(qpn); it!=it_end; it++)
 		{
 		qpn_node<NodeValue>* node =nodeMap[boost::get(boost::vertex_name, qpn, *it)];
-		os<<node->name<<(*node)<<";"<<endl;
+		os<<node->getName()<<(*node)<<";"<<endl;
 		}
 	}
 
@@ -243,15 +244,15 @@ void qpn_descriptor<NodeValue,boost::undirectedS>::addVertex(const std::string n
 	Vertex v =boost::add_vertex(nName, qpn);
 	get(boost::vertex_name, qpn)[v]=nName;
 	nodeMap[nName] = new qpn_node<NodeValue>();
-	nodeMap[nName]->name =nName;
+	nodeMap[nName]->setName(nName);
 	}
 
 template <typename NodeValue>
 void qpn_descriptor<NodeValue,boost::undirectedS>::addVertex(qpn_node<NodeValue>* node)
 	{
-	Vertex v =boost::add_vertex(node->name, qpn);
-	get(boost::vertex_name, qpn)[v]=node->name;
-	nodeMap[node->name] = node;
+	Vertex v =boost::add_vertex(node->getName(), qpn);
+	get(boost::vertex_name, qpn)[v]=node->getName();
+	nodeMap[node->getName()] = node;
 	}
 
 template <typename NodeValue>
@@ -263,7 +264,8 @@ void qpn_descriptor<NodeValue,boost::undirectedS>::observeNodeValue(const std::s
 template <typename NodeValue>
 void qpn_descriptor<NodeValue,boost::undirectedS>::observeNodeVariation(const std::string nName, const Sign& sign)
 	{
-	nodeMap[nName]->sign = sign; //There is no more modification because it's the role of the meta_qpn to propagate the sign
+	nodeMap[nName]->setSign(sign); //There is no more modification because it's the role of the meta_qpn to propagate the sign
+	nodeMap[nName]->setSignObserved(true);
 	}
 
 template <typename NodeValue>
@@ -306,7 +308,7 @@ void qpn_descriptor<NodeValue, boost::undirectedS>::writeGraphVizNodes(std::ostr
 	for(std::tie(it,it_end) = boost::vertices(qpn); it!=it_end; it++)
 		{
 		qpn_node<NodeValue>* node =nodeMap[boost::get(boost::vertex_name, qpn, *it)];
-		os<<node->name<<(*node)<<";"<<endl;
+		os<<node->getName()<<(*node)<<";"<<endl;
 		}
 	}
 
@@ -323,12 +325,12 @@ void qpn_descriptor< NodeValue, boost::undirectedS>::propagate(const std::string
 		qpn_edge& edge=*edgeMap[*out_it] ;
 		Vertex target = boost::target(*out_it,qpn);
 		qpn_node<NodeValue>* target_node = nodeMap[boost::get(boost::vertex_name,qpn,target)];
-		Sign newSign = (node->sign * edge.getSign()) + target_node->sign;
+		Sign newSign = (node->getSign() * edge.getSign()) + target_node->getSign();
 
-		if(!target_node->valIsSet && !colorMap[target_node->name] && newSign != target_node->sign)
+		if(!target_node->isValObserved() && !colorMap[target_node->getName()] && newSign != target_node->getSign())
 			{
-			nodeMap[target_node->name]->sign = newSign;
-			nextNodes[target_node->name] = true;//Define  where the sign come from;
+			nodeMap[target_node->getName()]->setSign(newSign);
+			nextNodes[target_node->getName()] = true;//Define  where the sign come from;
 			}
 		}
 	}

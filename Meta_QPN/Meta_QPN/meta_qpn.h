@@ -146,10 +146,10 @@ bool meta_qpn<NodeValue>::hasDescendent(const std::string nName, std::map<std::s
 			(*it_qpn_dir)->getChildren(nName, children);
 				for(list< qpn_node<NodeValue>>::iterator child = children.begin();child!=children.cend(); child++)
 					{
-					if(child->valIsSet)
+					if(child->isObserved())
 						return true;
-					if(!colorMap[child->name])
-						if(hasDescendent(child->name, std::map<std::string, bool>(colorMap)))
+					if(!colorMap[child->getName()])
+						if(hasDescendent(child->getName(), std::map<std::string, bool>(colorMap)))
 							return true;
 					}
 			}

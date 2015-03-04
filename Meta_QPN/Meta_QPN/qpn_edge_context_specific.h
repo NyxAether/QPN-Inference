@@ -63,7 +63,7 @@ qpn_edge_context_specific<NodeValue>::qpn_edge_context_specific(std::list<qpn_no
 
 	for (std::list<qpn_node<NodeValue>**>::iterator i_node=nodes_list.begin(); i_node!=nodes_list.cend(); i_node++)
 		{
-		std::string nName = (*(*i_node))->name;
+		std::string nName = (*(*i_node))->getName();
 		ordered_nNames.push_back(nName);
 		nodes[nName] = (*i_node);
 		}
@@ -92,7 +92,7 @@ Sign qpn_edge_context_specific<NodeValue>::getSign()
 	std::list<std::string> context_nodes =std::list<std::string>();
 	for(auto i_node = ordered_nNames.cbegin() ; i_node != ordered_nNames.cend() ; i_node++)
 		{
-		if((*(nodes[*i_node]))->valIsSet)
+		if((*(nodes[*i_node]))->isValObserved())
 			context_nodes.push_back(*i_node);
 		}
 
@@ -114,7 +114,7 @@ Sign qpn_edge_context_specific<NodeValue>::getSign() const
 	std::list<std::string> context_nodes =std::list<std::string>();
 	for(auto i_node = ordered_nNames.cbegin() ; i_node != ordered_nNames.cend() ; i_node++)
 		{
-		if((*(nodes.at(*i_node)))->valIsSet)
+		if((*(nodes.at(*i_node)))->isValObserved())
 			context_nodes.push_back(*i_node);
 		}
 
@@ -132,7 +132,7 @@ std::ostream& qpn_edge_context_specific<NodeValue>::writeGraphVizFormat(std::ost
 	os<<"label=\"";
 	for (auto i_nName = ordered_nNames.cbegin(); i_nName!=ordered_nNames.cend();)
 		{
-		const std::string nName =(*(nodes.at(*i_nName)))->name;
+		const std::string nName =(*(nodes.at(*i_nName)))->getName();
 		os<<nName;
 
 		if(++i_nName != ordered_nNames.cend())
@@ -189,9 +189,9 @@ void qpn_edge_context_specific<NodeValue>::findBestMotif(suffix_tree<Sign>& tree
 	if(i_nName!=cend){
 		qpn_node<NodeValue> node = *(*(nodes.at(*i_nName)));
 		//If this context has been defined on the suffix tree
-		if (tree.hasDesc(*i_nName, node.value))
+		if (tree.hasDesc(*i_nName, node.getValue()))
 			{
-			suffix_tree<Sign>& desc =tree.getDesc(*i_nName, node.value);
+			suffix_tree<Sign>& desc =tree.getDesc(*i_nName, node.getValue());
 			i_nName++;
 			findBestMotif(desc,i_nName,cend, sign, motif_size);
 			//child associated to the context become the new root

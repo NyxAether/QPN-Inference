@@ -34,7 +34,7 @@ Sign qpn_edge_nm_influence<NodeValue>::getSign()
 		{
 		qpn_node<NodeValue>* node_p = *(std::get<0>(*provoker));
 
-		if (node_p->valIsSet)
+		if (node_p->valObserved)
 			{
 			qpn_edge_additive_synergy* edge_p = std::get<1>(*provoker);
 			std::map<NodeValue, Sign> signs_p = std::get<2>(*provoker);

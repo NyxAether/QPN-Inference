@@ -162,7 +162,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	signMap[1]=Sign::MINUS_SIGN;
 	qpn_edge_product_synergy<bool>* esyn = new qpn_edge_product_synergy<bool>(signMap);
 	qpn_synergies->addEdge(esyn, v);
-	//qpn_manager.addQpn(qpn_synergies);
+	qpn_manager.addQpn(qpn_synergies);
 
 
 	//Context specific
