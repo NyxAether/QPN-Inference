@@ -6,16 +6,17 @@ class suffix_tree
 	{
 	typedef std::map<std::string, std::pair<suffix_tree<T>* ,suffix_tree<T>* >> descendants_t;
 	public:
-		suffix_tree(void):valDef(false),descendants(descendants_t()),motif_size(std::numeric_limits<int>::max()){};
+		suffix_tree(void):valDef(false),leaf(true),descendants(descendants_t()),motif_size(std::numeric_limits<int>::max()){};
 		virtual ~suffix_tree(void);
 
-		bool isLeaf();
-		bool hasValue();
-		bool hasDesc(std::string key, bool context_b);
+		bool isLeaf() const;
+		bool hasValue() const;
+		bool hasDesc(std::string key, bool context_b) ;
 
 		T& getValue();
 		int getMotifSize();
 		suffix_tree<T>& getDesc(std::string key, bool context_b);
+		const suffix_tree<T>& getDesc(std::string key, bool context_b) const;
 
 		suffix_tree<T>& createDesc(std::string key, bool context_b);
 		void setValue(T value, int motif_size);
@@ -24,7 +25,7 @@ class suffix_tree
 
 	private:
 		T value;
-		bool valDef;
+		bool valDef, leaf;
 		int motif_size;
 		descendants_t descendants;
 
@@ -66,15 +67,15 @@ suffix_tree<T>::~suffix_tree(void)
 	}
 
 template <typename T>
-bool suffix_tree<T>::isLeaf()
+bool suffix_tree<T>::isLeaf() const
 	{
-	return ( descendants.empty());
+	return leaf;
 	}
 
 
 
 template <typename T>
-bool suffix_tree<T>::hasValue()
+bool suffix_tree<T>::hasValue() const
 	{
 	return (valDef);
 	}
@@ -82,7 +83,7 @@ bool suffix_tree<T>::hasValue()
 
 
 template <typename T>
-bool suffix_tree<T>::hasDesc(std::string key, bool context_b)
+bool suffix_tree<T>::hasDesc(std::string key, bool context_b) 
 	{
 	//std::cout<<"hasDesc"<<key<<":"<<context_b<<(descendants[key].first != nullptr)<<(descendants[key].second != nullptr)<<std::endl;
 	if (context_b)
@@ -114,18 +115,23 @@ suffix_tree<T>& suffix_tree<T>::getDesc(std::string key, bool context_b)
 		return *(descendants[key].second);
 	}
 
+template <typename T>
+const suffix_tree<T>& suffix_tree<T>::getDesc(std::string key, bool context_b) const
+	{
+	if (context_b)
+		return *(descendants.at(key).first);
+	else
+		return *(descendants.at(key).second);
+	}
 
 template <typename T>
 suffix_tree<T>& suffix_tree<T>::createDesc(std::string key, bool context_b)
 	{
+	leaf=false;
 	if (hasDesc(key,context_b))
 		{
 		return getDesc(key, context_b);
 		}
-	//if(descendants[key] == NULL)
-	//	{
-	//	descendants[key] = std::pair<suffix_tree<T>* ,suffix_tree<T>* >();
-	//	}
 	suffix_tree<T>* new_tree = new suffix_tree<T>();
 	if (context_b)
 		descendants[key].first = new_tree;
@@ -133,6 +139,9 @@ suffix_tree<T>& suffix_tree<T>::createDesc(std::string key, bool context_b)
 		descendants[key].second = new_tree;
 	return *new_tree;
 	}
+
+
+
 
 
 template <typename T>

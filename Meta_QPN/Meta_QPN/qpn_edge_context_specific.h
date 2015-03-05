@@ -38,10 +38,13 @@ struct qpn_edge_context_specific :
 			std::list<std::pair<std::string,bool>>::iterator i_nName,
 			std::list<std::pair<std::string,bool>>::const_iterator cend,
 			Sign sign, int motif_size);
+
 		void findBestMotif(suffix_tree<Sign>& tree,
 			std::list<std::string>::const_iterator i_nName,
 			std::list<std::string>::const_iterator cend,
 			Sign & sign, int& motif_size) const;
+
+		std::stringstream writeSuffixTree(suffix_tree<Sign>& tree, std::stringstream& os) const;
 
 	private:
 		std::list<std::string> ordered_nNames;
@@ -77,15 +80,11 @@ qpn_edge_context_specific<NodeValue>::qpn_edge_context_specific(std::list<qpn_no
 		//For each element on the context we create associate suffix
 		constructSuffixTree(tree,(*i_context).first.begin(),(*i_context).first.end(),sign,motif_size);
 		}
-	std::cout<<std::endl<<"const"<<std::endl;
-	root->display();
 	}
 
 template <typename NodeValue>
 Sign qpn_edge_context_specific<NodeValue>::getSign()
 	{
-	std::cout<<std::endl<<"sign deb"<<std::endl;
-	root->display();
 	Sign sign = Sign::QMARK_SIGN;
 	int motif_size = 0;
 	//Calculate nodes in context
@@ -98,16 +97,12 @@ Sign qpn_edge_context_specific<NodeValue>::getSign()
 
 	findBestMotif(*root,context_nodes.cbegin(),context_nodes.cend(), sign, motif_size);
 
-	std::cout<<std::endl<<"sign fin"<<std::endl;
-	root->display();
 	return sign;
 	}
 
 template <typename NodeValue>
 Sign qpn_edge_context_specific<NodeValue>::getSign() const
 	{
-	std::cout<<std::endl<<"sign deb"<<std::endl;
-	root->display();
 	Sign sign = Sign::QMARK_SIGN;
 	int motif_size = 0;
 	//Calculate nodes in context
@@ -119,9 +114,6 @@ Sign qpn_edge_context_specific<NodeValue>::getSign() const
 		}
 
 	findBestMotif(*root,context_nodes.cbegin(),context_nodes.cend(), sign, motif_size);
-
-	std::cout<<std::endl<<"sign fin"<<std::endl;
-	root->display();
 	return sign;
 	}
 
@@ -130,15 +122,17 @@ template <typename NodeValue>
 std::ostream& qpn_edge_context_specific<NodeValue>::writeGraphVizFormat(std::ostream& os) const
 	{
 	os<<"label=\"";
-	for (auto i_nName = ordered_nNames.cbegin(); i_nName!=ordered_nNames.cend();)
-		{
-		const std::string nName =(*(nodes.at(*i_nName)))->getName();
-		os<<nName;
+	os<<writeSuffixTree(*root, std::stringstream()).str();
+	/*for (auto i_nName = ordered_nNames.cbegin(); i_nName!=ordered_nNames.cend();)
+	{
+	const std::string nName =(*(nodes.at(*i_nName)))->getName();
+	os<<nName;
 
-		if(++i_nName != ordered_nNames.cend())
-			os<<std::endl;
-		}
-	os<<getSign()<<"\"";
+	if(++i_nName != ordered_nNames.cend())
+	os<<std::endl;
+	}*/
+	/*os<<getSign()<<"\"";*/
+	os<<"\"";
 	return os;
 	}
 
@@ -204,5 +198,41 @@ void qpn_edge_context_specific<NodeValue>::findBestMotif(suffix_tree<Sign>& tree
 		}
 	}
 
+
+template <typename NodeValue>
+std::stringstream qpn_edge_context_specific<NodeValue>::writeSuffixTree(suffix_tree<Sign>& tree, std::stringstream& s) const
+	{
+	if(&tree == root)
+		s<<"[";
+	std::stringstream sreturn =std::stringstream();
+	for (auto i_nName = ordered_nNames.cbegin(); i_nName!=ordered_nNames.cend(); i_nName++)
+		{
+
+		if(tree.hasDesc(*i_nName,true))
+			{
+			if (tree.hasValue())
+				{
+				sreturn <<s.str()<<"]->"<<tree.getValue()<<std::endl;
+				}
+			std::stringstream tmp = std::stringstream();
+			tmp<<s.str()<<"("<<(*i_nName)<<")";
+			sreturn << writeSuffixTree(tree.getDesc(*i_nName,true), tmp).str();
+			}
+		if(tree.hasDesc(*i_nName,false))
+			{
+			if (tree.hasValue())
+				{
+				sreturn <<s.str()<<"]->"<<tree.getValue()<<std::endl;
+				}
+			std::stringstream tmp = std::stringstream();
+			tmp<<s.str()<<"(¬"<<(*i_nName)<<")";
+			sreturn << writeSuffixTree(tree.getDesc(*i_nName,false), tmp).str();
+			}
+		
+		}
+	if(tree.isLeaf())
+		sreturn<<s.str()<<sreturn.str()<<"]->"<<tree.getValue()<<std::endl;
+	return sreturn;
+	}
 
 
