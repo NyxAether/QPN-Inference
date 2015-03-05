@@ -98,7 +98,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="meta_qpn.cpp" />
     <ClCompile Include="Meta_QPN_main.cpp" />
     <ClCompile Include="qpn_edge.cpp" />
     <ClCompile Include="qpn_edge_additive_synergy.cpp" />

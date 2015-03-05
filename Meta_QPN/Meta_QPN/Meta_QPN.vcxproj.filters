@@ -104,9 +104,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="meta_qpn.cpp">
-      <Filter>Fichiers sources\meta_qpn</Filter>
-    </ClCompile>
     <ClCompile Include="qpn_edge.cpp">
       <Filter>Fichiers sources\edges</Filter>
     </ClCompile>

@@ -16,10 +16,10 @@ class meta_qpn
 		void addQpn(qpn_undirected_type* new_qpn);
 
 		void observeNodeValue(std::string nName, NodeValue value);
-
 		void observeNodeSign(std::string nName, Sign sign);
 
 		void resetQPN();
+		void resetSigns();
 
 		void propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild);
 
@@ -113,6 +113,21 @@ void meta_qpn<NodeValue>::resetQPN()
 		node->reset();
 		}
 	}
+
+
+template < typename NodeValue>
+void meta_qpn<NodeValue>::resetSigns()
+	{
+	qpn_directed_type* qpn = qpn_directed.front();
+	std::list<std::string>* nNames =  qpn->nodeNames();
+	//For each node 
+	for (auto i_nName = nNames->begin(); i_nName!=nNames->cend(); i_nName++)
+		{
+		qpn_node<NodeValue>* node= qpn->getNode(*i_nName);
+		node->resetSign();
+		}
+	}
+
 
 template < typename NodeValue>
 void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild)
