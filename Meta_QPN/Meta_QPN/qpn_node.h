@@ -19,6 +19,9 @@ struct qpn_node
 		virtual  void setSign(Sign sign);
 		virtual  void setValue(NodeValue val);
 		virtual  void setSignObserved(bool obs);
+
+		virtual void reset();
+
 		virtual inline bool isObserved();
 		virtual inline bool isValObserved();
 		virtual inline bool isSignObserved();
@@ -96,6 +99,18 @@ void qpn_node<NodeValue>::setSignObserved(bool obs)
 	{
 	signObserved =obs;
 	}
+
+
+
+template <typename NodeValue>
+void qpn_node<NodeValue>::reset()
+	{
+	sign = Sign::ZERO_SIGN;
+	value = NULL;
+	valObserved = false;
+	signObserved = false;
+	}
+
 template <typename NodeValue>
 std::ostream& operator<<(std::ostream& os, qpn_node<NodeValue>& node)
 	{

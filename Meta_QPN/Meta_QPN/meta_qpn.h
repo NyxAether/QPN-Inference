@@ -16,8 +16,10 @@ class meta_qpn
 		void addQpn(qpn_undirected_type* new_qpn);
 
 		void observeNodeValue(std::string nName, NodeValue value);
-		
+
 		void observeNodeSign(std::string nName, Sign sign);
+
+		void resetQPN();
 
 		void propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild);
 
@@ -48,30 +50,29 @@ class meta_qpn
 	private:
 		std::list<qpn_directed_type*> qpn_directed;
 		std::list<qpn_undirected_type*> qpn_undirected;
+
 	};
-
-
 
 template < typename NodeValue>
 void meta_qpn<NodeValue>::addQpn(qpn_directed_type* new_qpn)
 	{
-		if (qpn_directed.empty())
+	if (qpn_directed.empty())
+		{
+		if(!qpn_undirected.empty())
 			{
-			if(!qpn_undirected.empty())
-				{
-				for(std::list<qpn_undirected_type*>::iterator it = qpn_undirected.begin();  it!=qpn_undirected.cend();it++){
-					copyNode(*it, new_qpn);
-					}
+			for(std::list<qpn_undirected_type*>::iterator it = qpn_undirected.begin();  it!=qpn_undirected.cend();it++){
+				copyNode(*it, new_qpn);
 				}
 			}
-		else
-			{
-			copyNode(new_qpn, qpn_directed.front());
-			}
-		qpn_directed.push_back(new_qpn);
+		}
+	else
+		{
+		copyNode(new_qpn, qpn_directed.front());
+		}
+	qpn_directed.push_back(new_qpn);
 
-		} 
-	
+	} 
+
 
 template < typename NodeValue>
 void meta_qpn<NodeValue>::addQpn(qpn_undirected_type* new_qpn)
@@ -80,7 +81,7 @@ void meta_qpn<NodeValue>::addQpn(qpn_undirected_type* new_qpn)
 		{
 		copyNode(new_qpn, qpn_directed.front());		
 		}
-		qpn_undirected.push_back(new_qpn);
+	qpn_undirected.push_back(new_qpn);
 	}
 
 template < typename NodeValue>
@@ -98,6 +99,21 @@ void meta_qpn<NodeValue>::observeNodeSign(std::string nName, Sign sign)
 	propagate(nName,colorMap,true);
 	}
 
+
+
+template < typename NodeValue>
+void meta_qpn<NodeValue>::resetQPN()
+	{
+	qpn_directed_type* qpn = qpn_directed.front();
+	std::list<std::string>* nNames =  qpn->nodeNames();
+	//For each node 
+	for (auto i_nName = nNames->begin(); i_nName!=nNames->cend(); i_nName++)
+		{
+		qpn_node<NodeValue>* node= qpn->getNode(*i_nName);
+		node->reset();
+		}
+	}
+
 template < typename NodeValue>
 void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild)
 	{
@@ -109,10 +125,10 @@ void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::strin
 		if((*it_qpn_dir)->exists(nName)) //if the current node exist in it
 			{
 			(*it_qpn_dir)->propagate(nName,colorMap, (fromChild ||hasDescendent(nName,std::map<std::string, bool> ())), nextNodes);// The sign is propagate for each edges
-				for(std::map<std::string, bool>::iterator it_nName = nextNodes.begin();it_nName!=nextNodes.cend();it_nName++) // and propagate is launch again on each node modified
-					{
-					propagate((*it_nName).first,std::map<std::string, bool>(colorMap),it_nName->second);
-					}
+			for(std::map<std::string, bool>::iterator it_nName = nextNodes.begin();it_nName!=nextNodes.cend();it_nName++) // and propagate is launch again on each node modified
+				{
+				propagate((*it_nName).first,std::map<std::string, bool>(colorMap),it_nName->second);
+				}
 			}
 		}
 
@@ -123,11 +139,11 @@ void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::strin
 		if((*it_qpn_undir)->exists(nName))
 			{
 			(*it_qpn_undir)->propagate(nName,colorMap, false, nextNodes);
-				for(std::map<std::string, bool>::iterator it_nName = nextNodes.begin();it_nName!=nextNodes.cend();it_nName++)
-					{
-					//In qpns undirected, from child need to be false everytime due to the indirection of the function target, source, out_egde, in_edge in those case.
-					propagate((*it_nName).first,std::map<std::string, bool>(colorMap),it_nName->second);
-					}
+			for(std::map<std::string, bool>::iterator it_nName = nextNodes.begin();it_nName!=nextNodes.cend();it_nName++)
+				{
+				//In qpns undirected, from child need to be false everytime due to the indirection of the function target, source, out_egde, in_edge in those case.
+				propagate((*it_nName).first,std::map<std::string, bool>(colorMap),it_nName->second);
+				}
 			}
 		}
 	}
@@ -144,14 +160,14 @@ bool meta_qpn<NodeValue>::hasDescendent(const std::string nName, std::map<std::s
 			{
 			list<qpn_node<NodeValue>> children =list<qpn_node<NodeValue>>();
 			(*it_qpn_dir)->getChildren(nName, children);
-				for(list< qpn_node<NodeValue>>::iterator child = children.begin();child!=children.cend(); child++)
-					{
-					if(child->isObserved())
+			for(list< qpn_node<NodeValue>>::iterator child = children.begin();child!=children.cend(); child++)
+				{
+				if(child->isObserved())
+					return true;
+				if(!colorMap[child->getName()])
+					if(hasDescendent(child->getName(), std::map<std::string, bool>(colorMap)))
 						return true;
-					if(!colorMap[child->getName()])
-						if(hasDescendent(child->getName(), std::map<std::string, bool>(colorMap)))
-							return true;
-					}
+				}
 			}
 		}
 	return false;

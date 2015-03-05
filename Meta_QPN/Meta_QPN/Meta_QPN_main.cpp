@@ -201,6 +201,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	qpn_manager.observeNodeValue("M",false);
 	qpn_manager.observeNodeSign("D",Sign::PLUS_SIGN);
+	qpn_manager.resetQPN();
 	ofstream outf =ofstream("net.gv");
 	qpn_manager.writeGraphViz(outf);
 	return 0;
