@@ -39,8 +39,8 @@ void qpn_context_specific<NodeValue>::writeGraphVizEdges(std::ostream& os)
 	for (std::tie(it,it_end)=boost::edges(qpn); it!=it_end;it++)
 		{
 		qpn_edge& edge = *edgeMap[*it];
-		qpn_node<NodeValue>* source = nodeMap[boost::get(boost::vertex_name,qpn, boost::source(*it,qpn))];
-		qpn_node<NodeValue>* target = nodeMap[boost::get(boost::vertex_name,qpn, boost::target(*it,qpn))];
-		os<<source->getName()<<"->"<<target->getName()<<"["<<edge<<"];"<<endl;
+		qpn_node<NodeValue>* source = (*nodeMap)[boost::get(boost::vertex_name,qpn, boost::source(*it,qpn))];
+		qpn_node<NodeValue>* target = (*nodeMap)[boost::get(boost::vertex_name,qpn, boost::target(*it,qpn))];
+		os<<source->getName()<<"->"<<target->getName()<<"["<<edge<<"];"<<std::endl;
 		}
 	}

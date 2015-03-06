@@ -27,7 +27,7 @@ class i_qpn_descriptor
 		typedef typename boost::graph_traits<GraphType>::out_edge_iterator OutEIterator;
 
 	public:
-		i_qpn_descriptor(void):qpn(GraphType()), nodeMap(std::map<std::string, qpn_node<NodeValue>*>()), edgeMap(std::map<Edge, qpn_edge*>()){};
+		i_qpn_descriptor(void):qpn(GraphType()), nodeMap(new std::map<std::string, qpn_node<NodeValue>*>()), edgeMap(std::map<Edge, qpn_edge*>()){};
 		virtual ~i_qpn_descriptor(void){};
 
 		virtual void addVertex(const std::string nName); 
@@ -43,6 +43,7 @@ class i_qpn_descriptor
 		virtual typename qpn_node<NodeValue>* getNode(const std::string nName);
 		virtual typename qpn_node<NodeValue>** getPNode(const std::string nName);
 		virtual void setNode(const std::string nName, typename qpn_node<NodeValue>* node) ;
+		virtual void setNodeMap(std::map<std::string, qpn_node<NodeValue>*>* nodeMap);
 
 		virtual void getChildren(const std::string nName,  std::list< qpn_node<NodeValue>>& children);
 
@@ -56,7 +57,7 @@ class i_qpn_descriptor
 	protected:
 		GraphType qpn;
 		std::map<Edge, qpn_edge*> edgeMap;
-		std::map<std::string, qpn_node<NodeValue>*> nodeMap;
+		std::map<std::string, qpn_node<NodeValue>*>* nodeMap;
 	};
 
 
@@ -66,8 +67,8 @@ void i_qpn_descriptor<NodeValue,Direction>::addVertex(const std::string nName)
 	{
 	Vertex v =boost::add_vertex(nName, qpn);
 	get(boost::vertex_name, qpn)[v]=nName;
-	nodeMap[nName] = new qpn_node<NodeValue>();
-	nodeMap[nName]->setName(nName);
+	(*nodeMap)[nName] = new qpn_node<NodeValue>();
+	(*nodeMap)[nName]->setName(nName);
 	}
 
 template <typename NodeValue,  typename Direction>
@@ -75,49 +76,55 @@ void i_qpn_descriptor<NodeValue,Direction>::addVertex(qpn_node<NodeValue>* node)
 	{
 	Vertex v =boost::add_vertex(node->getName(), qpn);
 	get(boost::vertex_name, qpn)[v]=node->getName();
-	nodeMap[node->getName()] = node;
+	((*nodeMap))[node->getName()] = node;
 	}
 
 template <typename NodeValue,  typename Direction>
 void i_qpn_descriptor<NodeValue,Direction>::observeNodeValue(const std::string nName, NodeValue value)
 	{
-	nodeMap[nName]->setValue(value);
+	(*nodeMap)[nName]->setValue(value);
 	}
 
 template <typename NodeValue,  typename Direction>
 void i_qpn_descriptor<NodeValue,Direction>::observeNodeVariation(const std::string nName, const Sign& sign)
 	{
-	nodeMap[nName]->setSign(sign); //There is no more modification because it's the role of the meta_qpn to propagate the sign
-	nodeMap[nName]->setSignObserved(true);
+	(*nodeMap)[nName]->setSign(sign); //There is no more modification because it's the role of the meta_qpn to propagate the sign
+	(*nodeMap)[nName]->setSignObserved(true);
 	}
 
 template <typename NodeValue,  typename Direction>
 qpn_node<NodeValue>* i_qpn_descriptor<NodeValue, Direction>::getNode(const std::string nName)
 	{
-	return nodeMap[nName];
+	return (*nodeMap)[nName];
 	}
 
 
 template < typename NodeValue, typename Direction >
 typename qpn_node<NodeValue>** i_qpn_descriptor<NodeValue, Direction>::getPNode(const std::string nName)
 	{
-	return &(nodeMap[nName]);
+	return &((*nodeMap)[nName]);
 	}
 
 template < typename NodeValue, typename Direction >
 void i_qpn_descriptor<NodeValue, Direction>::setNode(const std::string nName, typename qpn_node<NodeValue>* node)
 	{
-	nodeMap[nName]=node;
+	(*nodeMap)[nName]=node;
 	}
 
 
+template < typename NodeValue, typename Direction >
+void i_qpn_descriptor<NodeValue, Direction>::setNodeMap(std::map<std::string, qpn_node<NodeValue>*>* nodeMap)
+	{
+	delete this->nodeMap;
+	this->nodeMap = nodeMap;
+	}
 
 template < typename NodeValue, typename Direction >
 void i_qpn_descriptor<NodeValue, Direction>::getChildren(const std::string nName,  std::list<  qpn_node<NodeValue>>& children)
 	{
 	OutEIterator out_it, out_end;
 	for(boost::tie(out_it, out_end) = boost::out_edges(qpn.vertex(nName),qpn); out_it != out_end ; out_it++){
-		children.push_back(*(nodeMap[boost::get(boost::vertex_name,qpn,boost::target(*out_it,qpn))]));
+		children.push_back(*((*nodeMap)[boost::get(boost::vertex_name,qpn,boost::target(*out_it,qpn))]));
 		}
 	}
 
@@ -147,7 +154,7 @@ void i_qpn_descriptor<NodeValue, Direction>::writeGraphVizNodes(std::ostream& os
 	VIterator it, it_end;
 	for(std::tie(it,it_end) = boost::vertices(qpn); it!=it_end; it++)
 		{
-		qpn_node<NodeValue>* node =nodeMap[boost::get(boost::vertex_name, qpn, *it)];
-		os<<node->getName()<<(*node)<<";"<<endl;
+		qpn_node<NodeValue>* node =(*nodeMap)[boost::get(boost::vertex_name, qpn, *it)];
+		os<<node->getName()<<(*node)<<";"<<std::endl;
 		}
 	}

@@ -9,6 +9,10 @@ struct qpn_node
 		qpn_node(void):value(NULL), sign(Sign::ZERO_SIGN), valObserved(false), signObserved(false)
 			{
 			};
+		qpn_node(std::string nName):name(nName),value(NULL), sign(Sign::ZERO_SIGN), valObserved(false), signObserved(false)
+			{
+			};
+
 		virtual ~qpn_node(void){};
 		friend std::ostream& operator<<(std::ostream& os,const qpn_node<NodeValue>& v);
 		virtual inline NodeValue getValue() const;

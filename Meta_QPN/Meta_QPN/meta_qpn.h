@@ -11,7 +11,7 @@ class meta_qpn
 
 		//TODO using some smart pointers for the qpns can be the good way to do things
 		meta_qpn(void):qpn_directed(std::list<qpn_directed_type*>()), qpn_undirected(std::list<qpn_undirected_type*>()){};
-		~meta_qpn(void){};
+		virtual ~meta_qpn(void){};
 
 		void addQpn(qpn_directed_type* new_qpn);
 		void addQpn(qpn_undirected_type* new_qpn);
@@ -26,6 +26,7 @@ class meta_qpn
 
 		void propagate(const std::string nName, std::map<std::string, bool>& colorMap, bool fromChild);
 
+		bool exists(std::string nName);
 		bool hasDescendent(const std::string nName, std::map<std::string, bool>& colorMap);
 
 		void  writeGraphViz(std::ostream& out);
@@ -43,12 +44,9 @@ class meta_qpn
 					{
 					nodes[*nName]= qpn->getNode(*nName);
 					}
-				else
-					{
 
-					qpn->setNode(*nName, nodes[*nName]);
-					}
 				}
+			qpn->setNodeMap(&nodes);
 			};
 
 	private:
@@ -75,6 +73,13 @@ void meta_qpn<NodeValue>::addQpn(qpn_undirected_type* new_qpn)
 	}
 
 
+template < typename NodeValue>
+void meta_qpn<NodeValue>::addNode(std::string nName)
+	{
+	if(!exists(nName))
+		nodes[nName] = new qpn_node<NodeValue>(nName);
+	}
+
 
 
 template < typename NodeValue>
@@ -87,6 +92,7 @@ template < typename NodeValue>
 void meta_qpn<NodeValue>::observeNodeSign(std::string nName, Sign sign)
 	{
 	nodes[nName]->setSign( sign);
+	nodes[nName]->setSignObserved(true);
 	std::map<std::string, bool> colorMap = std::map<std::string, bool>();
 	colorMap[nName]=true;
 	propagate(nName,colorMap,true);
@@ -152,6 +158,13 @@ void meta_qpn<NodeValue>::propagate(const std::string nName, std::map<std::strin
 
 
 template < typename NodeValue>
+bool meta_qpn<NodeValue>::exists(std::string nName)
+	{
+	return nodes[nName] != nullptr;
+	}
+
+
+template < typename NodeValue>
 bool meta_qpn<NodeValue>::hasDescendent(const std::string nName, std::map<std::string, bool>& colorMap)
 	{
 	colorMap[nName]=true;
@@ -201,8 +214,7 @@ qpn_node<NodeValue>** meta_qpn<NodeValue>::getNode(std::string nName)
 	qpn_node<NodeValue>* node_ptr = nodes[nName];
 	if(node_ptr == nullptr)
 		{
-		node_ptr = new qpn_node<NodeValue>();
-		nodes[nName]= node_ptr;
+		addNode(nName);
 		}
 	return &(nodes[nName]);
 	}

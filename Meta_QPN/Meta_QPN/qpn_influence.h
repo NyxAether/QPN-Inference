@@ -54,18 +54,6 @@ void qpn_influence<NodeValue>::addEdge(qpn_edge* new_edge,  std::vector<std::str
 		addVertex(args[1]);
 	Edge& e =boost::add_edge_by_label(args[0], args[1], qpn).first;
 	edgeMap[e] = new_edge;
-	//qpn_edge_influence* casted_edge = dynamic_cast<qpn_edge_influence *>(&new_edge);
-	//if (NULL != casted_edge)
-	//{
-	//qpn_edge_influence&  edge_tmp= *casted_edge;
-	//	qpn[e]= *casted_edge;
-	//		cout<<edge_tmp<<std::endl;
-	//	qpn[e]= edge_tmp;
-	//}
-
-
-	//cout<<new_edge<<std::endl;
-	//cout<<qpn[e]<<std::endl;
 	
 	}
 
@@ -76,9 +64,9 @@ void qpn_influence<NodeValue>::writeGraphVizEdges(std::ostream& os)
 	for (std::tie(it,it_end)=boost::edges(qpn); it!=it_end;it++)
 		{
 		qpn_edge& edge = *edgeMap[*it];
-		qpn_node<NodeValue>* source = nodeMap[boost::get(boost::vertex_name,qpn, boost::source(*it,qpn))];
-		qpn_node<NodeValue>* target = nodeMap[boost::get(boost::vertex_name,qpn, boost::target(*it,qpn))];
-		os<<source->getName()<<"->"<<target->getName()<<"["<<edge<<"];"<<endl;
+		qpn_node<NodeValue>* source = (*nodeMap)[boost::get(boost::vertex_name,qpn, boost::source(*it,qpn))];
+		qpn_node<NodeValue>* target = (*nodeMap)[boost::get(boost::vertex_name,qpn, boost::target(*it,qpn))];
+		os<<source->getName()<<"->"<<target->getName()<<"["<<edge<<"];"<<std::endl;
 		}
 	}
 
