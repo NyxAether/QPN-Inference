@@ -1,12 +1,13 @@
 #pragma once
-#include "qpn_descriptor.h"
+#include "qpn_descriptor_directed.h"
+#include "qpn_descriptor_undirected.h"
 
 template < typename NodeValue>
 class meta_qpn
 	{
 	public:
-		typedef typename qpn_descriptor< NodeValue, boost::bidirectionalS> qpn_directed_type;
-		typedef typename qpn_descriptor< NodeValue, boost::undirectedS> qpn_undirected_type;
+		typedef typename qpn_descriptor_directed< NodeValue> qpn_directed_type;
+		typedef typename qpn_descriptor_undirected< NodeValue> qpn_undirected_type;
 
 		//TODO using some smart pointers for the qpns can be the good way to do things
 		meta_qpn(void):qpn_directed(std::list<qpn_directed_type*>()), qpn_undirected(std::list<qpn_undirected_type*>()){};
@@ -31,7 +32,7 @@ class meta_qpn
 
 	protected:
 		template<typename NodeValue, typename T1, typename T2>
-		void copyNode(qpn_descriptor<NodeValue, T1>* from, qpn_descriptor<NodeValue, T2>* to)
+		void copyNode(i_qpn_descriptor<NodeValue, T1>* from, i_qpn_descriptor<NodeValue, T2>* to)
 			{
 			std::list<std::string>* nNames = from->nodeNames();
 			for(std::list<std::string>::iterator nName = nNames->begin(); nName != nNames->cend(); nName++)

@@ -69,9 +69,6 @@
     <ClInclude Include="qpn_nm_influence.h">
       <Filter>Fichiers d%27en-tête\qpn</Filter>
     </ClInclude>
-    <ClInclude Include="qpn_descriptor.h">
-      <Filter>Fichiers d%27en-tête\qpn</Filter>
-    </ClInclude>
     <ClInclude Include="qpn_influence.h">
       <Filter>Fichiers d%27en-tête\qpn</Filter>
     </ClInclude>
@@ -94,6 +91,15 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="qpn_context_specific.h">
+      <Filter>Fichiers d%27en-tête\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="i_qpn_descriptor.h">
+      <Filter>Fichiers d%27en-tête\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_descriptor_undirected.h">
+      <Filter>Fichiers d%27en-tête\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_descriptor_directed.h">
       <Filter>Fichiers d%27en-tête\qpn</Filter>
     </ClInclude>
   </ItemGroup>

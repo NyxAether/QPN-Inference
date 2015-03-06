@@ -9,7 +9,7 @@
 #include "qpn_nm_influence.h"
 #include "qpn_context_specific.h"
 #include "meta_qpn.h"
-#include "qpn_descriptor.h"
+#include "qpn_descriptor_directed.h"
 #include <fstream> 
 
 
@@ -115,7 +115,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//	qpn_manager.observeNodeValue("X6",0);
 	//qpn_manager.observeNodeSign("X3",Sign::MINUS_SIGN); 
 	
-	qpn_descriptor<bool , boost::bidirectionalS>* qpn_influences =new qpn_influence<bool>(); 
+	qpn_descriptor_directed<bool>* qpn_influences =new qpn_influence<bool>(); 
 
 	vector<string> v = vector<string>();
 	v.push_back("U");
@@ -151,7 +151,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	qpn_manager.addQpn(qpn_influences);
 
 	//Product Synergies
-	qpn_descriptor<bool , boost::undirectedS>* qpn_synergies =new qpn_product_synergy<bool>(); 
+	qpn_descriptor_undirected<bool>* qpn_synergies =new qpn_product_synergy<bool>(); 
 
 	v = vector<string>();
 	v.push_back("U");
@@ -166,7 +166,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 	//Context specific
-	qpn_descriptor<bool , boost::bidirectionalS>* qpn_contexts =new qpn_context_specific<bool>(); 
+	qpn_descriptor_directed<bool>* qpn_contexts =new qpn_context_specific<bool>(); 
 
 	list<pair<list<pair<string,bool>>,Sign>> contexts = list<pair<list<pair<string,bool>>,Sign>>();
 	pair<string,bool> d, _m, _w, _m_w;
@@ -201,7 +201,6 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	qpn_manager.observeNodeValue("M",false);
 	qpn_manager.observeNodeSign("D",Sign::PLUS_SIGN);
-	qpn_manager.resetSigns();
 	ofstream outf =ofstream("net.gv");
 	qpn_manager.writeGraphViz(outf);
 	return 0;

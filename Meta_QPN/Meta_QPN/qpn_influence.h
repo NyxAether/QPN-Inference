@@ -8,12 +8,12 @@
 #include "qpn_node.h"
 #include "qpn_edge.h"
 #include "qpn_edge_influence.h"
-#include "qpn_descriptor.h"
+#include "qpn_descriptor_directed.h"
 
 
 template <typename NodeValue>
 class qpn_influence :
-	public qpn_descriptor< NodeValue, boost::bidirectionalS>
+	public qpn_descriptor_directed< NodeValue>
 	{
 		public:
 
@@ -30,7 +30,7 @@ class qpn_influence :
 
 
 template <typename NodeValue>
-qpn_influence<NodeValue>::qpn_influence(void) :qpn_descriptor()
+qpn_influence<NodeValue>::qpn_influence(void) :qpn_descriptor_directed()
 	{
 
 	}

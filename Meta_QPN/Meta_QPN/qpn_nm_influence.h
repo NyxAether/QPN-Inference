@@ -1,12 +1,12 @@
 #pragma once
 
 #include "boost\graph\adjacency_list.hpp"
-#include "qpn_descriptor.h"
+#include "qpn_descriptor_directed.h"
 #include "qpn_edge_nm_influence.h"
 
 template <typename NodeValue>
 class qpn_nm_influence :
-	public qpn_descriptor< NodeValue, boost::bidirectionalS>
+	public qpn_descriptor_directed< NodeValue>
 	{
 	public:
 		qpn_nm_influence(void){};

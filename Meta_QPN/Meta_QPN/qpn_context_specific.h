@@ -1,12 +1,12 @@
 #pragma once
 
 #include "boost\graph\adjacency_list.hpp"
-#include "qpn_descriptor.h"
+#include "qpn_descriptor_directed.h"
 #include "qpn_edge_context_specific.h"
 
 template <typename NodeValue>
 class qpn_context_specific :
-	public qpn_descriptor< NodeValue, boost::bidirectionalS>
+	public qpn_descriptor_directed< NodeValue>
 	{
 	public:
 		qpn_context_specific(void){};

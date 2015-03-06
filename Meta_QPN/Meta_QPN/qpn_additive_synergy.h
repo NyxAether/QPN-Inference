@@ -2,12 +2,12 @@
 
 #include <string>
 #include "boost\graph\adjacency_list.hpp"
-#include "qpn_descriptor.h"
+#include "qpn_descriptor_undirected.h"
 #include "qpn_edge_additive_synergy.h"
 
 template <typename NodeValue>
 class qpn_additive_synergy :
-	public qpn_descriptor< NodeValue, boost::undirectedS>
+	public qpn_descriptor_undirected< NodeValue>
 	{
 	public:
 

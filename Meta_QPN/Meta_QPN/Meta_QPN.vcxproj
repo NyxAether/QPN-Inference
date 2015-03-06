@@ -78,10 +78,12 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="i_qpn_descriptor.h" />
     <ClInclude Include="meta_qpn.h" />
     <ClInclude Include="qpn_additive_synergy.h" />
     <ClInclude Include="qpn_context_specific.h" />
-    <ClInclude Include="qpn_descriptor.h" />
+    <ClInclude Include="qpn_descriptor_directed.h" />
+    <ClInclude Include="qpn_descriptor_undirected.h" />
     <ClInclude Include="qpn_edge.h" />
     <ClInclude Include="qpn_edge_additive_synergy.h" />
     <ClInclude Include="qpn_edge_context_specific.h" />
