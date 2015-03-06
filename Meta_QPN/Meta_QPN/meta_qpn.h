@@ -16,6 +16,8 @@ class meta_qpn
 		void addQpn(qpn_directed_type* new_qpn);
 		void addQpn(qpn_undirected_type* new_qpn);
 
+		void addNode(std::string nName);
+
 		void observeNodeValue(std::string nName, NodeValue value);
 		void observeNodeSign(std::string nName, Sign sign);
 
@@ -31,19 +33,20 @@ class meta_qpn
 		qpn_node<NodeValue>** getNode(std::string nName);
 
 	protected:
-		template<typename NodeValue, typename T1, typename T2>
-		void copyNode(i_qpn_descriptor<NodeValue, T1>* from, i_qpn_descriptor<NodeValue, T2>* to)
+		template<typename NodeValue, typename T1>
+		void copyNode(i_qpn_descriptor<NodeValue, T1>* qpn)
 			{
-			std::list<std::string>* nNames = from->nodeNames();
+			std::list<std::string>* nNames = qpn->nodeNames();
 			for(std::list<std::string>::iterator nName = nNames->begin(); nName != nNames->cend(); nName++)
 				{
-				if(! to->exists(*nName))
+				if(nodes[*nName] == nullptr)
 					{
-					to->addVertex(from->getNode(*nName));
+					nodes[*nName]= qpn->getNode(*nName);
 					}
 				else
 					{
-					from->setNode(*nName, to->getNode(*nName));
+
+					qpn->setNode(*nName, nodes[*nName]);
 					}
 				}
 			};
@@ -51,25 +54,14 @@ class meta_qpn
 	private:
 		std::list<qpn_directed_type*> qpn_directed;
 		std::list<qpn_undirected_type*> qpn_undirected;
+		std::map<std::string, qpn_node<NodeValue>*> nodes;
 
 	};
 
 template < typename NodeValue>
 void meta_qpn<NodeValue>::addQpn(qpn_directed_type* new_qpn)
 	{
-	if (qpn_directed.empty())
-		{
-		if(!qpn_undirected.empty())
-			{
-			for(std::list<qpn_undirected_type*>::iterator it = qpn_undirected.begin();  it!=qpn_undirected.cend();it++){
-				copyNode(*it, new_qpn);
-				}
-			}
-		}
-	else
-		{
-		copyNode(new_qpn, qpn_directed.front());
-		}
+	copyNode(new_qpn);
 	qpn_directed.push_back(new_qpn);
 
 	} 
@@ -78,23 +70,23 @@ void meta_qpn<NodeValue>::addQpn(qpn_directed_type* new_qpn)
 template < typename NodeValue>
 void meta_qpn<NodeValue>::addQpn(qpn_undirected_type* new_qpn)
 	{
-	if(!qpn_directed.empty())
-		{
-		copyNode(new_qpn, qpn_directed.front());		
-		}
+	copyNode(new_qpn);
 	qpn_undirected.push_back(new_qpn);
 	}
+
+
+
 
 template < typename NodeValue>
 void meta_qpn<NodeValue>::observeNodeValue(std::string nName, NodeValue value)
 	{
-	qpn_directed.front()->observeNodeValue(nName, value);
+	nodes[nName]->setValue(value);
 	}
 
 template < typename NodeValue>
 void meta_qpn<NodeValue>::observeNodeSign(std::string nName, Sign sign)
 	{
-	qpn_directed.front()->observeNodeVariation(nName, sign);
+	nodes[nName]->setSign( sign);
 	std::map<std::string, bool> colorMap = std::map<std::string, bool>();
 	colorMap[nName]=true;
 	propagate(nName,colorMap,true);
@@ -105,13 +97,10 @@ void meta_qpn<NodeValue>::observeNodeSign(std::string nName, Sign sign)
 template < typename NodeValue>
 void meta_qpn<NodeValue>::resetQPN()
 	{
-	qpn_directed_type* qpn = qpn_directed.front();
-	std::list<std::string>* nNames =  qpn->nodeNames();
 	//For each node 
-	for (auto i_nName = nNames->begin(); i_nName!=nNames->cend(); i_nName++)
+	for (auto i_nName = nodes->begin(); i_nName!=nodes->cend(); i_nName++)
 		{
-		qpn_node<NodeValue>* node= qpn->getNode(*i_nName);
-		node->reset();
+		i_nName->second->reset();
 		}
 	}
 
@@ -119,13 +108,10 @@ void meta_qpn<NodeValue>::resetQPN()
 template < typename NodeValue>
 void meta_qpn<NodeValue>::resetSigns()
 	{
-	qpn_directed_type* qpn = qpn_directed.front();
-	std::list<std::string>* nNames =  qpn->nodeNames();
 	//For each node 
-	for (auto i_nName = nNames->begin(); i_nName!=nNames->cend(); i_nName++)
+	for (auto i_nName = nodes->begin(); i_nName!=nodes->cend(); i_nName++)
 		{
-		qpn_node<NodeValue>* node= qpn->getNode(*i_nName);
-		node->resetSign();
+		i_nName->second->resetSign();
 		}
 	}
 
@@ -193,7 +179,10 @@ template < typename NodeValue>
 void meta_qpn<NodeValue>::writeGraphViz(std::ostream& out)
 	{
 	out<<"digraph G {"<<std::endl;
-	qpn_directed.front()->writeGraphVizNodes(out);
+	for (auto i_node=nodes.cbegin(); i_node!=nodes.cend();i_node++)
+		{
+		out<<i_node->first<<*(i_node->second)<<";"<<std::endl;
+		}
 	for(std::list<qpn_directed_type*>::iterator it = qpn_directed.begin(); it!=qpn_directed.cend(); it++)
 		{
 		(*it)->writeGraphVizEdges(out);
@@ -209,11 +198,11 @@ void meta_qpn<NodeValue>::writeGraphViz(std::ostream& out)
 template < typename NodeValue>
 qpn_node<NodeValue>** meta_qpn<NodeValue>::getNode(std::string nName)
 	{
-	qpn_directed_type* qpn = qpn_directed.front();
-	if(qpn->exists(nName))
-		return qpn->getPNode(nName);
-	else{
-		qpn->addVertex(nName);
-		return  qpn->getPNode(nName);
+	qpn_node<NodeValue>* node_ptr = nodes[nName];
+	if(node_ptr == nullptr)
+		{
+		node_ptr = new qpn_node<NodeValue>();
+		nodes[nName]= node_ptr;
 		}
+	return &(nodes[nName]);
 	}

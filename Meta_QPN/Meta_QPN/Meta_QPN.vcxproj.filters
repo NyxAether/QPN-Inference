@@ -102,6 +102,9 @@
     <ClInclude Include="qpn_descriptor_directed.h">
       <Filter>Fichiers d%27en-tête\qpn</Filter>
     </ClInclude>
+    <ClInclude Include="meta_qpn_controller.h">
+      <Filter>Fichiers d%27en-tête\meta_qpn</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Meta_QPN_main.cpp">
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="qpn_sign.cpp">
       <Filter>Fichiers sources\signs</Filter>
+    </ClCompile>
+    <ClCompile Include="meta_qpn_controller.cpp">
+      <Filter>Fichiers sources\meta_qpn</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

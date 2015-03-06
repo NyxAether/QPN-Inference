@@ -9,7 +9,6 @@
 #include "qpn_nm_influence.h"
 #include "qpn_context_specific.h"
 #include "meta_qpn.h"
-#include "qpn_descriptor_directed.h"
 #include <fstream> 
 
 

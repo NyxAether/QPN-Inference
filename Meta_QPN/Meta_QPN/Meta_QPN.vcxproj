@@ -80,6 +80,7 @@
   <ItemGroup>
     <ClInclude Include="i_qpn_descriptor.h" />
     <ClInclude Include="meta_qpn.h" />
+    <ClInclude Include="meta_qpn_controller.h" />
     <ClInclude Include="qpn_additive_synergy.h" />
     <ClInclude Include="qpn_context_specific.h" />
     <ClInclude Include="qpn_descriptor_directed.h" />
@@ -100,6 +101,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="meta_qpn_controller.cpp" />
     <ClCompile Include="Meta_QPN_main.cpp" />
     <ClCompile Include="qpn_edge.cpp" />
     <ClCompile Include="qpn_edge_additive_synergy.cpp" />
