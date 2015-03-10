@@ -200,7 +200,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	qpn.addInfluence("A","B", Sign::PLUS_SIGN);
 	qpn.addInfluence("A","C", Sign::MINUS_SIGN);
 	qpn.addInfluence("C","D", Sign::ZERO_SIGN);
-	qpn.addInfluence("B","D", Sign::QMARK_SIGN);
+
 	qpn.addInfluence("E","D", Sign::MINUS_SIGN);
 	qpn.addInfluence("F","D", Sign::PLUS_SIGN);
 
@@ -209,8 +209,10 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	qpn.addProductSynergy("C","F","D",Sign::PLUS_SIGN,Sign::PLUS_SIGN);
 	
+	qpn.addContextSpecific("B","D","context.txt");
 
-		qpn.observeNodeValue("D",true);
+	qpn.observeNodeValue("E",true);
+	qpn.observeNodeValue("F",true);
 	qpn.observeNodeSign("B",Sign::PLUS_SIGN);
 
 

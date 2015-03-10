@@ -40,7 +40,7 @@ void qpn_descriptor_undirected< NodeValue>::propagate(const std::string nName, s
 		if(!target_node->isValObserved() && !colorMap[target_node->getName()] && newSign != target_node->getSign())
 			{
 			(*nodeMap)[target_node->getName()]->setSign(newSign);
-			nextNodes[target_node->getName()] = true;//Define  where the sign come from;
+			nextNodes[target_node->getName()] = true;//Define where the sign come from;
 			}
 		}
 	}

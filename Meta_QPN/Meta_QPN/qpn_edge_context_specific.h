@@ -24,7 +24,7 @@ struct qpn_edge_context_specific :
 		// The two lists of parameter need to be ordered cautiously with a special logic :
 		// The order of qpn_node will influence the context order in the contexts parameter.
 		// For instance, if nodes are specified in the following order A,B,C,D
-		// If context not D, A and B need to be specified only in this order : A, B , not D
+		// and the context is [not D, A and B] need to be specified only in this order : [A, B , not D]
 		//************************************
 		qpn_edge_context_specific(std::list<qpn_node<NodeValue>**> nodes_list, contexts_t contexts);
 		~qpn_edge_context_specific(void){};
