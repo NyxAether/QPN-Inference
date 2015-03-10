@@ -204,12 +204,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	qpn.addInfluence("E","D", Sign::MINUS_SIGN);
 	qpn.addInfluence("F","D", Sign::PLUS_SIGN);
 
-	//qpn.addProductSynergy("B","C","D",Sign::MINUS_SIGN);
-	//qpn.addProductSynergy("B","E","D",Sign::MINUS_SIGN,Sign::PLUS_SIGN);
+	qpn.addProductSynergy("B","C","D",Sign::MINUS_SIGN);
+	qpn.addProductSynergy("B","E","D",Sign::MINUS_SIGN,Sign::PLUS_SIGN);
+
 	qpn.addProductSynergy("C","F","D",Sign::PLUS_SIGN,Sign::PLUS_SIGN);
 	
+
+		qpn.observeNodeValue("D",true);
 	qpn.observeNodeSign("B",Sign::PLUS_SIGN);
-	qpn.observeNodeValue("D",true);
+
 
 	qpn.writeGraphViz("net.gv");
 	return 0;

@@ -10,7 +10,7 @@ struct qpn_edge_product_synergy :
 		qpn_edge_product_synergy(qpn_node<NodeValue>** linkedNode, Sign sign):linkedNode(linkedNode),sign(sign),isSimple(true){};
 		~qpn_edge_product_synergy(void){};
 
-		Sign getSign();
+		virtual Sign getSign();
 
 		std::ostream& writeGraphVizFormat(std::ostream& os) const;
 
@@ -26,7 +26,7 @@ struct qpn_edge_product_synergy :
 template <typename NodeValue>
 Sign qpn_edge_product_synergy<NodeValue>::getSign()
 	{
-				std::cout<<((*linkedNode)->getName())<<(*linkedNode)->isObserved()<<sign<<std::endl;
+	//std::cout<<((*linkedNode)->getName())<<(*linkedNode)->isObserved()<<sign<<std::endl;
 	if(isSimple){
 		if((*linkedNode)->isObserved())
 			return sign;

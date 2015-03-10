@@ -21,16 +21,6 @@ std::ostream& qpn_edge::writeGraphVizFormat(std::ostream& os)const
 		return os<<"test";
 	}
 
-//qpn_edge& qpn_edge::operator=(qpn_edge& edge)
-//	{
-//		edge.assign(*this);
-//		return edge;
-//	}
-
-//inline void qpn_edge::assign( qpn_edge& edge)
-//	{
-//	edge.name = name;
-//	}
 
 
  std::ostream& operator<<(std::ostream& os, const qpn_edge& edge)
