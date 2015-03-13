@@ -15,7 +15,7 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QListWidget>
+#include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
@@ -35,7 +35,7 @@ public:
     QVBoxLayout *verticalLayout_3;
     QPushButton *addNodeButton;
     QPushButton *addEdgeButton;
-    QListWidget *nodeNamesListWidget;
+    QListView *nodeView;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -44,7 +44,7 @@ public:
     {
         if (Meta_QPN_QTClass->objectName().isEmpty())
             Meta_QPN_QTClass->setObjectName(QStringLiteral("Meta_QPN_QTClass"));
-        Meta_QPN_QTClass->resize(307, 278);
+        Meta_QPN_QTClass->resize(436, 289);
         centralWidget = new QWidget(Meta_QPN_QTClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayoutWidget = new QWidget(centralWidget);
@@ -69,19 +69,17 @@ public:
         verticalLayout_3->addWidget(addEdgeButton);
 
 
-        gridLayout->addLayout(verticalLayout_3, 1, 1, 1, 1);
+        gridLayout->addLayout(verticalLayout_3, 0, 1, 1, 1);
 
-        nodeNamesListWidget = new QListWidget(gridLayoutWidget);
-        nodeNamesListWidget->setObjectName(QStringLiteral("nodeNamesListWidget"));
+        nodeView = new QListView(gridLayoutWidget);
+        nodeView->setObjectName(QStringLiteral("nodeView"));
 
-        gridLayout->addWidget(nodeNamesListWidget, 1, 0, 1, 1);
+        gridLayout->addWidget(nodeView, 0, 0, 1, 1);
 
         Meta_QPN_QTClass->setCentralWidget(centralWidget);
-        gridLayoutWidget->raise();
-        addEdgeButton->raise();
         menuBar = new QMenuBar(Meta_QPN_QTClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 307, 21));
+        menuBar->setGeometry(QRect(0, 0, 436, 21));
         Meta_QPN_QTClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(Meta_QPN_QTClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));

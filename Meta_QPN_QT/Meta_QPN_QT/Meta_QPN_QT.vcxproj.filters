@@ -79,6 +79,9 @@
     <Filter Include="Source Files\tools">
       <UniqueIdentifier>{08d168bc-10d2-45ac-a1f7-c2c106c028d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\node">
+      <UniqueIdentifier>{c12ae85d-36b7-413c-a96a-9f33852425d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -112,7 +115,7 @@
       <Filter>Source Files\tools</Filter>
     </ClCompile>
     <ClCompile Include="qpn_node_list_model.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\node</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="qpn_node_list_model.h">
       <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\meta_qpn.h">
+      <Filter>Header Files\meta_qpn</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

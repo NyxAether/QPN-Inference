@@ -13,16 +13,20 @@ qpn_node_list_model::~qpn_node_list_model(void)
 
 int qpn_node_list_model::rowCount(const QModelIndex & parent) const
 	{
-	return 0;
+	return qpn->nodesCount();
 	}
 QVariant qpn_node_list_model::data(const QModelIndex & index, int role) const
 	{
-	return QVariant();
+	qpn_node<bool>* node = qpn->getNode(index.row());
+	return QVariant(QString::fromStdString(node->getName()));
 	}
 
 bool qpn_node_list_model::setData(const QModelIndex & index, const QVariant & value, int role)
 	{
-	return false;
+	std::string nName = value.toString().toLocal8Bit().constData();
+	qpn->addNode(nName);
+	emit dataChanged(index, index);
+	return true;
 	}
 Qt::ItemFlags qpn_node_list_model::flags(const QModelIndex & index) const
 	{

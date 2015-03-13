@@ -2,7 +2,10 @@
 #include <QAbstractListModel>
 #include <QVariant>
 #include <QModelIndex>
+#include <QString>
+
 #include "../../Meta_QPN/Meta_QPN/meta_qpn_controller.h"
+
 class qpn_node_list_model :
 	public QAbstractListModel
 	{

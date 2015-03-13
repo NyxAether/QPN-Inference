@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Meta_QPN\Meta_QPN\i_qpn_descriptor.h" />
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\meta_qpn.h" />
     <ClInclude Include="..\..\Meta_QPN\Meta_QPN\meta_qpn_controller.h" />
     <ClInclude Include="GeneratedFiles\ui_meta_qpn_qt.h" />
     <ClInclude Include="qpn_node_list_model.h" />

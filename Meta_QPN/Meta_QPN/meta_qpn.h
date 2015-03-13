@@ -28,10 +28,13 @@ class meta_qpn
 
 		bool exists(std::string nName);
 		bool hasDescendent(const std::string nName, std::map<std::string, bool>& colorMap);
+		int nodesCount();
 
 		void  writeGraphViz(std::ostream& out);
 
 		qpn_node<NodeValue>** getNode(std::string nName);
+
+		qpn_node<NodeValue>* getNode(int index);
 
 	protected:
 		template<typename NodeValue, typename T1>
@@ -188,6 +191,12 @@ bool meta_qpn<NodeValue>::hasDescendent(const std::string nName, std::map<std::s
 	return false;
 	}
 
+template<typename NodeValue>
+int meta_qpn<NodeValue>::nodesCount()
+	{
+	return nodes.size();
+	}
+
 template < typename NodeValue>
 void meta_qpn<NodeValue>::writeGraphViz(std::ostream& out)
 	{
@@ -217,4 +226,16 @@ qpn_node<NodeValue>** meta_qpn<NodeValue>::getNode(std::string nName)
 		addNode(nName);
 		}
 	return &(nodes[nName]);
+	}
+
+template < typename NodeValue>
+qpn_node<NodeValue>* meta_qpn<NodeValue>::getNode(int index)
+	{
+	int i = 0;
+	for(auto i_node = nodes.begin(); i_node!=nodes.cend();  i_node++)
+		{
+		if(i == index)
+			return i_node->second;
+		}
+	return NULL;
 	}
