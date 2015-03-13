@@ -1,0 +1,12 @@
+VSMacros80
+*.sdf 
+*.suo 
+*.open
+*.opensdf
+*.opensdf git tag
+*/*.sdf
+*/*.suo
+Test_BGL/*/
+Meta_QPN/*/
+Meta_QPN_QT/Meta_QPN_QT/*/
+Meta_QPN_QT/*/

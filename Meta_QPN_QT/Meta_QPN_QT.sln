@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Meta_QPN_QT", "Meta_QPN_QT\Meta_QPN_QT.vcxproj", "{CB297C3B-1B88-4AA4-BAE7-C334360828B0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Meta_QPN", "..\Meta_QPN\Meta_QPN\Meta_QPN.vcxproj", "{9D23A4D4-7BB5-4E4D-8088-5934FC3E6159}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CB297C3B-1B88-4AA4-BAE7-C334360828B0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CB297C3B-1B88-4AA4-BAE7-C334360828B0}.Debug|Win32.Build.0 = Debug|Win32
+		{CB297C3B-1B88-4AA4-BAE7-C334360828B0}.Release|Win32.ActiveCfg = Release|Win32
+		{CB297C3B-1B88-4AA4-BAE7-C334360828B0}.Release|Win32.Build.0 = Release|Win32
+		{9D23A4D4-7BB5-4E4D-8088-5934FC3E6159}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9D23A4D4-7BB5-4E4D-8088-5934FC3E6159}.Debug|Win32.Build.0 = Debug|Win32
+		{9D23A4D4-7BB5-4E4D-8088-5934FC3E6159}.Release|Win32.ActiveCfg = Release|Win32
+		{9D23A4D4-7BB5-4E4D-8088-5934FC3E6159}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

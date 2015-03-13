@@ -1,4 +1,6 @@
 #pragma once
+
+
 #include "boost\spirit\home\classic\dynamic\impl\conditions.ipp"
 #include "boost\tokenizer.hpp"
 #include "boost\lexical_cast.hpp"
@@ -8,8 +10,11 @@
 #include "qpn_additive_synergy.h"
 #include "qpn_nm_influence.h"
 #include "qpn_context_specific.h"
-#include "meta_qpn.h"
+#include "meta_qpn.h" 
 #include <fstream> 
+
+
+
 
 class meta_qpn_controller:
 	public meta_qpn<bool>
@@ -24,7 +29,7 @@ class meta_qpn_controller:
 		void addContextSpecific(std::string from, std::string to, std::string file_path);
 
 		void writeGraphViz(std::string file_path);
-
+		  
 	private:
 		qpn_influence<bool> influences;
 		qpn_product_synergy<bool> product_synergies;

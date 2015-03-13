@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{07c3dcb1-ad1f-45e4-acfb-8322f6e4dad8}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{c09dfc8b-16a8-4f47-9492-a22318852596}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Header Files\edge">
+      <UniqueIdentifier>{7c2e7ad3-84ed-453f-80aa-aa8b2bd23bc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\qpn">
+      <UniqueIdentifier>{596549ac-2a6a-4f74-a817-229a0a97686a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\meta_qpn">
+      <UniqueIdentifier>{b93ef5de-b725-40d7-99b5-f297f89499ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tools">
+      <UniqueIdentifier>{81b4eaf6-1ffe-463b-9bb3-900f73d29345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\node">
+      <UniqueIdentifier>{982d80e0-ce56-4051-b7cd-6edf6fd7e331}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\edge">
+      <UniqueIdentifier>{6ec01192-a2ab-4ad8-a456-f51ba7780c36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\meta_qpn">
+      <UniqueIdentifier>{ea4dbee3-505e-4643-b939-b7546bd1d8a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\tools">
+      <UniqueIdentifier>{08d168bc-10d2-45ac-a1f7-c2c106c028d8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_meta_qpn_qt.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_meta_qpn_qt.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_meta_qpn_qt.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Meta_QPN\Meta_QPN\qpn_edge_influence.cpp">
+      <Filter>Source Files\edge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Meta_QPN\Meta_QPN\qpn_edge.cpp">
+      <Filter>Source Files\edge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Meta_QPN\Meta_QPN\qpn_edge_additive_synergy.cpp">
+      <Filter>Source Files\edge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Meta_QPN\Meta_QPN\meta_qpn_controller.cpp">
+      <Filter>Source Files\meta_qpn</Filter>
+    </ClCompile>
+    <ClCompile Include="meta_qpn_qt.cpp">
+      <Filter>Source Files\meta_qpn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Meta_QPN\Meta_QPN\qpn_sign.cpp">
+      <Filter>Source Files\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="qpn_node_list_model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GeneratedFiles\ui_meta_qpn_qt.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_edge.h">
+      <Filter>Header Files\edge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_edge_product_synergy.h">
+      <Filter>Header Files\edge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_edge_additive_synergy.h">
+      <Filter>Header Files\edge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_edge_context_specific.h">
+      <Filter>Header Files\edge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_edge_influence.h">
+      <Filter>Header Files\edge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_edge_nm_influence.h">
+      <Filter>Header Files\edge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_nm_influence.h">
+      <Filter>Header Files\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_additive_synergy.h">
+      <Filter>Header Files\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_context_specific.h">
+      <Filter>Header Files\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_descriptor_directed.h">
+      <Filter>Header Files\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_descriptor_undirected.h">
+      <Filter>Header Files\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_influence.h">
+      <Filter>Header Files\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\i_qpn_descriptor.h">
+      <Filter>Header Files\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_product_synergy.h">
+      <Filter>Header Files\qpn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_sign.h">
+      <Filter>Header Files\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\suffix_tree.h">
+      <Filter>Header Files\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\qpn_node.h">
+      <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="qpn_node_list_model.h">
+      <Filter>Header Files\node</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="meta_qpn_qt.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="meta_qpn_qt.h">
+      <Filter>Header Files\meta_qpn</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="meta_qpn_qt.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Meta_QPN\Meta_QPN\meta_qpn_controller.h">
+      <Filter>Header Files\meta_qpn</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Meta_QPN_QT.pri" />
+    <None Include="Meta_QPN_QT.pro" />
+  </ItemGroup>
+</Project>
