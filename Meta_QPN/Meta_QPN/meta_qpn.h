@@ -33,8 +33,8 @@ class meta_qpn
 		void  writeGraphViz(std::ostream& out);
 
 		qpn_node<NodeValue>** getNode(std::string nName);
-
 		qpn_node<NodeValue>* getNode(int index);
+		void getNodeNames(std::list<std::string>& nodeNames) const;
 
 	protected:
 		template<typename NodeValue, typename T1>
@@ -238,4 +238,14 @@ qpn_node<NodeValue>* meta_qpn<NodeValue>::getNode(int index)
 			return i_node->second;
 		}
 	return NULL;
+	}
+
+
+template < typename NodeValue>
+void meta_qpn<NodeValue>::getNodeNames(std::list<std::string>& nodeNames) const
+	{
+	for(auto i_node = nodes.cbegin(); i_node!=nodes.cend();i_node++)
+		{
+		nodeNames.push_back(i_node->first);
+		}
 	}

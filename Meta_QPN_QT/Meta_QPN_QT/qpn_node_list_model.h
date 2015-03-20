@@ -3,6 +3,7 @@
 #include <QVariant>
 #include <QModelIndex>
 #include <QString>
+#include <QStringList>
 
 #include "../../Meta_QPN/Meta_QPN/meta_qpn_controller.h"
 
@@ -21,5 +22,6 @@ class qpn_node_list_model :
 
 	private:
 		meta_qpn_controller* qpn;
+		QStringList nNames;
 	};
 
