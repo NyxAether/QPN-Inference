@@ -81,6 +81,7 @@
     <ClInclude Include="i_qpn_descriptor.h" />
     <ClInclude Include="meta_qpn.h" />
     <ClInclude Include="meta_qpn_controller.h" />
+    <ClInclude Include="parents_sign_state.h" />
     <ClInclude Include="qpn_additive_synergy.h" />
     <ClInclude Include="qpn_context_specific.h" />
     <ClInclude Include="qpn_descriptor_directed.h" />

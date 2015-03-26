@@ -105,6 +105,9 @@
     <ClInclude Include="meta_qpn_controller.h">
       <Filter>Fichiers d%27en-tête\meta_qpn</Filter>
     </ClInclude>
+    <ClInclude Include="parents_sign_state.h">
+      <Filter>Fichiers d%27en-tête\signs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Meta_QPN_main.cpp">

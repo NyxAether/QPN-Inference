@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\structures">
+      <UniqueIdentifier>{b036b5ab-68db-4ab3-8112-55609aa69145}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\structures">
+      <UniqueIdentifier>{3dcf8994-caa4-47b6-9a93-bad4a9c07b6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -24,10 +30,13 @@
     <ClInclude Include="targetver.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="n_matrix.h">
+    <ClInclude Include="bayesian_factory.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="bayesian_factory.h">
+    <ClInclude Include="n_matrix.h">
+      <Filter>Fichiers d%27en-tête\structures</Filter>
+    </ClInclude>
+    <ClInclude Include="poset_forest.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,10 +47,13 @@
     <ClCompile Include="Learning_Bayesian_Network.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="n_matrix.cpp">
+    <ClCompile Include="bayesian_factory.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="bayesian_factory.cpp">
+    <ClCompile Include="n_matrix.cpp">
+      <Filter>Fichiers sources\structures</Filter>
+    </ClCompile>
+    <ClCompile Include="poset_forest.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

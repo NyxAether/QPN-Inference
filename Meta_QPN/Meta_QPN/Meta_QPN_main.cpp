@@ -217,6 +217,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 	qpn.writeGraphViz("net.gv");
+
 	return 0;
 	}
 

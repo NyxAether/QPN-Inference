@@ -97,7 +97,7 @@ struct Sign
 		else if(c == '?' || s.c == '?')
 			return QMARK_SIGN;
 		else if (s.c == '+' || c=='-')
-			return MINUS_SIGN
+			return MINUS_SIGN;
 		else 
 			return PLUS_SIGN;
 		}

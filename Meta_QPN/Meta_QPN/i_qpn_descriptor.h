@@ -45,6 +45,8 @@ class i_qpn_descriptor
 		virtual void setNode(const std::string nName, typename qpn_node<NodeValue>* node) ;
 		virtual void setNodeMap(std::map<std::string, qpn_node<NodeValue>*>* nodeMap);
 
+		qpn_edge* getEdge(std::string fromN, std::string toN);
+
 		virtual void getChildren(const std::string nName,  std::list< qpn_node<NodeValue>>& children);
 		virtual void getParents(const std::string nName,  std::list< qpn_node<NodeValue>>& parents);
 
@@ -119,6 +121,18 @@ void i_qpn_descriptor<NodeValue, Direction>::setNodeMap(std::map<std::string, qp
 	delete this->nodeMap;
 	this->nodeMap = nodeMap;
 	}
+
+
+template < typename NodeValue, typename Direction >
+qpn_edge* i_qpn_descriptor<NodeValue, Direction>::getEdge(std::string fromN, std::string toN)
+	{
+	OutEIterator out_it, out_end;
+	for(boost::tie(out_it, out_end) = boost::out_edges(qpn.vertex(fromN),qpn); out_it != out_end ; out_it++){
+		if (boost::get(boost::vertex_name,qpn,boost::target(*out_it,qpn)) == toN)
+			return edgeMap[*out_it];
+		}
+	}
+
 
 template < typename NodeValue, typename Direction >
 void i_qpn_descriptor<NodeValue, Direction>::getChildren(const std::string nName,  std::list<  qpn_node<NodeValue>>& children)
