@@ -1,6 +1,7 @@
 #pragma once
 #include "qpn_descriptor_directed.h"
 #include "qpn_descriptor_undirected.h"
+#include <set>
 
 template < typename NodeValue>
 class meta_qpn
@@ -35,6 +36,7 @@ class meta_qpn
 		qpn_node<NodeValue>** getNode(std::string nName);
 		qpn_node<NodeValue>* getNode(int index);
 		void getNodeNames(std::list<std::string>& nodeNames) const;
+		void getParentNames(std::string nName, std::list<std::string>& parentNames) const;
 
 	protected:
 		template<typename NodeValue, typename T1>
@@ -248,4 +250,31 @@ void meta_qpn<NodeValue>::getNodeNames(std::list<std::string>& nodeNames) const
 		{
 		nodeNames.push_back(i_node->first);
 		}
+	}
+
+
+template < typename NodeValue>
+void meta_qpn<NodeValue>::getParentNames(std::string nName, std::list<std::string>& parentNames) const
+	{
+	std::set<std::string> parentNamesSet= std::set<std::string>();
+	for (auto i_qpn = qpn_directed.cbegin(); i_qpn!= qpn_directed.cend();i_qpn++)
+		{
+		std::list<qpn_node<NodeValue>> parents = std::list<qpn_node<NodeValue>>();
+		(*i_qpn)->getParents(nName, parents);
+		for (auto i_node = parents.cbegin(); i_node!=parents.cend();i_node++)
+			{
+			parentNamesSet.insert(i_node->getName());
+			}
+		}
+	for (auto i_qpn = qpn_undirected.cbegin(); i_qpn!= qpn_undirected.cend();i_qpn++)
+		{
+		std::list<qpn_node<NodeValue>> parents = std::list<qpn_node<NodeValue>>();
+		(*i_qpn)->getParents(nName, parents);
+		for (auto i_node = parents.cbegin(); i_node!=parents.cend();i_node++)
+			{
+			parentNamesSet.insert(i_node->getName());
+			}
+		}
+
+	std::copy(parentNamesSet.begin(), parentNamesSet.cend(), std::back_inserter(parentNames));
 	}

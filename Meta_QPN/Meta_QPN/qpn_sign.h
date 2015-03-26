@@ -72,6 +72,36 @@ struct Sign
 			return *this;
 		}
 
+
+		/**********************************************************************************************//**
+	\fn	const Sign operator-( const Sign & s) const
+	
+	\brief	Substraction operator :
+				|	+	|	-	|	0	|	?<br/>
+			+	|	0	|	+	|	+	|	?<br/>
+			-	|	-	|	0	|	-	|	?<br/>
+			0	|	-	|	+	|	0	|	?<br/>
+			?	|	?	|	?	|	?	|	0<br/>
+	
+	\author	Romain RINCE
+	\date	16/02/2015
+	
+	\param	s	second part of the operand -
+	
+	\return	The result of the operation.
+	 **************************************************************************************************/
+
+	const Sign  operator-( const  Sign & s) const{
+		if (c == s.c)
+			return ZERO_SIGN;
+		else if(c == '?' || s.c == '?')
+			return QMARK_SIGN;
+		else if (s.c == '+' || c=='-')
+			return MINUS_SIGN
+		else 
+			return PLUS_SIGN;
+		}
+
 	/**********************************************************************************************//**
 	\fn	const Sign operator*( const Sign & s) const
 	

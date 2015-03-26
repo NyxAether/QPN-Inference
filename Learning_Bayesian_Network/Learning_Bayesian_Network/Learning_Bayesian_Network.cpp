@@ -11,7 +11,7 @@ using namespace std;
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-	n_matrix<3> m = n_matrix<3>("n_matrix_test.txt");
+	n_matrix m = n_matrix("n_matrix_test.txt");
 	pair<unsigned int, unsigned int> a =m.get(1,1,0);
 	cout<< a.first <<":"<<a.second<<endl;
 		return 0;

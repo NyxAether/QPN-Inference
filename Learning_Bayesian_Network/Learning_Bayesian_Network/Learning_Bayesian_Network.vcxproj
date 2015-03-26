@@ -50,7 +50,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_57_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_57_0;C:\Users\duke\Documents\Pilgrim\Relational\lib\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,11 +78,13 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bayesian_factory.h" />
     <ClInclude Include="n_matrix.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bayesian_factory.cpp" />
     <ClCompile Include="Learning_Bayesian_Network.cpp" />
     <ClCompile Include="n_matrix.cpp" />
     <ClCompile Include="stdafx.cpp" />

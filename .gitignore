@@ -18,6 +18,7 @@ Test_BGL/Test_BGL/net.gv
 Meta_QPN/Debug
 Meta_QPN/Release
 Meta_QPN/Win32
+Meta_QPN/ipch
 Meta_QPN/Meta_QPN/Debug
 Meta_QPN/Meta_QPN/ReadMe.txt
 Meta_QPN/Meta_QPN/Release
@@ -26,4 +27,7 @@ Meta_QPN_QT/ipch
 Meta_QPN_QT/Meta_QPN_QT/Debug
 Meta_QPN_QT/Meta_QPN_QT/Win32
 Meta_QPN_QT/Meta_QPN_QT/GeneratedFiles/Debug
-
+Learning_Bayesian_Network/Debug
+Learning_Bayesian_Network/Learning_Bayesian_Network/Debug
+Learning_Bayesian_Network/Learning_Bayesian_Network/ReadMe.txt
+Learning_Bayesian_Network/ipch
