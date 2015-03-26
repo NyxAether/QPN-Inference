@@ -302,13 +302,18 @@ void meta_qpn<NodeValue>::getParentsStatus(std::string nName, std::map<std::stri
 	std::map<std::string, std::pair<bool, NodeValue>> save_state;
 	std::list<std::string> parentNames = std::list<std::string> ();
 	getParentNames(nName, parentNames);
+	//Set the values for all the parents
 	for (auto i_pName = parentNames.begin(); i_pName!=parentNames.cend(); i_pName++)
 		{
 		qpn_node* parent = getNode(*i_pName);
 		save_state[*i_pName]=std::make_pair(parent->isValObserved(),parent->getValue());
 		parent->setValue(status[*i_pName].first);
 		}
-
+	//Catch all the signs propagated 
+	for (auto i_pName = parentNames.begin(); i_pName!=parentNames.cend(); i_pName++)
+		{
+		status[*i_pName].second = getEdge(*i_pName)->getSign();
+		}
 	//Clean modifications
 	for (auto i_pName = parentNames.begin(); i_pName!=parentNames.cend(); i_pName++)
 		{
