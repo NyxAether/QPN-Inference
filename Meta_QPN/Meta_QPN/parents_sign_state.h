@@ -30,7 +30,7 @@ template <typename NodeValue>
 class parents_sign_state
 	{
 	public:
-		parents_sign_state(std::string nodeName, std::shared_ptr<std::map<std::string, std::pair<NodeValue, Sign>>> observed_state);
+		parents_sign_state(std::string nodeName, std::map<std::string, std::pair<NodeValue, Sign>>* observed_state);
 		virtual ~parents_sign_state(void);
 
 
@@ -41,7 +41,7 @@ class parents_sign_state
 		*\param nName Name of the parent of which we want to know the state
 		*
 		*/
-		std::pair<NodeValue, Sign> getState(std::string nName);
+		std::pair<NodeValue, Sign> getState(std::string nName)const;
 
 		/*!
 		*  \brief Compare the current object with an other
@@ -59,17 +59,23 @@ class parents_sign_state
 		int compare(const parents_sign_state& pss) const;
 
 	protected:
-		std::shared_ptr<std::map<std::string, std::pair<NodeValue, Sign>>> state;
+		std::map<std::string, std::pair<NodeValue, Sign>>* state;
 		std::string nName;
 
 	};
 
 template <typename NodeValue>
-parents_sign_state<NodeValue>::parents_sign_state(std::string nodeName,std::shared_ptr<std::map<std::string, std::pair<NodeValue, Sign>>> observed_state):state(observed_state), nName(nodeName)
+parents_sign_state<NodeValue>::parents_sign_state(std::string nodeName,std::map<std::string, std::pair<NodeValue, Sign>>* observed_state):state(observed_state), nName(nodeName)
 	{
 
 	}
 
+
+template <typename NodeValue>
+parents_sign_state<NodeValue>::~parents_sign_state(void)
+	{
+	delete state;
+	}
 
 
 template <typename NodeValue>
@@ -80,16 +86,16 @@ std::string parents_sign_state<NodeValue>::getNode() const
 
 
 template <typename NodeValue>
-std::pair<NodeValue, Sign> parents_sign_state<NodeValue>::getState(std::string nName)
+std::pair<NodeValue, Sign> parents_sign_state<NodeValue>::getState(std::string nName)const
 	{
-	return state->at(nName)
+	return state->at(nName);
 	}
 
 
 template <typename NodeValue>
 int parents_sign_state<NodeValue>::compare(const parents_sign_state& pss) const
 	{
-	if(nName != pss.getNode)
+	if(nName != pss.getNode())
 		return 3; //incomparable
 	Sign variation = Sign::ZERO_SIGN;
 	for (auto i_state= (*state).cbegin(); i_state != (*state).cend(); i_state++ )
@@ -100,7 +106,7 @@ int parents_sign_state<NodeValue>::compare(const parents_sign_state& pss) const
 		if (signTo == Sign::QMARK_SIGN && signFrom==Sign::QMARK_SIGN)
 			{
 			NodeValue valTo =getState(pName).first;
-			Nodevalue valFrom = pss.getState(pName).first;
+			NodeValue valFrom = pss.getState(pName).first;
 			if(valTo != valFrom)
 				return 4;//incomparable. We can break the algorithm here we have to propagate a QMARK_SIGN which is dominant by + operation
 			//no else case because it's equivalent to no variation and therefore there is no need to propagate it into the variation
@@ -108,16 +114,13 @@ int parents_sign_state<NodeValue>::compare(const parents_sign_state& pss) const
 		else
 			variation = variation + (signTo - signFrom);
 		}
-	switch(variation)
-		{
-	case Sign::PLUS_SIGN :
+	if(variation == Sign::PLUS_SIGN)
 		return 1;
-	case Sign::MINUS_SIGN :
+	if(variation == Sign::MINUS_SIGN)
 		return -1;
-	case Sign::ZERO_SIGN:
+	if(variation == Sign::ZERO_SIGN)
 		return 0;
-	case Sign::QMARK_SIGN :
+	//if(variation == Sign::QMARK_SIGN)
 		return 2; //Standard incomparability 
-
-		}
+	
 	}

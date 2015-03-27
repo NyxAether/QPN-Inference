@@ -37,7 +37,7 @@
       <Filter>Fichiers d%27en-tête\structures</Filter>
     </ClInclude>
     <ClInclude Include="poset_forest.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -52,9 +52,6 @@
     </ClCompile>
     <ClCompile Include="n_matrix.cpp">
       <Filter>Fichiers sources\structures</Filter>
-    </ClCompile>
-    <ClCompile Include="poset_forest.cpp">
-      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

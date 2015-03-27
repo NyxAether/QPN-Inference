@@ -40,6 +40,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <SourcePath>$(SourcePath)</SourcePath>
+    <LibraryPath>C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -50,11 +52,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_57_0;C:\Users\duke\Documents\Pilgrim\Relational\lib\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\duke\Documents\Pilgrim\Relational\lib\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug;C:\Program Files\boost\boost_1_57_0;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Meta_QPN</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug\Meta_QPN.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,7 +93,6 @@
     <ClCompile Include="bayesian_factory.cpp" />
     <ClCompile Include="Learning_Bayesian_Network.cpp" />
     <ClCompile Include="n_matrix.cpp" />
-    <ClCompile Include="poset_forest.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
