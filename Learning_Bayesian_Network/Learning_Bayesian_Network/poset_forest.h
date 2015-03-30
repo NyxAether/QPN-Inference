@@ -31,7 +31,8 @@ class poset_forest
 	protected:
 		void insert_as_child(Vertex new_v, Vertex current, std::set<Vertex>& seen);
 		void insert_as_parent(Vertex new_v, Vertex current, std::set<Vertex>& seen);
-
+		void desc_seen (Vertex current, std::set<Vertex>& seen);
+		void ancestor_seen (Vertex current, std::set<Vertex>& seen);
 	protected:
 		std::vector<parents_sign_state<NodeValue>> states;
 		poset_type poset;
@@ -75,12 +76,15 @@ void poset_forest<NodeValue>::addState(parents_sign_state<NodeValue>* state)
 				{
 			case 1:
 				{
+				//A new edge is inserted
 				insert_as_child(v,*v_it,seen);
+				ancestor_seen(*v_it,seen);
 				break;
 				}
 			case -1:
 				{
 				insert_as_parent(v,*v_it,seen);
+				desc_seen(*v_it,seen);
 				break;
 				}
 				}
@@ -109,6 +113,9 @@ void poset_forest<NodeValue>::insert_as_child(Vertex new_v, Vertex current, std:
 				}
 			else if(diff == -1)
 				{
+				//All the nodes that weren't explored need to be set to seen
+				//in this case the children of the current node
+				ancestor_seen(next_v,seen);
 				boost::remove_edge(current, next_v,poset);
 				boost::add_edge(current,new_v,poset);
 				boost::add_edge(new_v,next_v, poset);
@@ -143,6 +150,9 @@ void poset_forest<NodeValue>::insert_as_parent(Vertex new_v, Vertex current, std
 				}
 			else if(diff == 1)
 				{
+				//All the nodes that weren't explored need to be set to seen
+				//in this case the parents of the current node
+				desc_seen(next_v,seen);
 				boost::remove_edge(next_v , current , poset);
 				boost::add_edge(new_v ,current, poset);
 				boost::add_edge(next_v, new_v, poset);
@@ -156,4 +166,33 @@ void poset_forest<NodeValue>::insert_as_parent(Vertex new_v, Vertex current, std
 		}
 	}
 
+
+template <typename NodeValue>
+void poset_forest<NodeValue>::desc_seen(Vertex current, std::set<Vertex>& seen)
+	{
+	OutEIterator out_it, end_out_it;
+	for (boost::tie(out_it,end_out_it) = boost::out_edges(current, poset); out_it!=end_out_it;out_it++)
+		{
+		Vertex next_v= boost::target(*out_it,poset);
+		if (seen.count(next_v)==0){
+		seen.insert(next_v);
+			desc_seen(next_v,seen);
+			}
+		}
+	}
+
+
+template <typename NodeValue>
+void poset_forest<NodeValue>::ancestor_seen(Vertex current, std::set<Vertex>& seen)
+	{
+	InEIterator in_it, end_in_it;
+	for (boost::tie(in_it,end_in_it) = boost::in_edges(current, poset); in_it!=end_in_it;in_it++)
+		{
+		Vertex next_v= boost::source(*in_it,poset);
+		if (seen.count(next_v)==0){
+			seen.insert(next_v);
+				ancestor_seen(next_v,seen);
+			}
+		}
+	}
 
