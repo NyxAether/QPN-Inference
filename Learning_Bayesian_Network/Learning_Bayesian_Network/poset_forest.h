@@ -27,12 +27,22 @@ class poset_forest
 		~poset_forest(void);
 
 		void addState(parents_sign_state<NodeValue>* state);
+		void findLowerSets(std::vector<std::vector<parents_sign_state<NodeValue>*>>& lowerSets );
+
 
 	protected:
 		void insert_as_child(Vertex new_v, Vertex current, std::set<Vertex>& seen);
 		void insert_as_parent(Vertex new_v, Vertex current, std::set<Vertex>& seen);
 		void desc_seen (Vertex current, std::set<Vertex>& seen);
 		void ancestor_seen (Vertex current, std::set<Vertex>& seen);
+
+		bool isAntichain(Vertex v, const std::set<Vertex> antichain);
+
+		void computeLowerSet(std::set<Vertex> antichain,std::set<Vertex>& lowerSet);
+		void getPartialLS(Vertex v, std::set<Vertex>& lowerSet);
+
+		void findAntiChains(std::set<std::set<Vertex>>& antichains);
+
 	protected:
 		std::vector<parents_sign_state<NodeValue>> states;
 		poset_type poset;
@@ -92,6 +102,26 @@ void poset_forest<NodeValue>::addState(parents_sign_state<NodeValue>* state)
 			}
 		}
 	}
+
+
+template <typename NodeValue>
+void poset_forest<NodeValue>::findLowerSets(std::vector<std::vector<parents_sign_state<NodeValue>*>>& lowerSets)
+	{
+	std::set<std::set<Vertex>> antichains = std::set<std::set<Vertex>>();
+	findAntiChains(antichains);
+	for (auto i_achain = antichains.begin();i_achain!=antichains.end();i_achain++)
+		{
+		std::set<Vertex> vertexLowerSet = std::set<Vertex>();
+		computeLowerSet(*i_achain, vertexLowerSet);
+		std::vector<parents_sign_state<NodeValue>*> lowerSet =std::vector<parents_sign_state<NodeValue>*>();
+		for (auto i_v = vertexLowerSet.begin(); i_v!=vertexLowerSet.end();i_v++)
+			{
+			lowerSet.push_back(poset[*i_v]);
+			}
+		lowerSets.push_back(lowerSet);
+		}
+	}
+
 
 template <typename NodeValue>
 void poset_forest<NodeValue>::insert_as_child(Vertex new_v, Vertex current, std::set<Vertex>& seen)
@@ -175,7 +205,7 @@ void poset_forest<NodeValue>::desc_seen(Vertex current, std::set<Vertex>& seen)
 		{
 		Vertex next_v= boost::target(*out_it,poset);
 		if (seen.count(next_v)==0){
-		seen.insert(next_v);
+			seen.insert(next_v);
 			desc_seen(next_v,seen);
 			}
 		}
@@ -191,8 +221,76 @@ void poset_forest<NodeValue>::ancestor_seen(Vertex current, std::set<Vertex>& se
 		Vertex next_v= boost::source(*in_it,poset);
 		if (seen.count(next_v)==0){
 			seen.insert(next_v);
-				ancestor_seen(next_v,seen);
+			ancestor_seen(next_v,seen);
 			}
 		}
 	}
 
+
+template <typename NodeValue>
+bool poset_forest<NodeValue>::isAntichain(Vertex v, std::set<Vertex> antichain)
+	{
+	for (auto i_v = antichain.begin();i_v!=antichain.end();i_v++)
+		{
+		int comp_val =poset[v]->compare(*(poset[*i_v]));
+		if(comp_val == 0 || comp_val==-1 ||comp_val ==1)
+			return false;
+		}
+	return true;
+	}
+
+
+
+template <typename NodeValue>
+void poset_forest<NodeValue>::computeLowerSet(std::set<Vertex> antichain,std::set<Vertex>& lowerSet)
+	{
+	for (auto i_v = antichain.begin(); i_v!=antichain.end(); i_v++)
+		{
+		getPartialLS(*i_v,lowerSet);
+		}
+	}
+
+
+template <typename NodeValue>
+void poset_forest<NodeValue>::getPartialLS(Vertex v, std::set<Vertex>& lowerSet)
+	{
+	if (lowerSet.count(v) == 0)
+		{
+		lowerSet.insert(v);
+		OutEIterator out_it, end_out_it;
+		for (boost::tie(out_it,end_out_it) = boost::out_edges(v, poset); out_it!=end_out_it;out_it++)
+			{
+			Vertex next_v= boost::target(*out_it,poset);
+			getPartialLS(next_v, lowerSet);
+			}
+		}
+	}
+
+
+template <typename NodeValue>
+void poset_forest<NodeValue>::findAntiChains(std::set<std::set<Vertex>>& antichains)
+	{
+	VIterator v_it, v_end;
+	//We build antichains by iteration. For each node
+	for (boost::tie(v_it,v_end)=boost::vertices(poset);(v_it!=v_end);v_it++)
+		{
+				std::cout<<"coucou"<<std::endl;
+		//we look into all antichain to figure if we can find a new antichain composed with this node and this antichain 
+		for (auto i_antichain = antichains.begin(); i_antichain!=antichains.end();i_antichain++)
+			{
+			//If a new antichain can be obtain
+			if (isAntichain(*(v_it),*i_antichain))
+				{
+				//the current antichain is copied, vertex is added to it. The antichain created is added to the list of antichains 
+				std::set<Vertex> new_achain =std::set<Vertex>(*i_antichain);
+				new_achain.insert(*v_it);
+				antichains.insert(new_achain);
+				//antichains.push_back(new_achain);
+				}
+			}
+		//Finally all nodes is an antichain by itself and need to be added
+		std::set<Vertex> new_achain =std::set<Vertex>();
+		new_achain.insert(*v_it);
+		antichains.insert(new_achain);
+		}
+	}
