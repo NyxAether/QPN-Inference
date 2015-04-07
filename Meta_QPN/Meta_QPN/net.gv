@@ -1,7 +1,7 @@
 digraph G {
-A[label="A:+"];
-B[label="B:+",style=bold];
-C[label="C:-"];
+A[label="A:-"];
+B[label="B:-",style=bold];
+C[label="C:+"];
 D[label="D:?"];
 E[label="E:1",style=filled, color="0.75 0.75 0.75"];
 F[label="F:1",style=filled, color="0.75 0.75 0.75"];

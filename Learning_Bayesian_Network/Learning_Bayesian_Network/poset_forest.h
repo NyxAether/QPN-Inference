@@ -8,7 +8,7 @@ class poset_forest
 	{
 	public:
 
-		struct VertexProperties
+		struct VertexProperties 
 			{
 			parents_sign_state state;
 			};
@@ -82,7 +82,7 @@ void poset_forest<NodeValue>::addState(parents_sign_state<NodeValue>* state)
 			{
 			seen.insert(*v_it);
 			parents_sign_state<NodeValue>* current_state = poset[*v_it];
-			switch(state->compare(*current_state))
+			switch(state->compare(*current_state))//TODO no zero case ?
 				{
 			case 1:
 				{
@@ -108,9 +108,11 @@ template <typename NodeValue>
 void poset_forest<NodeValue>::findLowerSets(std::vector<std::vector<parents_sign_state<NodeValue>*>>& lowerSets)
 	{
 	std::set<std::set<Vertex>> antichains = std::set<std::set<Vertex>>();
+	//Lower sets are obtained from its associate antichains
 	findAntiChains(antichains);
 	for (auto i_achain = antichains.begin();i_achain!=antichains.end();i_achain++)
 		{
+		//For each antichains we compute the associate lower set
 		std::set<Vertex> vertexLowerSet = std::set<Vertex>();
 		computeLowerSet(*i_achain, vertexLowerSet);
 		std::vector<parents_sign_state<NodeValue>*> lowerSet =std::vector<parents_sign_state<NodeValue>*>();

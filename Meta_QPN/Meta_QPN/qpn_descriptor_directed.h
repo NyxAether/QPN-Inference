@@ -49,6 +49,7 @@ void qpn_descriptor_directed<NodeValue>::propagate(const std::string nName, std:
 	for(boost::tie(out_it, out_end) = boost::out_edges(vertex,qpn); out_it != out_end ; out_it++){
 		qpn_edge& edge=*edgeMap[*out_it] ;
 		Vertex target = boost::target(*out_it,qpn);
+		std::cout<<boost::get(boost::vertex_name,qpn,target)<<std::endl;
 		qpn_node<NodeValue>* target_node = (*nodeMap)[boost::get(boost::vertex_name,qpn,target)];
 		Sign newSign = (node->getSign() * edge.getSign()) + target_node->getSign();
 		if(!target_node->isValObserved() && !colorMap[target_node->getName()] && newSign != target_node->getSign())

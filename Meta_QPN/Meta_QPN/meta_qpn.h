@@ -282,15 +282,15 @@ void meta_qpn<NodeValue>::getParentNames(std::string nName, std::list<std::strin
 			parentNamesSet.insert(i_node->getName());
 			}
 		}
-	for (auto i_qpn = qpn_undirected.cbegin(); i_qpn!= qpn_undirected.cend();i_qpn++)
-		{
-		std::list<qpn_node<NodeValue>> parents = std::list<qpn_node<NodeValue>>();
-		(*i_qpn)->getParents(nName, parents);
-		for (auto i_node = parents.cbegin(); i_node!=parents.cend();i_node++)
-			{
-			parentNamesSet.insert(i_node->getName());
-			}
-		}
+	//for (auto i_qpn = qpn_undirected.cbegin(); i_qpn!= qpn_undirected.cend();i_qpn++)
+	//	{
+	//	std::list<qpn_node<NodeValue>> parents = std::list<qpn_node<NodeValue>>();
+	//	(*i_qpn)->getParents(nName, parents);
+	//	for (auto i_node = parents.cbegin(); i_node!=parents.cend();i_node++)
+	//		{
+	//		parentNamesSet.insert(i_node->getName());
+	//		}
+	//	}
 
 	std::copy(parentNamesSet.begin(), parentNamesSet.cend(), std::back_inserter(parentNames));
 	}
@@ -305,22 +305,24 @@ void meta_qpn<NodeValue>::getParentsStatus(std::string nName, std::map<std::stri
 	//Set the values for all the parents
 	for (auto i_pName = parentNames.begin(); i_pName!=parentNames.cend(); i_pName++)
 		{
-		qpn_node* parent = getNode(*i_pName);
-		save_state[*i_pName]=std::make_pair(parent->isValObserved(),parent->getValue());
-		parent->setValue(status[*i_pName].first);
+		qpn_node<NodeValue>** parent = getNode(*i_pName);
+		save_state[*i_pName]=std::make_pair((*parent)->isValObserved(),(*parent)->getValue());
+		(*parent)->setValue(status[*i_pName].first);
 		}
 	//Catch all the signs propagated 
 	for (auto i_pName = parentNames.begin(); i_pName!=parentNames.cend(); i_pName++)
 		{
-		status[*i_pName].second = getEdge(*i_pName)->getSign();
+		qpn_edge* e=  getEdge(*i_pName, nName);
+		if(e != nullptr)
+			status[*i_pName].second = e->getSign();//TODO Error we need the sign of the node to e+v 
 		}
 	//Clean modifications
 	for (auto i_pName = parentNames.begin(); i_pName!=parentNames.cend(); i_pName++)
 		{
-		qpn_node* parent = getNode(*i_pName);
+		qpn_node<NodeValue>** parent = getNode(*i_pName);
 		if(!save_state[*i_pName].first)
-			parent->reset();
+			(*parent)->reset();
 		else
-			parent->setValue(save_state[*i_pName].second)
+			(*parent)->setValue(save_state[*i_pName].second);
 		}
 	}

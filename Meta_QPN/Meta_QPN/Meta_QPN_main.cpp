@@ -213,7 +213,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	qpn.observeNodeValue("E",true);
 	qpn.observeNodeValue("F",true);
-	qpn.observeNodeSign("B",Sign::PLUS_SIGN);
+	qpn.observeNodeSign("B",Sign::MINUS_SIGN);
 
 
 	qpn.writeGraphViz("net.gv");

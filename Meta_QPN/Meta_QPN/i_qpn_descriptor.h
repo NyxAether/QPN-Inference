@@ -126,10 +126,13 @@ void i_qpn_descriptor<NodeValue, Direction>::setNodeMap(std::map<std::string, qp
 template < typename NodeValue, typename Direction >
 qpn_edge* i_qpn_descriptor<NodeValue, Direction>::getEdge(std::string fromN, std::string toN)
 	{
-	OutEIterator out_it, out_end;
-	for(boost::tie(out_it, out_end) = boost::out_edges(qpn.vertex(fromN),qpn); out_it != out_end ; out_it++){
-		if (boost::get(boost::vertex_name,qpn,boost::target(*out_it,qpn)) == toN)
-			return edgeMap[*out_it];
+	if (exists(fromN) && exists(toN))
+		{
+		OutEIterator out_it, out_end;
+		for(boost::tie(out_it, out_end) = boost::out_edges(qpn.vertex(fromN),qpn); out_it != out_end ; out_it++){
+			if (boost::get(boost::vertex_name,qpn,boost::target(*out_it,qpn)) == toN)
+				return edgeMap[*out_it];
+			}
 		}
 	}
 
@@ -137,9 +140,13 @@ qpn_edge* i_qpn_descriptor<NodeValue, Direction>::getEdge(std::string fromN, std
 template < typename NodeValue, typename Direction >
 void i_qpn_descriptor<NodeValue, Direction>::getChildren(const std::string nName,  std::list<  qpn_node<NodeValue>>& children)
 	{
-	OutEIterator out_it, out_end;
-	for(boost::tie(out_it, out_end) = boost::out_edges(qpn.vertex(nName),qpn); out_it != out_end ; out_it++){
-		children.push_back(*((*nodeMap)[boost::get(boost::vertex_name,qpn,boost::target(*out_it,qpn))]));
+	if (exists(nName))
+		{
+
+		OutEIterator out_it, out_end;
+		for(boost::tie(out_it, out_end) = boost::out_edges(qpn.vertex(nName),qpn); out_it != out_end ; out_it++){
+			children.push_back(*((*nodeMap)[boost::get(boost::vertex_name,qpn,boost::target(*out_it,qpn))]));
+			}
 		}
 	}
 
@@ -147,9 +154,12 @@ void i_qpn_descriptor<NodeValue, Direction>::getChildren(const std::string nName
 template < typename NodeValue, typename Direction >
 void i_qpn_descriptor<NodeValue, Direction>::getParents(const std::string nName, std::list< qpn_node<NodeValue>>& parents)
 	{
-	InEIterator in_it, in_end;
-	for(boost::tie(in_it, in_end) = boost::in_edges(qpn.vertex(nName),qpn); in_it != in_end ; in_it++){
-		parents.push_back(*((*nodeMap)[boost::get(boost::vertex_name,qpn,boost::source(*in_it,qpn))]));
+	if (exists(nName))
+		{
+		InEIterator in_it, in_end;
+		for(boost::tie(in_it, in_end) = boost::in_edges(qpn.vertex(nName),qpn); in_it != in_end ; in_it++){
+			parents.push_back(*((*nodeMap)[boost::get(boost::vertex_name,qpn,boost::source(*in_it,qpn))]));
+			}
 		}
 	}
 

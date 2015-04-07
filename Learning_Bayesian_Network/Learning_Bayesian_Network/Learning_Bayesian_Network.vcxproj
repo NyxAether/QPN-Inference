@@ -41,7 +41,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <SourcePath>$(SourcePath)</SourcePath>
-    <LibraryPath>C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\duke\Documents\Pilgrim\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\lib;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -52,15 +52,21 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\duke\Documents\Pilgrim\Relational\lib\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug;C:\Program Files\boost\boost_1_57_0;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Meta_QPN</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_57_0;C:\Users\duke\Documents\Pilgrim\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include;C:\Users\duke\Documents\Pilgrim\General\include;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Meta_QPN;C:\Users\duke\Documents\Pilgrim\StructureLearning\include</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug\Meta_QPN.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>C:\Users\duke\Documents\Visual Studio 2010\Projects\Learning_Bayesian_Network\Debug\Meta_QPN.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <PreventDllBinding>
+      </PreventDllBinding>
     </Link>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -71,6 +77,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -94,6 +101,19 @@
     <ClCompile Include="Learning_Bayesian_Network.cpp" />
     <ClCompile Include="n_matrix.cpp" />
     <ClCompile Include="stdafx.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Meta_QPN\Meta_QPN\Meta_QPN.vcxproj">
+      <Project>{9d23a4d4-7bb5-4e4d-8088-5934fc3e6159}</Project>
+      <Private>true</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Pilgrim_General\Pilgrim_General\Pilgrim_General.vcxproj">
+      <Project>{b23a3035-9579-4501-b56c-aa2b72a0619c}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,10 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Learning_Bayesian_Network", "Learning_Bayesian_Network\Learning_Bayesian_Network.vcxproj", "{D97F7E30-D77C-46A2-8159-F89D97BDFECC}"
 	ProjectSection(ProjectDependencies) = postProject
+		{B23A3035-9579-4501-B56C-AA2B72A0619C} = {B23A3035-9579-4501-B56C-AA2B72A0619C}
 		{9D23A4D4-7BB5-4E4D-8088-5934FC3E6159} = {9D23A4D4-7BB5-4E4D-8088-5934FC3E6159}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Meta_QPN", "..\Meta_QPN\Meta_QPN\Meta_QPN.vcxproj", "{9D23A4D4-7BB5-4E4D-8088-5934FC3E6159}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pilgrim_General", "..\Pilgrim_General\Pilgrim_General\Pilgrim_General.vcxproj", "{B23A3035-9579-4501-B56C-AA2B72A0619C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +25,10 @@ Global
 		{9D23A4D4-7BB5-4E4D-8088-5934FC3E6159}.Debug|Win32.Build.0 = Debug|Win32
 		{9D23A4D4-7BB5-4E4D-8088-5934FC3E6159}.Release|Win32.ActiveCfg = Release|Win32
 		{9D23A4D4-7BB5-4E4D-8088-5934FC3E6159}.Release|Win32.Build.0 = Release|Win32
+		{B23A3035-9579-4501-B56C-AA2B72A0619C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B23A3035-9579-4501-B56C-AA2B72A0619C}.Debug|Win32.Build.0 = Debug|Win32
+		{B23A3035-9579-4501-B56C-AA2B72A0619C}.Release|Win32.ActiveCfg = Release|Win32
+		{B23A3035-9579-4501-B56C-AA2B72A0619C}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
