@@ -104,6 +104,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="suffix_tree.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="transformer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="meta_qpn_controller.cpp" />

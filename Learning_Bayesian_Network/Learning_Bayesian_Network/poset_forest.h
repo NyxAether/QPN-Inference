@@ -10,7 +10,9 @@ class poset_forest
 
 		struct VertexProperties 
 			{
-			parents_sign_state state;
+			VertexProperties():states(std::vector<parents_sign_state<NodeValue>*>())
+				{}
+			std::vector<parents_sign_state<NodeValue>*> states;
 			};
 
 		//Defining the graph type used for QPN instantiation
@@ -44,12 +46,12 @@ class poset_forest
 		void findAntiChains(std::set<std::set<Vertex>>& antichains);
 
 	protected:
-		std::vector<parents_sign_state<NodeValue>> states;
+		//std::vector<parents_sign_state<NodeValue>> states;
 		poset_type poset;
 	};
 
 template <typename NodeValue>
-poset_forest<NodeValue>::poset_forest(void):states(std::vector<parents_sign_state<NodeValue>>()), poset(poset_type())
+poset_forest<NodeValue>::poset_forest(void): poset(poset_type())
 	{
 
 	}

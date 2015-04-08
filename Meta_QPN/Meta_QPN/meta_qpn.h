@@ -255,6 +255,7 @@ qpn_edge* meta_qpn<NodeValue>::getEdge(std::string fromN, std::string toN)
 		if((*i_qpn)->exists(fromN) && (*i_qpn)->exists(toN) )
 			return (*i_qpn)->getEdge(fromN, toN);
 		}
+	return nullptr;
 	}
 
 
@@ -312,9 +313,10 @@ void meta_qpn<NodeValue>::getParentsStatus(std::string nName, std::map<std::stri
 	//Catch all the signs propagated 
 	for (auto i_pName = parentNames.begin(); i_pName!=parentNames.cend(); i_pName++)
 		{
+		qpn_node<NodeValue>* parent = *(getNode(*i_pName));
 		qpn_edge* e=  getEdge(*i_pName, nName);
 		if(e != nullptr)
-			status[*i_pName].second = e->getSign();//TODO Error we need the sign of the node to e+v 
+			status[*i_pName].second = e->getSign() * parent->getSign();//TODO Error we need the sign of the node to e+v 
 		}
 	//Clean modifications
 	for (auto i_pName = parentNames.begin(); i_pName!=parentNames.cend(); i_pName++)

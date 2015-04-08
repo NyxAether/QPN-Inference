@@ -41,7 +41,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <SourcePath>$(SourcePath)</SourcePath>
-    <LibraryPath>C:\Users\duke\Documents\Pilgrim\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\lib;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\duke\Documents\Pilgrim\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\lib;C:\Users\duke\Documents\Visual Studio 2010\Projects\Learning_Bayesian_Network\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -52,9 +52,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_57_0;C:\Users\duke\Documents\Pilgrim\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include;C:\Users\duke\Documents\Pilgrim\General\include;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Meta_QPN;C:\Users\duke\Documents\Pilgrim\StructureLearning\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\duke\Documents\Visual Studio 2010\Projects\Learning_Bayesian_Network\Debug;C:\Program Files\boost\boost_1_57_0;C:\Users\duke\Documents\Pilgrim\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include;C:\Users\duke\Documents\Pilgrim\General\include;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Meta_QPN;C:\Users\duke\Documents\Pilgrim\StructureLearning\include</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableSpecificWarnings>4996;4800;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

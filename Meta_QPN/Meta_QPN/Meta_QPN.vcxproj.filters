@@ -108,6 +108,9 @@
     <ClInclude Include="parents_sign_state.h">
       <Filter>Fichiers d%27en-tête\signs</Filter>
     </ClInclude>
+    <ClInclude Include="transformer.h">
+      <Filter>Fichiers d%27en-tête\nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -121,12 +121,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	//qpn.addContextSpecific("B","D","context.txt");
 
 	qpn.observeNodeValue("E",true);
-	qpn.observeNodeValue("F",true);
+	qpn.observeNodeValue("F",false);
 	qpn.observeNodeSign("B",Sign::PLUS_SIGN);
 
+	qpn_node<bool>* n_e= *(qpn.getNode("E"));
+	qpn_node<bool>* n_f= *(qpn.getNode("F")); 
+	cout<<n_e->getSign()<<n_f->getSign()<<endl;
 
 	qpn.writeGraphViz("net.gv");
 
-	bayesian_factory bf = bayesian_factory(&qpn);
+	bayesian_factory bf = bayesian_factory(&qpn); 
 		return 0; 
 }

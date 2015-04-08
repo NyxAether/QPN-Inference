@@ -1,15 +1,16 @@
 #pragma once
 #include "qpn_sign.h"
+#include "transformer.h"
 
 
 template <typename NodeValue>
 struct qpn_node
 	{
 	public:
-		qpn_node(void):value(NULL), sign(Sign::ZERO_SIGN), valObserved(false), signObserved(false)
+		qpn_node(void):value(NULL), sign(Sign::ZERO_SIGN), valObserved(false), signObserved(false), t(transformer<NodeValue>())
 			{
 			};
-		qpn_node(std::string nName):name(nName),value(NULL), sign(Sign::ZERO_SIGN), valObserved(false), signObserved(false)
+		qpn_node(std::string nName, transformer<NodeValue> trans = transformer<NodeValue>() ):name(nName),value(NULL), sign(Sign::ZERO_SIGN), valObserved(false), signObserved(false),t(trans)
 			{
 			};
 
@@ -37,6 +38,7 @@ struct qpn_node
 		bool signObserved;
 		Sign sign;
 		NodeValue value;
+		transformer<NodeValue> t;
 	};
 
 template <typename NodeValue>
@@ -48,7 +50,10 @@ std::string qpn_node<NodeValue>::getName() const
 template <typename NodeValue>
 Sign qpn_node<NodeValue>::getSign() const
 	{
-	return sign;
+	if (valObserved)
+		return t.transform(value);
+	else
+		return sign;
 	}
 
 template <typename NodeValue>

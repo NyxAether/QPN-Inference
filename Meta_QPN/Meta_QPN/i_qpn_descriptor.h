@@ -134,6 +134,7 @@ qpn_edge* i_qpn_descriptor<NodeValue, Direction>::getEdge(std::string fromN, std
 				return edgeMap[*out_it];
 			}
 		}
+	return nullptr;
 	}
 
 
