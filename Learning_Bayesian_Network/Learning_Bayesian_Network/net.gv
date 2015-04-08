@@ -1,13 +1,9 @@
 digraph G {
-A[label="A:+"];
-B[label="B:+",style=bold];
-C[label="C:-"];
+C[label="C:0"];
 D[label="D:0"];
 E[label="E:1",style=filled, color="0.75 0.75 0.75"];
 F[label="F:0",style=filled, color="0.75 0.75 0.75"];
-A->B[label="+"];
-A->C[label="-"];
-C->D[label="0"];
+C->D[label="?"];
 E->D[label="-"];
 F->D[label="+"];
 }

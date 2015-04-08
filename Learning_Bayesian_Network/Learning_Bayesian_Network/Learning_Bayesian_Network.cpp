@@ -106,9 +106,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	meta_qpn_controller qpn = meta_qpn_controller();
 
-	qpn.addInfluence("A","B", Sign::PLUS_SIGN);
-	qpn.addInfluence("A","C", Sign::MINUS_SIGN);
-	qpn.addInfluence("C","D", Sign::ZERO_SIGN);
+	//qpn.addInfluence("A","B", Sign::PLUS_SIGN);
+	//qpn.addInfluence("A","C", Sign::MINUS_SIGN);
+	qpn.addInfluence("C","D", Sign::QMARK_SIGN);
 
 	qpn.addInfluence("E","D", Sign::MINUS_SIGN);
 	qpn.addInfluence("F","D", Sign::PLUS_SIGN);
@@ -122,7 +122,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	qpn.observeNodeValue("E",true);
 	qpn.observeNodeValue("F",false);
-	qpn.observeNodeSign("B",Sign::PLUS_SIGN);
+	//qpn.observeNodeSign("B",Sign::PLUS_SIGN);
 
 	qpn_node<bool>* n_e= *(qpn.getNode("E"));
 	qpn_node<bool>* n_f= *(qpn.getNode("F")); 

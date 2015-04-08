@@ -8,15 +8,16 @@ class poset_forest
 	{
 	public:
 
+		typedef typename std::vector<parents_sign_state<NodeValue>*> states_type;
 		struct VertexProperties 
 			{
-			VertexProperties():states(std::vector<parents_sign_state<NodeValue>*>())
+			VertexProperties():states(states_type())
 				{}
 			std::vector<parents_sign_state<NodeValue>*> states;
 			};
 
 		//Defining the graph type used for QPN instantiation
-		typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, parents_sign_state<NodeValue>*, boost::no_property> poset_type;
+		typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::bidirectionalS, VertexProperties, boost::no_property> poset_type;
 		typedef typename boost::graph_traits<poset_type>::vertex_descriptor Vertex;
 
 		//Defining vertex and edge iterators
@@ -63,7 +64,12 @@ poset_forest<NodeValue>::~poset_forest(void)
 	VIterator v_it, v_end;
 	for (boost::tie(v_it,v_end)=boost::vertices(poset);v_it!=v_end;v_it++)
 		{
-		delete(poset[*v_it]);
+		states_type states = poset[*v_it].states;
+		for (auto i_state = states.begin(); i_state!=states.end(); i_state++)
+			{
+			delete(*i_state);
+			}
+
 		}
 	}
 
@@ -71,19 +77,33 @@ poset_forest<NodeValue>::~poset_forest(void)
 template <typename NodeValue>
 void poset_forest<NodeValue>::addState(parents_sign_state<NodeValue>* state)
 	{
+
 	//seen's purpose is to stop the algorithm anytime an node as been seen previously
 	//If, during the algorithm insert_as_child, a node is seen but 
 	//is incomparable this node stay incomparable in the insert_as_parent algorithm and reciprocally 
-	std::set<Vertex> seen= std::set<Vertex> ();
-	Vertex v = boost::add_vertex(state, poset);
-	seen.insert(v);
 	VIterator v_it, v_end;
+	//We first need to assert that a state is not equal to an existing
+	for (boost::tie(v_it,v_end)=boost::vertices(poset);(v_it!=v_end);v_it++)
+		{
+		parents_sign_state<NodeValue>* current_state = poset[*v_it].states.front();
+		if (state->compare(*current_state)==0)
+			{				
+			poset[*v_it].states.push_back(state);
+			return;//An equal state has been found so the new_state is added and the algorithm stop
+			}
+		}
+	//If no equal state was found, we add the new state as a new element of the graph then we search an existing order between
+	//this state and the others
+	std::set<Vertex> seen= std::set<Vertex> ();
+	Vertex v = boost::add_vertex( poset);
+	poset[v].states.push_back(state);
+	seen.insert(v);
 	for (boost::tie(v_it,v_end)=boost::vertices(poset);(v_it!=v_end);v_it++)
 		{
 		if(seen.count(*v_it)==0)
 			{
 			seen.insert(*v_it);
-			parents_sign_state<NodeValue>* current_state = poset[*v_it];
+			parents_sign_state<NodeValue>* current_state = poset[*v_it].states.front();
 			switch(state->compare(*current_state))//TODO no zero case ?
 				{
 			case 1:
@@ -131,14 +151,14 @@ template <typename NodeValue>
 void poset_forest<NodeValue>::insert_as_child(Vertex new_v, Vertex current, std::set<Vertex>& seen)
 	{
 	OutEIterator out_it, end_out_it;
-	parents_sign_state<NodeValue>* new_state = poset[new_v];
+	parents_sign_state<NodeValue>* new_state = poset[new_v].states.front();
 	bool inserted = false;
 	for (boost::tie(out_it,end_out_it) = boost::out_edges(current, poset); out_it!=end_out_it;out_it++)
 		{
 		Vertex next_v= boost::target(*out_it,poset);
 		if (seen.count(next_v)==0)
 			{
-			parents_sign_state<NodeValue>* next_state = poset[next_v];
+			parents_sign_state<NodeValue>* next_state = poset[next_v].states.front();
 
 			int diff = next_state->compare(*new_state);
 			if(diff == 1){
@@ -167,7 +187,7 @@ template <typename NodeValue>
 void poset_forest<NodeValue>::insert_as_parent(Vertex new_v, Vertex current, std::set<Vertex>& seen)
 	{
 	InEIterator in_it, end_in_it;
-	parents_sign_state<NodeValue>* new_state = poset[new_v];
+	parents_sign_state<NodeValue>* new_state = poset[new_v].states.front();
 	bool inserted = false;
 	for (boost::tie(in_it,end_in_it) = boost::in_edges(current, poset); in_it!=end_in_it; in_it++)
 		{
@@ -175,7 +195,7 @@ void poset_forest<NodeValue>::insert_as_parent(Vertex new_v, Vertex current, std
 		if (seen.count(next_v)==0)
 			{
 			seen.insert(next_v);
-			parents_sign_state<NodeValue>* next_state = poset[next_v];
+			parents_sign_state<NodeValue>* next_state = poset[next_v].states.front();
 
 			int diff = next_state->compare(*new_state);
 			if(diff == -1){
@@ -236,7 +256,7 @@ bool poset_forest<NodeValue>::isAntichain(Vertex v, std::set<Vertex> antichain)
 	{
 	for (auto i_v = antichain.begin();i_v!=antichain.end();i_v++)
 		{
-		int comp_val =poset[v]->compare(*(poset[*i_v]));
+		int comp_val =poset[v]->compare(*(poset[*i_v].states.front()));
 		if(comp_val == 0 || comp_val==-1 ||comp_val ==1)
 			return false;
 		}
