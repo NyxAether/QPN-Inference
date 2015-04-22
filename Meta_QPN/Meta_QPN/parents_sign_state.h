@@ -58,6 +58,8 @@ class parents_sign_state
 		*/
 		int compare(const parents_sign_state& pss) const;
 
+		virtual bool operator==(const parents_sign_state<NodeValue>& pss);
+
 	protected:
 		std::map<std::string, std::pair<NodeValue, Sign>>* state;
 		std::string nName;
@@ -123,4 +125,21 @@ int parents_sign_state<NodeValue>::compare(const parents_sign_state& pss) const
 	//if(variation == Sign::QMARK_SIGN)
 		return 2; //Standard incomparability 
 	
+	}
+
+template <typename NodeValue>
+bool parents_sign_state<NodeValue>::operator==(const parents_sign_state<NodeValue>& pss)
+	{
+	if(nName != pss.getNode())
+		return false;
+	for (auto i_value = state->begin(); i_value!= state->end(); i_value++)
+		{
+		std::string nName = i_value->first;
+		NodeValue val1, val2;
+		val1 = i_value->second.first;
+		val2 = pss.getState(nName).first;
+		if(val1 != val2)
+			return false;
+		}
+	return true;
 	}

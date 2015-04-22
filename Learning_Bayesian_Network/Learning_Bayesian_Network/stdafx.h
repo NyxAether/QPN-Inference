@@ -11,5 +11,4 @@
 #include <tchar.h>
 
 
-
 // TODO: faites référence ici aux en-têtes supplémentaires nécessaires au programme

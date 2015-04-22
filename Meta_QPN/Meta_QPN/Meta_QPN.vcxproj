@@ -52,12 +52,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_57_0</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(PILGRIM_GENERAL_HOME)\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include;$(PILGRIM_GENERAL_HOME)\lib\vendor\boost_1_50_0;$(PILGRIM_GENERAL_HOME)\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(PILGRIM_GENERAL_HOME)\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\lib\spl-vc100-d.lib;$(PILGRIM_GENERAL_HOME)\Debug\PILGRIM-General-library.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PILGRIM_GENERAL_HOME)\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\lib;$(PILGRIM_GENERAL_HOME)\lib\vendor\boost_1_50_0\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -68,7 +70,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_57_0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>

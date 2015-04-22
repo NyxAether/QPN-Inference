@@ -2,7 +2,7 @@ digraph G {
 A[label="A:-"];
 B[label="B:-",style=bold];
 C[label="C:+"];
-D[label="D:?"];
+D[label="D:0"];
 E[label="E:1",style=filled, color="0.75 0.75 0.75"];
 F[label="F:1",style=filled, color="0.75 0.75 0.75"];
 A->B[label="+"];
@@ -10,10 +10,6 @@ A->C[label="-"];
 C->D[label="0"];
 E->D[label="-"];
 F->D[label="+"];
-B->D[label="[(C)(E)]->-
-[(¬C)]->+
-[(¬C)(F)]->-
-"];
 B->C[label="D:-",dir=none,style=dotted];
 B->E[label="D:[0, +],[1, -]",dir=none,style=dotted];
 C->F[label="D:+",dir=none,style=dotted];

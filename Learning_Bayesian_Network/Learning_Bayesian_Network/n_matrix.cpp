@@ -1,4 +1,6 @@
 #include "n_matrix.h"
+#include "boost\algorithm\string\split.hpp"
+#include "boost\algorithm\string\classification.hpp"
 
 
 n_matrix::n_matrix(std::string file_path):index_map(std::map<std::string, unsigned int>()), nb_value(std::vector<unsigned int>()), data(std::vector<std::pair<unsigned int, unsigned int>>())

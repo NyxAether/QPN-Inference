@@ -4,8 +4,7 @@
 #include <string>
 #include <map>
 #include <vector>
-#include "boost\spirit\home\classic\dynamic\impl\conditions.ipp"
-#include "boost\algorithm\string.hpp"
+
 
 
 class n_matrix

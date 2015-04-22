@@ -20,7 +20,6 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -38,51 +37,42 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <SourcePath>$(SourcePath)</SourcePath>
-    <LibraryPath>C:\Users\duke\Documents\Pilgrim\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\lib;C:\Users\duke\Documents\Visual Studio 2010\Projects\Learning_Bayesian_Network\Debug;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\duke\Documents\Visual Studio 2010\Projects\Learning_Bayesian_Network\Debug;C:\Program Files\boost\boost_1_57_0;C:\Users\duke\Documents\Pilgrim\General\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include;C:\Users\duke\Documents\Pilgrim\General\include;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Debug;C:\Users\duke\Documents\Visual Studio 2010\Projects\Meta_QPN\Meta_QPN;C:\Users\duke\Documents\Pilgrim\StructureLearning\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PILGRIM_GENERAL_HOME)\lib\vendor\glog-0.3.3\src;$(PILGRIM_GENERAL_HOME)\lib\vendor\glog-0.3.3\src\windows;$(PILGRIM_GENERAL_HOME)\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include;$(PILGRIM_GENERAL_HOME)\lib\vendor\gtest-1.6.0\include;$(PILGRIM_GENERAL_HOME)\lib\vendor\boost_1_50_0;$(PILGRIM_GENERAL_HOME)\include;$(VS_PROJECTS)\Meta_QPN\Debug;$(VS_PROJECTS)\Meta_QPN\Meta_QPN%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalOptions>/NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>4996;4800;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>C:\Users\duke\Documents\Visual Studio 2010\Projects\Learning_Bayesian_Network\Debug\Meta_QPN.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <PreventDllBinding>
-      </PreventDllBinding>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>$(VS_PROJECTS)\Learning_Bayesian_Network\Debug\Meta_QPN.lib;$(PILGRIM_GENERAL_HOME)\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\lib\spl-vc100-d.lib;$(PILGRIM_GENERAL_HOME)\Debug\PILGRIM-General-library.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PILGRIM_GENERAL_HOME)\lib\vendor\boost_1_50_0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <ProjectReference>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(VS_PROJECTS)\Meta_QPN\Meta_QPN;$(PILGRIM_GENERAL_HOME)\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\include;$(PILGRIM_GENERAL_HOME)\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(PILGRIM_GENERAL_HOME)\lib\vendor\glog-0.3.3\Release;$(PILGRIM_GENERAL_HOME)\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\lib;$(PILGRIM_GENERAL_HOME)\lib\vendor\gtest-1.6.0\msvc\gtest-md\Release;$(PILGRIM_GENERAL_HOME)\lib\vendor\boost_1_50_0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(VS_PROJECTS)\Learning_Bayesian_Network\Debug\Meta_QPN.lib;$(PILGRIM_GENERAL_HOME)\lib\vendor\probt-spl-2.2.99-cvs20121129-vc10-vc9-dynamic-release\lib\spl-vc100-d.lib;$(PILGRIM_GENERAL_HOME)\Debug\PILGRIM-General-library.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
@@ -111,9 +101,6 @@
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Pilgrim_General\Pilgrim_General\Pilgrim_General.vcxproj">
-      <Project>{b23a3035-9579-4501-b56c-aa2b72a0619c}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

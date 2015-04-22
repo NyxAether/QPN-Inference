@@ -7,14 +7,17 @@
 *=============================================================================
 */
 #pragma once
+#include <iostream>
+#include <fstream>
 #include "meta_qpn_controller.h"
 #include "n_matrix.h"
 #include <memory>
 #include <pl.h>
 #include "poset_forest.h"
-#include "pilgrim\general\LoadDataSet.h"
-#include "pilgrim\general\pmCommonTypeDefinations.h"
+#include "plCSVFileDataDescriptor.h"
+#include "parents_sign_state.h"
 
+#include "pilgrim\general\FrequencyCounter.h"
 //=============================================================================
 /*!
 *  \brief bayesian_factory class
@@ -27,13 +30,22 @@
 */
 class bayesian_factory
 	{
+
+	struct fract{
+		int num;
+		int den;
+
+		};
+
 	public:
 
 
 		typedef poset_forest<bool> poset_type;
 		typedef std::map<std::string,poset_forest<bool>> posets_type;
-		typedef std::map<std::string, pmCSVDataSet*> data_type;
-
+		typedef std::map<std::string, PILGRIM::pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>*> data_type;
+		typedef std::map<std::string, plSymbol> symbols_type;
+		typedef std::map<parents_sign_state<bool>, fract> m_frac_type;
+		typedef std::map<std::string, m_frac_type> values_type;
 		/**
 		* \brief Main constructor
 		* \details Using a setted qpn, this constructor will process all the structures needed to 
@@ -73,24 +85,47 @@ class bayesian_factory
 		void constructPoset(std::string nName);
 		
 		/**
-		* \brief Define values for a set of nodes
-		* \details With the aim of constructing a poset, it's necessary to define all set possible 
-		* for the parent nodes and observe the value of the common child. This is the purpose of 
-		* this method. Each state compute is use to define a new lower set. The number of states can be easily estimated : values are
-		* considerated boolean so the number of state is equal to 2^nb_parents.
+		* \brief Defines values for a set of nodes
+		* \details With the aim of constructing a poset, it's necessary to define all the sets of possible values
+		* of the parent nodes. This is the purpose of  this method. Each state computed is use to define a new lower set.
+		This method is recursive. States created while be directly added to the posets structure
+		The number of states can be easily estimated : values are considerated boolean so the number of state is equal to 2^nb_parents.
 		* \param nName : name of the child
 		* \param begin : first iterator on the parent names (you can see that is not a reference because the algorithm simulate a 
 		* tree structure to compute all state) 
 		* \param end : last iterator on the parent names
 		* \param[in] state : empty map needed to begin the algorithm. Store configuration of parents nodes in a specific state
 		*/
-		void stateDefine(std::string nName, std::list<std::string>::iterator begin, std::list<std::string>::iterator end, std::map<std::string, std::pair<bool, Sign>>* state);
+		void stateDefine(std::string nName, std::vector<std::string>::iterator begin, std::vector<std::string>::iterator end, std::map<std::string, std::pair<bool, Sign>>* state);
+
+		/**
+		* \brief Creates parents_sign_state from a DataDescriptor row
+		* \param nName : Name of the current node
+		* \param[in] row : row from the data
+		* \return a parents_sign state corresponding to the data row
+		*/
+		parents_sign_state<bool> createPSSFromRow(std::string nName, plCSVFileDataDescriptor<int>::CSVDescRowDataType& row);
+
+		/**
+		* Reads the first line of a file to creates a plVariablesCunjunction with all the plSymbol defined in the same order.
+		*\brief Creates plSymbols from a header
+		* \details The headers at the begining of the file need to be with the following syntax
+		* "name_var_1";"name_var_2"
+		* Example :
+		* "C";"E";"F";"D"
+		* \param[out] variables : Will stock all the plSympol corresponding to the header at the end of the method. 
+		* \param[in] filename : name of a file containing the data or at least a correct header on first line.
+		*/
+		void setHeaders(plVariablesConjunction& variables, std::string filename);
+
+		void computeProbTable(std::string nName, std::vector<plProbValue> & values);
 
 	protected:
 		meta_qpn_controller* qpn;
 		posets_type posets;
 		data_type data;
-
+		symbols_type symbols;
+		values_type values;
 
 
 	};

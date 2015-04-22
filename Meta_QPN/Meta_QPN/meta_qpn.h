@@ -38,8 +38,10 @@ class meta_qpn
 		qpn_node<NodeValue>* getNode(int index);
 		qpn_edge* getEdge(std::string fromN, std::string toN);
 		void getNodeNames(std::list<std::string>& nodeNames) const;
-		void getParentNames(std::string nName, std::list<std::string>& parentNames) const;
+		void getParentNames(std::string nName, std::vector<std::string>& parentNames) const;
 		void getParentsStatus(std::string nName, std::map<std::string,std::pair<NodeValue, Sign>>& status);
+		int getParentsCount(std::string nName) const;
+
 
 	protected:
 		template<typename NodeValue, typename T1>
@@ -271,7 +273,7 @@ void meta_qpn<NodeValue>::getNodeNames(std::list<std::string>& nodeNames) const
 
 
 template < typename NodeValue>
-void meta_qpn<NodeValue>::getParentNames(std::string nName, std::list<std::string>& parentNames) const
+void meta_qpn<NodeValue>::getParentNames(std::string nName, std::vector<std::string>& parentNames) const
 	{
 	std::set<std::string> parentNamesSet= std::set<std::string>();
 	for (auto i_qpn = qpn_directed.cbegin(); i_qpn!= qpn_directed.cend();i_qpn++)
@@ -301,7 +303,7 @@ template < typename NodeValue>
 void meta_qpn<NodeValue>::getParentsStatus(std::string nName, std::map<std::string,std::pair<NodeValue, Sign>>& status)
 	{
 	std::map<std::string, std::pair<bool, NodeValue>> save_state;
-	std::list<std::string> parentNames = std::list<std::string> ();
+	std::vector<std::string> parentNames = std::vector<std::string> ();
 	getParentNames(nName, parentNames);
 	//Set the values for all the parents
 	for (auto i_pName = parentNames.begin(); i_pName!=parentNames.cend(); i_pName++)
@@ -328,3 +330,16 @@ void meta_qpn<NodeValue>::getParentsStatus(std::string nName, std::map<std::stri
 			(*parent)->setValue(save_state[*i_pName].second);
 		}
 	}
+
+
+template < typename NodeValue>
+int meta_qpn<NodeValue>::getParentsCount(std::string nName) const
+	{
+	int count = 0;
+	for (auto i_qpn = qpn_directed.begin(); i_qpn!=qpn_directed.end();i_qpn++)
+	{
+	count += (*i_qpn)->getParentsCount(nName);
+	}
+	return count;
+	}
+

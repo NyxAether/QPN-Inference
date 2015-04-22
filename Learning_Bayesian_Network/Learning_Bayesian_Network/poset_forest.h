@@ -1,7 +1,8 @@
 #pragma once
-#include "..\..\Meta_QPN\Meta_QPN\parents_sign_state.h"
+
 #include <vector>
 #include "boost\graph\adjacency_list.hpp"
+#include "parents_sign_state.h"
 
 template <typename NodeValue>
 class poset_forest
@@ -140,7 +141,12 @@ void poset_forest<NodeValue>::findLowerSets(std::vector<std::vector<parents_sign
 		std::vector<parents_sign_state<NodeValue>*> lowerSet =std::vector<parents_sign_state<NodeValue>*>();
 		for (auto i_v = vertexLowerSet.begin(); i_v!=vertexLowerSet.end();i_v++)
 			{
-			lowerSet.push_back(poset[*i_v]);
+			states_type states = poset[*i_v].states;
+			for (auto i_state = states.begin(); i_state!= states.end(); i_state++)
+				{
+				lowerSet.push_back(*i_state);
+				}
+
 			}
 		lowerSets.push_back(lowerSet);
 		}
@@ -256,7 +262,7 @@ bool poset_forest<NodeValue>::isAntichain(Vertex v, std::set<Vertex> antichain)
 	{
 	for (auto i_v = antichain.begin();i_v!=antichain.end();i_v++)
 		{
-		int comp_val =poset[v]->compare(*(poset[*i_v].states.front()));
+		int comp_val =poset[v].states.front()->compare(*(poset[*i_v].states.front()));
 		if(comp_val == 0 || comp_val==-1 ||comp_val ==1)
 			return false;
 		}
@@ -298,7 +304,6 @@ void poset_forest<NodeValue>::findAntiChains(std::set<std::set<Vertex>>& anticha
 	//We build antichains by iteration. For each node
 	for (boost::tie(v_it,v_end)=boost::vertices(poset);(v_it!=v_end);v_it++)
 		{
-				std::cout<<"coucou"<<std::endl;
 		//we look into all antichain to figure if we can find a new antichain composed with this node and this antichain 
 		for (auto i_antichain = antichains.begin(); i_antichain!=antichains.end();i_antichain++)
 			{
