@@ -178,8 +178,18 @@ cout<<A.name()<<endl;
 	//plSymbol pl_B = plSymbol("B", PL_BINARY_TYPE);
 	//plSymbol pl_C = plSymbol("C", PL_BINARY_TYPE);
 	//plSymbol pl_D = plSymbol("D", PL_BINARY_TYPE);
-	//plVariablesConjunction variable = pl_A ^ pl_B ^ pl_C ^ pl_D;
-
+	//plSymbol pl_E = plSymbol("E", PL_BINARY_TYPE);
+	//plSymbol pl_F = plSymbol("F", PL_BINARY_TYPE);
+	//plVariablesConjunction variable = pl_C ^ pl_E ^ pl_F ^ pl_D;
+	//plCSVFileDataDescriptor<int>* ds =new plCSVFileDataDescriptor<int>("data_node_A.csv", variable, true, ';');
+	//pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc= new	pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>(ds, variable);
+	//vector<plFloat> values = vector<plFloat>();
+	//vector<unsigned int> variableSet = vector<unsigned int>();
+	//variableSet.push_back(variable.get_symbol_position(pl_D));
+	//variableSet.push_back(variable.get_symbol_position(pl_E));
+	//variableSet.push_back(variable.get_symbol_position(pl_C));
+	//variableSet.push_back(variable.get_symbol_position(pl_F));	
+	//fc->frequencyCount(variableSet, values);
 	//cout<<pl_D.name();
 	//for (auto i = variable.begin(); i!= variable.end();i++)
 	//{

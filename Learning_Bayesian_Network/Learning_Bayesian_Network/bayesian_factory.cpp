@@ -36,7 +36,7 @@ bayesian_factory::~bayesian_factory(void)
 void bayesian_factory::constructPoset(string nName)
 	{
 	map<string, pair<bool, Sign>>*  state = new map<string, pair<bool, Sign>>();
-	posets[nName] = poset_type();
+	posets[nName] = poset_type(nName);
 	vector<string> parentNames = vector<string>();
 	qpn->getParentNames(nName,parentNames);
 	stateDefine(nName, parentNames.begin(), parentNames.end(), state);
@@ -74,13 +74,13 @@ void bayesian_factory::addData(string nName, string filePath)
 	vector<string> pNames = vector<string>();
 	qpn->getParentNames(nName, pNames);
 	plVariablesConjunction variables = plVariablesConjunction();
-
+	
 	setHeaders(variables,filePath);
 
 	plCSVFileDataDescriptor<int>* ds =new plCSVFileDataDescriptor<int>(filePath, variables, true, ';');
 	pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc= new	pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>(ds, variables);
 	data[nName]=fc;
-
+	
 	}
 
 void bayesian_factory::build()
@@ -89,7 +89,7 @@ void bayesian_factory::build()
 	qpn->getNodeNames(nNames);
 	for (auto i_name = nNames.begin(); i_name!=nNames.end();i_name++)
 		{
-		
+		posets[*i_name].MLS(*(data[*i_name]));
 		}
 	}
 

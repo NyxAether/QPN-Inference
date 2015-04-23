@@ -35,6 +35,7 @@ class parents_sign_state
 
 
 		std::string getNode() const;
+		void getParents(std::vector<std::string>& v) const;
 		/*!
 		*\brief return state associate to a parent
 		*
@@ -86,6 +87,15 @@ std::string parents_sign_state<NodeValue>::getNode() const
 	return nName;
 	}
 
+
+template <typename NodeValue>
+void parents_sign_state<NodeValue>::getParents(std::vector<std::string>& v) const
+	{
+	for (auto i_parent=state->cbegin();i_parent!=state->cend();i_parent++)
+		{
+		v.push_back(i_parent->first);
+		}
+	}
 
 template <typename NodeValue>
 std::pair<NodeValue, Sign> parents_sign_state<NodeValue>::getState(std::string nName)const
