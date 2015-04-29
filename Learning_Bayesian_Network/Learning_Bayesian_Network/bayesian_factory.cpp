@@ -27,9 +27,13 @@ bayesian_factory::~bayesian_factory(void)
 	for (auto i_data = data.begin(); i_data!=data.end();i_data++)
 		{
 		//Destruct the data descriptor stores into the pmFrequencyCounter
-		delete(i_data->second->getDataDescriptor());
-		//Destruct the pmFrequencyCounter
-		delete(i_data->second);
+		if (i_data->second != nullptr)
+			{
+			auto dd = i_data->second->getDataDescriptor();
+			delete(dd);
+			//Destruct the pmFrequencyCounter
+			delete(i_data->second);
+			}
 		}
 	}
 
@@ -80,7 +84,6 @@ void bayesian_factory::addData(string nName, string filePath)
 	plCSVFileDataDescriptor<int>* ds =new plCSVFileDataDescriptor<int>(filePath, variables, true, ';');
 	pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc= new	pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>(ds, variables);
 	data[nName]=fc;
-	
 	}
 
 void bayesian_factory::build()
@@ -89,7 +92,8 @@ void bayesian_factory::build()
 	qpn->getNodeNames(nNames);
 	for (auto i_name = nNames.begin(); i_name!=nNames.end();i_name++)
 		{
-		posets[*i_name].MLS(*(data[*i_name]));
+		plProbValue* test = posets[*i_name].MLS((data[*i_name]));
+		//cout<<*test<<*(test+sizeof(plProbValue))<<endl;
 		}
 	}
 
@@ -103,7 +107,11 @@ void bayesian_factory::setHeaders(plVariablesConjunction& variables, std::string
 		getline(file, line);  
 		 istringstream toSplit(line);
 		while (getline(toSplit, name_var, ';')) 
-			variables = variables ^ symbols[name_var];
+			{
+			name_var=name_var.substr(1,name_var.size()-2);
+			plSymbol tmp = symbols[name_var];
+			variables = variables ^ (tmp);
+			}
 		file.close();
 		}
 	else

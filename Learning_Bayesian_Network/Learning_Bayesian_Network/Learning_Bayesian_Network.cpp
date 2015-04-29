@@ -199,7 +199,7 @@ cout<<A.name()<<endl;
 	bayesian_factory bf = bayesian_factory(&qpn); 
 	bf.addData("D", "data_node_A.csv");
 
-
+	bf.build();
 
 		//return 0; 
 }

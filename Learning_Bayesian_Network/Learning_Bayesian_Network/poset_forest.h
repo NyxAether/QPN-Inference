@@ -38,7 +38,7 @@ class poset_forest
 
 		void addState(parents_sign_state<NodeValue>* state);
 		void findLowerSets(std::vector<lower_set_type>& lowerSets );
-		plProbValue* MLS(PILGRIM::pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>& fc);		 
+		plProbValue* MLS(PILGRIM::pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc);		 
 
 	protected:
 
@@ -58,7 +58,8 @@ class poset_forest
 	private:
 		boost::rational<int> getRationalFromState(parents_sign_state<NodeValue>* state, std::vector<plFloat>& freq, std::map<std::string, unsigned int>& pos);
 		boost::rational<int> computeLowerSetProb(lower_set_type& ls, std::map<parents_sign_state<NodeValue>*,boost::rational<int>>& probTable);
-		void constructProbTable(std::map<parents_sign_state<NodeValue>*, boost::rational<int>>& rationalProb, std::map<std::string, unsigned int>& posstd::vector<plProbValue> probTable );
+		void constructProbTable(std::map<parents_sign_state<NodeValue>*, boost::rational<int>>& rationalProb, std::map<std::string, unsigned int>& pos,std::vector<plProbValue>& probTable );
+		void computeRelativesPos(plVariablesConjunction& variables, std::vector<unsigned int>& absolute_pos,std::map<std::string, unsigned int>& all, std::map<std::string, unsigned int> & parents);
 
 	protected:
 		std::string nName;
@@ -182,8 +183,15 @@ void poset_forest<NodeValue>::findLowerSets(std::vector<lower_set_type>& lowerSe
 
 
 template <typename NodeValue>
-plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>& fc)
+plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc)
 	{
+	std::vector<plProbValue> vectorProb = std::vector<plProbValue>();
+	if (fc == nullptr)
+		{
+		vectorProb.push_back(0.5);
+		vectorProb.push_back(0.5);
+		return &(vectorProb.front());
+		}
 	/************************************************************************/
 	/* Initialisation                                                       */
 	/************************************************************************/
@@ -191,25 +199,12 @@ plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileD
 	findLowerSets(lowerSets);
 	std::map<parents_sign_state<NodeValue>*, boost::rational<int>> probTable =std::map<parents_sign_state<NodeValue>*, boost::rational<int>>();
 	//Gets Variables
-	plVariablesConjunction variables =  fc.getVariables();
+	plVariablesConjunction variables =  fc->getVariables();
 	//Initializes variable's positions
 	std::vector<unsigned int> pos =std::vector<unsigned int>();
 	std::map<std::string, unsigned int> relative_pos =std::map<std::string, unsigned int>();
-	for(auto i_parent=parentNames.begin();i_parent!=parentNames.end();i_parent++)
-		{
-		unsigned int pos_parent =variables.get_symbol_position(variables.get_symbol_with_name(*i_parent));
-		pos.push_back(pos_parent);
-		unsigned int relative= 0;
-		for (auto i_pos_r= relative_pos.begin();i_pos_r!=relative_pos.end();i_pos_r++)
-			{
-			unsigned int current_pos = variables.get_symbol_position(variables.get_symbol_with_name((*i_pos_r).first)) ;
-			if(pos_parent < current_pos )
-				relative_pos[(*i_pos_r).first]++;
-			else
-				relative++;
-			}
-		relative_pos[*i_parent]= relative;
-		}
+	std::map<std::string, unsigned int> parents_relative_pos =std::map<std::string, unsigned int>();
+	computeRelativesPos(variables, pos, relative_pos, parents_relative_pos);
 
 
 	std::vector<plFloat> freq =std::vector<plFloat>();
@@ -218,7 +213,7 @@ plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileD
 	/*First step : Constructs the table value from the data                 */
 	/************************************************************************/
 	//Compute frequencies
-	fc.frequencyCount(pos, freq);
+	fc->frequencyCount(pos, freq);
 	for (auto i_state = all_states.begin(); i_state!=all_states.end();i_state++)
 		{
 		probTable[*i_state] = getRationalFromState(*i_state, freq, relative_pos);
@@ -251,31 +246,35 @@ plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileD
 			}
 		//Remove minimal from lowerSets and other
 		lowerSets.erase(lowerSets.begin()+index_min);
+		std::vector<lower_set_type> lower_sets_cp = std::vector<lower_set_type>();
 		for (auto i_ls = lowerSets.begin(); i_ls!=lowerSets.end();i_ls++)
 			{
 
 			for (auto i_min_state= min_ls.begin();i_min_state!=min_ls.end();i_min_state++)
 				{
+				lower_set_type states_cp = lower_set_type();
 				for (auto i_state= i_ls->begin();i_state!=i_ls->end();i_state++)
 					{
-					if ((*i_min_state) == (*i_state) )
+					if ((*i_min_state) != (*i_state) )
 						{
-						i_ls->erase(i_state);
-						i_state--;
+						states_cp.push_back(*i_state);
 						}		
 					}
+				*i_ls = states_cp;
 				}
-			if(i_ls->empty())
+			if(! i_ls->empty())
 				{
-				lowerSets.erase(i_ls);
-				i_ls--;
+				lower_sets_cp.push_back(*i_ls);
 				}
 			}
+		lowerSets = lower_sets_cp;
 		}
 	/************************************************************************/
 	/* Third step : Constructs a plProbValue[]                              */
 	/************************************************************************/
 
+	constructProbTable(probTable,parents_relative_pos,vectorProb);
+	return &(vectorProb.front());
 	}
 
 
@@ -290,7 +289,7 @@ boost::rational<int> poset_forest<NodeValue>::getRationalFromState(parents_sign_
 		neg_val += state->getState(*i_parent).first *((unsigned int) std::pow(2.0,(int)pos[*i_parent]));
 		}
 	pos_val = neg_val + ((unsigned int) std::pow(2.0,(int)pos[nName]));
-	return boost::rational<int>((int) freq[pos_val], (int)freq[pos_val+neg_val]);
+	return boost::rational<int>((int) freq[pos_val], (int)(freq[neg_val]+ freq[pos_val]));
 	}
 
 
@@ -303,8 +302,12 @@ boost::rational<int> poset_forest<NodeValue>::computeLowerSetProb(lower_set_type
 	for (auto i_state= ls.begin(); i_state!=ls.end();i_state++)
 		{
 		boost::rational<int> frac = probTable[*i_state];
-		num += frac.numerator();
-		denum += frac.denominator();
+		if (frac.numerator() !=0)
+			{
+
+			num += frac.numerator();
+			denum += frac.denominator();
+			}
 		}
 	return boost::rational<int>(num, denum);
 	}
@@ -314,15 +317,65 @@ boost::rational<int> poset_forest<NodeValue>::computeLowerSetProb(lower_set_type
 template <typename NodeValue>
 void poset_forest<NodeValue>::constructProbTable(std::map<parents_sign_state<NodeValue>*, boost::rational<int>>& rationalProb, std::map<std::string, unsigned int>& pos, std::vector<plProbValue>& probTable)
 	{
-		probTable = std::vector<plProbValue>(rationalProb.size());
-		for (auto i_rprob= rationalProb.begin();i_rprob!=rationalProb.end();i++)
+	probTable = std::vector<plProbValue>(rationalProb.size()*2);
+	for (auto i_rprob= rationalProb.begin();i_rprob!=rationalProb.end();i_rprob++)
 		{
 		int index =0;
+		parents_sign_state<NodeValue>* state = i_rprob->first;
 		for (auto i_parent = parentNames.begin();i_parent!=parentNames.end();i_parent++)
 			{
-			index += state->getState(*i_parent).first *((unsigned int) std::pow(2.0,(int)pos[*i_parent]));//DKLHFKLMSDFJKLSDJFK
-			error;
+			index += state->getState(*i_parent).first *((unsigned int) std::pow(2.0,(int)pos[*i_parent]));
 			}
+		boost::rational<int> value =i_rprob->second;
+		std::cout<<"value: "<<value.numerator()<<" "<<value.denominator()<<std::endl;
+		if(value.numerator() == 0)
+			probTable[index] = 0.5;
+		else
+			probTable[index] = 1- value.numerator()/(double)value.denominator();
+		int index_compl =index +std::pow(2.0,(int)parentNames.size());
+			probTable[index_compl] =1 - probTable[index];
+		}
+	for (auto i_display = probTable.begin(); i_display!=probTable.end();i_display++)
+	{
+	std::cout<<*i_display<<" ";
+	}
+	std::cout<<std::endl;
+	}
+
+
+template <typename NodeValue>
+void poset_forest<NodeValue>::computeRelativesPos(plVariablesConjunction& variables, std::vector<unsigned int>& absolute_pos,std::map<std::string, unsigned int>& all_pos, std::map<std::string, unsigned int> & parents_pos)
+	{
+	//child first
+	absolute_pos.push_back(variables.get_symbol_position(variables.get_symbol_with_name(nName)));
+	all_pos[nName] =0 ;
+	//then parent
+	for(auto i_parent=parentNames.begin();i_parent!=parentNames.end();i_parent++)
+		{
+		unsigned int pos_parent =variables.get_symbol_position(variables.get_symbol_with_name(*i_parent));
+		absolute_pos.push_back(pos_parent);
+		unsigned int relative= 0;
+		unsigned int relative_p= 0;
+		for (auto i_pos_r= all_pos.begin();i_pos_r!=all_pos.end();i_pos_r++)
+			{
+			string current_name = i_pos_r->first;
+			unsigned int current_pos = variables.get_symbol_position(variables.get_symbol_with_name(current_name) );
+			if(pos_parent < current_pos )
+				all_pos[current_name]++;
+			else
+				relative++;
+			if (current_name != nName)
+			{
+			if(pos_parent < current_pos )
+				parents_pos[current_name]++;
+			else
+				relative_p++;
+			}
+			}
+		all_pos[*i_parent]= relative;
+		parents_pos[*i_parent]= relative_p;
+
+
 		}
 	}
 
