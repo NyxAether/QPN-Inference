@@ -85,6 +85,7 @@
     <ClInclude Include="n_matrix.h" />
     <ClInclude Include="poset_forest.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="strange_rational.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +93,7 @@
     <ClCompile Include="Learning_Bayesian_Network.cpp" />
     <ClCompile Include="n_matrix.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="strange_rational.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Meta_QPN\Meta_QPN\Meta_QPN.vcxproj">

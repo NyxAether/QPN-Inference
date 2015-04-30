@@ -39,6 +39,9 @@
     <ClInclude Include="bayesian_factory.h">
       <Filter>Fichiers d%27en-tête\structures</Filter>
     </ClInclude>
+    <ClInclude Include="strange_rational.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -52,6 +55,9 @@
     </ClCompile>
     <ClCompile Include="bayesian_factory.cpp">
       <Filter>Fichiers sources\structures</Filter>
+    </ClCompile>
+    <ClCompile Include="strange_rational.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,9 +2,9 @@
 
 #include <vector>
 #include "boost\graph\adjacency_list.hpp"
-#include <boost\rational.hpp>
 #include "parents_sign_state.h"
 #include "pilgrim\general\FrequencyCounter.h"
+#include "strange_rational.h"
 
 template <typename NodeValue>
 class poset_forest
@@ -51,14 +51,15 @@ class poset_forest
 		bool isAntichain(Vertex v, const std::set<Vertex> antichain);
 
 		void computeLowerSet(std::set<Vertex> antichain,std::set<Vertex>& lowerSet);
+		strange_rational getMinLowerSet(std::vector<lower_set_type>& lowerSets, std::map<parents_sign_state<NodeValue>*, strange_rational>& probTable, lower_set_type &min_ls );
 		void getPartialLS(Vertex v, std::set<Vertex>& lowerSet);
 
 		void findAntiChains(std::set<std::set<Vertex>>& antichains);
 
 	private:
-		boost::rational<int> getRationalFromState(parents_sign_state<NodeValue>* state, std::vector<plFloat>& freq, std::map<std::string, unsigned int>& pos);
-		boost::rational<int> computeLowerSetProb(lower_set_type& ls, std::map<parents_sign_state<NodeValue>*,boost::rational<int>>& probTable);
-		void constructProbTable(std::map<parents_sign_state<NodeValue>*, boost::rational<int>>& rationalProb, std::map<std::string, unsigned int>& pos,std::vector<plProbValue>& probTable );
+		strange_rational getRationalFromState(parents_sign_state<NodeValue>* state, std::vector<plFloat>& freq, std::map<std::string, unsigned int>& pos);
+		strange_rational computeLowerSetProb(lower_set_type& ls, std::map<parents_sign_state<NodeValue>*,strange_rational>& probTable);
+		void constructProbTable(std::map<parents_sign_state<NodeValue>*, strange_rational>& rationalProb, std::map<std::string, unsigned int>& pos,std::vector<plProbValue>& probTable );
 		void computeRelativesPos(plVariablesConjunction& variables, std::vector<unsigned int>& absolute_pos,std::map<std::string, unsigned int>& all, std::map<std::string, unsigned int> & parents);
 
 	protected:
@@ -197,7 +198,7 @@ plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileD
 	/************************************************************************/
 	std::vector<lower_set_type> lowerSets = std::vector<lower_set_type>();
 	findLowerSets(lowerSets);
-	std::map<parents_sign_state<NodeValue>*, boost::rational<int>> probTable =std::map<parents_sign_state<NodeValue>*, boost::rational<int>>();
+	std::map<parents_sign_state<NodeValue>*, strange_rational> probTable =std::map<parents_sign_state<NodeValue>*, strange_rational>();
 	//Gets Variables
 	plVariablesConjunction variables =  fc->getVariables();
 	//Initializes variable's positions
@@ -225,27 +226,15 @@ plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileD
 	/************************************************************************/
 	while(!lowerSets.empty())
 		{
-		boost::rational<int> min_r;
-		boost::rational<int> min(1,1);
-		int index_min =0;
-		//Searching minimal
-		for(unsigned int i = 0 ; i< lowerSets.size();i++)
-			{
-			min_r = computeLowerSetProb(lowerSets[i], probTable);
-			if(min_r < min)
-				{
-				min = min_r;
-				index_min = i;
-				}
-			}
-		lower_set_type min_ls = lowerSets[index_min];
+		lower_set_type min_ls = lower_set_type();
+		strange_rational min_r = getMinLowerSet(lowerSets, probTable, min_ls);
+
 		//Change probTable
 		for (auto i_state = min_ls.begin(); i_state!=min_ls.end();i_state++)
 			{
 			probTable[*i_state]=min_r;
 			}
-		//Remove minimal from lowerSets and other
-		lowerSets.erase(lowerSets.begin()+index_min);
+		//Remove minimal from each lowerSets
 		std::vector<lower_set_type> lower_sets_cp = std::vector<lower_set_type>();
 		for (auto i_ls = lowerSets.begin(); i_ls!=lowerSets.end();i_ls++)
 			{
@@ -280,7 +269,7 @@ plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileD
 
 
 template <typename NodeValue>
-boost::rational<int> poset_forest<NodeValue>::getRationalFromState(parents_sign_state<NodeValue>* state, std::vector<plFloat>& freq, std::map<std::string, unsigned int>& pos)
+strange_rational poset_forest<NodeValue>::getRationalFromState(parents_sign_state<NodeValue>* state, std::vector<plFloat>& freq, std::map<std::string, unsigned int>& pos)
 	{
 	unsigned int neg_val = 0;
 	unsigned int  pos_val;
@@ -289,33 +278,26 @@ boost::rational<int> poset_forest<NodeValue>::getRationalFromState(parents_sign_
 		neg_val += state->getState(*i_parent).first *((unsigned int) std::pow(2.0,(int)pos[*i_parent]));
 		}
 	pos_val = neg_val + ((unsigned int) std::pow(2.0,(int)pos[nName]));
-	return boost::rational<int>((int) freq[pos_val], (int)(freq[neg_val]+ freq[pos_val]));
+	return strange_rational((int) freq[pos_val], (int)(freq[neg_val]+ freq[pos_val]));
 	}
 
 
 template <typename NodeValue>
-boost::rational<int> poset_forest<NodeValue>::computeLowerSetProb(lower_set_type& ls, std::map<parents_sign_state<NodeValue>*,boost::rational<int>>& probTable)
+strange_rational poset_forest<NodeValue>::computeLowerSetProb(lower_set_type& ls, std::map<parents_sign_state<NodeValue>*,strange_rational>& probTable)
 	{
-	int num, denum;
-	num =0;
-	denum = 0;
+	strange_rational frac= strange_rational();
 	for (auto i_state= ls.begin(); i_state!=ls.end();i_state++)
 		{
-		boost::rational<int> frac = probTable[*i_state];
-		if (frac.numerator() !=0)
-			{
-
-			num += frac.numerator();
-			denum += frac.denominator();
-			}
+		frac += probTable[*i_state];
+		
 		}
-	return boost::rational<int>(num, denum);
+	return frac;
 	}
 
 
 
 template <typename NodeValue>
-void poset_forest<NodeValue>::constructProbTable(std::map<parents_sign_state<NodeValue>*, boost::rational<int>>& rationalProb, std::map<std::string, unsigned int>& pos, std::vector<plProbValue>& probTable)
+void poset_forest<NodeValue>::constructProbTable(std::map<parents_sign_state<NodeValue>*, strange_rational>& rationalProb, std::map<std::string, unsigned int>& pos, std::vector<plProbValue>& probTable)
 	{
 	probTable = std::vector<plProbValue>(rationalProb.size()*2);
 	for (auto i_rprob= rationalProb.begin();i_rprob!=rationalProb.end();i_rprob++)
@@ -326,12 +308,12 @@ void poset_forest<NodeValue>::constructProbTable(std::map<parents_sign_state<Nod
 			{
 			index += state->getState(*i_parent).first *((unsigned int) std::pow(2.0,(int)pos[*i_parent]));
 			}
-		boost::rational<int> value =i_rprob->second;
+		strange_rational value =i_rprob->second;
 		std::cout<<"value: "<<value.numerator()<<" "<<value.denominator()<<std::endl;
 		if(value.numerator() == 0)
 			probTable[index] = 0.5;
 		else
-			probTable[index] = 1- value.numerator()/(double)value.denominator();
+			probTable[index] = 1- value.value();
 		int index_compl =index +std::pow(2.0,(int)parentNames.size());
 			probTable[index_compl] =1 - probTable[index];
 		}
@@ -505,6 +487,50 @@ void poset_forest<NodeValue>::computeLowerSet(std::set<Vertex> antichain,std::se
 		{
 		getPartialLS(*i_v,lowerSet);
 		}
+	}
+
+
+template <typename NodeValue>
+strange_rational poset_forest<NodeValue>::getMinLowerSet(std::vector<lower_set_type>& lowerSets, std::map<parents_sign_state<NodeValue>*, strange_rational>& probTable, lower_set_type &min_ls)
+	{
+	strange_rational min_r;
+	strange_rational min(1,1);
+	std::list<lower_set_type> min_ls_list =std::list<lower_set_type>() ;
+	//Searching minimal
+	// If there are multiple minimal, they will be merge
+	for(unsigned int i = 0 ; i< lowerSets.size();i++)
+		{
+		min_r = computeLowerSetProb(lowerSets[i], probTable);
+		if (min == min_r)
+			{
+			min_ls_list.push_back(lowerSets[i]);
+			}
+		if(min_r < min)
+			{
+			min = min_r;
+			min_ls_list = std::list<lower_set_type>();
+			min_ls_list.push_back(lowerSets[i]);
+			}
+
+		}
+	//Suppress all min lower sets
+	for (auto i_min_ls=min_ls_list.begin(); i_min_ls!=min_ls_list.end();i_min_ls++)
+		{
+
+		for (auto i_ls=lowerSets.begin();i_ls!=lowerSets.end();i_ls++)
+			{
+			if(*i_min_ls == *i_ls)
+				{
+				lowerSets.erase(i_ls);
+				break;
+				}
+			}
+		for (auto i_min_state=i_min_ls->begin();i_min_state!= i_min_ls->end(); i_min_state++)
+			{
+			min_ls.push_back(*i_min_state);
+			}
+		}
+	return min;
 	}
 
 
