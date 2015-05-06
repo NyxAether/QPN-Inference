@@ -18,6 +18,7 @@
 #include "parents_sign_state.h"
 
 #include "pilgrim\general\FrequencyCounter.h"
+#include "pilgrim\general\pmBayesianNetwork.h"
 //=============================================================================
 /*!
 *  \brief bayesian_factory class
@@ -72,7 +73,7 @@ class bayesian_factory
 		* If a node doesn't have data specified, all configurations of state for the node and his 
 		* parents will be considered as equiproportional.
 		*/
-		void build();
+		void build(plJointDistribution & jd);
 
 	protected:
 		/**
@@ -116,7 +117,7 @@ class bayesian_factory
 		* \param[out] variables : Will stock all the plSympol corresponding to the header at the end of the method. 
 		* \param[in] filename : name of a file containing the data or at least a correct header on first line.
 		*/
-		void setHeaders(plVariablesConjunction& variables, std::string filename);
+		void setHeaders(std::string nName, plVariablesConjunction& variables, std::string filename);
 
 		void computeProbTable(std::string nName, std::vector<plProbValue> & values);
 

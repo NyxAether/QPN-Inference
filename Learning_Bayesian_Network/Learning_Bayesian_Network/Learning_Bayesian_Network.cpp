@@ -198,8 +198,14 @@ cout<<A.name()<<endl;
 
 	bayesian_factory bf = bayesian_factory(&qpn); 
 	bf.addData("D", "data_node_A.csv");
-
-	bf.build();
+	bf.addData("C", "data_node_A.csv");
+	bf.addData("E", "data_node_A.csv");
+	bf.addData("F", "data_node_A.csv");
+	
+	plJointDistribution jd =plJointDistribution();
+	bf.build(jd);
+	pmBayesianNetwork bn = pmBayesianNetwork(jd) ;
+	bn.summary();
 
 		//return 0; 
 }

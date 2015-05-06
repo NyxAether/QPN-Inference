@@ -78,39 +78,69 @@ void bayesian_factory::addData(string nName, string filePath)
 	vector<string> pNames = vector<string>();
 	qpn->getParentNames(nName, pNames);
 	plVariablesConjunction variables = plVariablesConjunction();
-	
-	setHeaders(variables,filePath);
+
+	setHeaders(nName,variables,filePath);
 
 	plCSVFileDataDescriptor<int>* ds =new plCSVFileDataDescriptor<int>(filePath, variables, true, ';');
 	pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc= new	pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>(ds, variables);
 	data[nName]=fc;
 	}
 
-void bayesian_factory::build()
-	{
+void bayesian_factory::build(plJointDistribution & jd)
+{
 	list<string> nNames = list<string>();
 	qpn->getNodeNames(nNames);
+
+	plVariablesConjunction nodeVariables = plVariablesConjunction();
+	plComputableObjectList tables = plComputableObjectList();
 	for (auto i_name = nNames.begin(); i_name!=nNames.end();i_name++)
 		{
-		plProbValue* test = posets[*i_name].MLS((data[*i_name]));
+		std::vector<std::string> parentNames =std::vector<std::string> ();
+		qpn->getParentNames(*i_name, parentNames);
+		nodeVariables = nodeVariables ^ symbols[*i_name];
+		vector<plProbValue> probs = vector<plProbValue>();
+		posets[*i_name].MLS((data[*i_name]), probs);
+
+		if (data[*i_name]!=nullptr && parentNames.size()>0)
+			{
+			plVariablesConjunction parentSymbols, allVariables;
+			allVariables =data[*i_name]->getVariables();
+			for (auto i_parent =parentNames.begin();i_parent!=parentNames.end();i_parent++)
+			{
+			parentSymbols = parentSymbols ^ allVariables.get_symbol_with_name(*i_parent);
+			}
+
+			tables*=plDistributionTable(symbols[*i_name],parentSymbols, probs);
+			}
+		else
+			{
+			tables*=plProbTable(symbols[*i_name], probs);
+			}
+
 		//cout<<*test<<*(test+sizeof(plProbValue))<<endl;
 		}
+	 jd =plJointDistribution(nodeVariables,tables);
 	}
 
-void bayesian_factory::setHeaders(plVariablesConjunction& variables, std::string filename)
-	{
+void bayesian_factory::setHeaders(std::string nName, plVariablesConjunction& variables, std::string filename)
+{
+std::vector<std::string> parentNames = std::vector<std::string>();
+	qpn->getParentNames(nName,parentNames);
 	ifstream file(filename, ios::in);  
 
 	if(file)  
 		{
 		string line,name_var;  
 		getline(file, line);  
-		 istringstream toSplit(line);
+		istringstream toSplit(line);
 		while (getline(toSplit, name_var, ';')) 
 			{
 			name_var=name_var.substr(1,name_var.size()-2);
+			if(std::find(parentNames.begin(), parentNames.end(), name_var) != parentNames.end() || name_var==nName)
+				{
 			plSymbol tmp = symbols[name_var];
 			variables = variables ^ (tmp);
+				}
 			}
 		file.close();
 		}

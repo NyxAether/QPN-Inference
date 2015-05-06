@@ -42,7 +42,7 @@ double strange_rational::value() const
 
 strange_rational& strange_rational::operator+=(const strange_rational sr)
 	{
-	if (num!=0 || sr.numerator()!=0)
+	if (num!=0 && sr.numerator()!=0)
 	{
 	num+= sr.numerator();
 	denom+= sr.denominator();

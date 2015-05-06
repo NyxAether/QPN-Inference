@@ -38,7 +38,7 @@ class poset_forest
 
 		void addState(parents_sign_state<NodeValue>* state);
 		void findLowerSets(std::vector<lower_set_type>& lowerSets );
-		plProbValue* MLS(PILGRIM::pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc);		 
+		void MLS(PILGRIM::pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc, std::vector<plProbValue>& probs);		 
 
 	protected:
 
@@ -184,14 +184,14 @@ void poset_forest<NodeValue>::findLowerSets(std::vector<lower_set_type>& lowerSe
 
 
 template <typename NodeValue>
-plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc)
+void poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc, std::vector<plProbValue>& probs)
 	{
-	std::vector<plProbValue> vectorProb = std::vector<plProbValue>();
+	probs = std::vector<plProbValue>();
 	if (fc == nullptr)
 		{
-		vectorProb.push_back(0.5);
-		vectorProb.push_back(0.5);
-		return &(vectorProb.front());
+		probs.push_back(0.5);
+		probs.push_back(0.5);
+		return;
 		}
 	/************************************************************************/
 	/* Initialisation                                                       */
@@ -228,7 +228,7 @@ plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileD
 		{
 		lower_set_type min_ls = lower_set_type();
 		strange_rational min_r = getMinLowerSet(lowerSets, probTable, min_ls);
-
+		std::cout<<"min_ls"<<min_r.numerator()<<" "<<min_r.denominator()<<std::endl;
 		//Change probTable
 		for (auto i_state = min_ls.begin(); i_state!=min_ls.end();i_state++)
 			{
@@ -262,8 +262,7 @@ plProbValue* poset_forest<NodeValue>::MLS(PILGRIM::pmFrequencyCounter<plCSVFileD
 	/* Third step : Constructs a plProbValue[]                              */
 	/************************************************************************/
 
-	constructProbTable(probTable,parents_relative_pos,vectorProb);
-	return &(vectorProb.front());
+	constructProbTable(probTable,parents_relative_pos,probs);
 	}
 
 
@@ -306,21 +305,21 @@ void poset_forest<NodeValue>::constructProbTable(std::map<parents_sign_state<Nod
 		parents_sign_state<NodeValue>* state = i_rprob->first;
 		for (auto i_parent = parentNames.begin();i_parent!=parentNames.end();i_parent++)
 			{
-			index += state->getState(*i_parent).first *((unsigned int) std::pow(2.0,(int)pos[*i_parent]));
+
+			index += state->getState(*i_parent).first *((unsigned int) std::pow(2.0,(int)pos[*i_parent]+1));
 			}
 		strange_rational value =i_rprob->second;
-		std::cout<<"value: "<<value.numerator()<<" "<<value.denominator()<<std::endl;
 		if(value.numerator() == 0)
 			probTable[index] = 0.5;
 		else
 			probTable[index] = 1- value.value();
-		int index_compl =index +std::pow(2.0,(int)parentNames.size());
-			probTable[index_compl] =1 - probTable[index];
+		//int index_compl =index +std::pow(2.0,(int)parentNames.size());
+		probTable[index +1] =1 - probTable[index];
 		}
 	for (auto i_display = probTable.begin(); i_display!=probTable.end();i_display++)
-	{
-	std::cout<<*i_display<<" ";
-	}
+		{
+		std::cout<<*i_display<<" ";
+		}
 	std::cout<<std::endl;
 	}
 
@@ -328,34 +327,40 @@ void poset_forest<NodeValue>::constructProbTable(std::map<parents_sign_state<Nod
 template <typename NodeValue>
 void poset_forest<NodeValue>::computeRelativesPos(plVariablesConjunction& variables, std::vector<unsigned int>& absolute_pos,std::map<std::string, unsigned int>& all_pos, std::map<std::string, unsigned int> & parents_pos)
 	{
+	int cpt =parentNames.size();
 	//child first
 	absolute_pos.push_back(variables.get_symbol_position(variables.get_symbol_with_name(nName)));
-	all_pos[nName] =0 ;
+	all_pos[nName] =cpt ;
 	//then parent
 	for(auto i_parent=parentNames.begin();i_parent!=parentNames.end();i_parent++)
 		{
 		unsigned int pos_parent =variables.get_symbol_position(variables.get_symbol_with_name(*i_parent));
 		absolute_pos.push_back(pos_parent);
-		unsigned int relative= 0;
-		unsigned int relative_p= 0;
-		for (auto i_pos_r= all_pos.begin();i_pos_r!=all_pos.end();i_pos_r++)
-			{
-			string current_name = i_pos_r->first;
-			unsigned int current_pos = variables.get_symbol_position(variables.get_symbol_with_name(current_name) );
-			if(pos_parent < current_pos )
-				all_pos[current_name]++;
-			else
-				relative++;
-			if (current_name != nName)
-			{
-			if(pos_parent < current_pos )
-				parents_pos[current_name]++;
-			else
-				relative_p++;
-			}
-			}
-		all_pos[*i_parent]= relative;
-		parents_pos[*i_parent]= relative_p;
+
+		cpt--;
+		all_pos[*i_parent]=cpt;
+		parents_pos[*i_parent]=cpt;
+
+		//unsigned int relative= 0;
+		//unsigned int relative_p= 0;
+		//for (auto i_pos_r= all_pos.begin();i_pos_r!=all_pos.end();i_pos_r++)
+		//	{
+		//	string current_name = i_pos_r->first;
+		//	unsigned int current_pos = variables.get_symbol_position(variables.get_symbol_with_name(current_name) );
+		//	if(pos_parent < current_pos )
+		//		all_pos[current_name]++;
+		//	else
+		//		relative++;
+		//	if (current_name != nName)
+		//	{
+		//	if(pos_parent < current_pos )
+		//		parents_pos[current_name]++;
+		//	else
+		//		relative_p++;
+		//	}
+		//	}
+		//all_pos[*i_parent]= relative;
+		//parents_pos[*i_parent]= relative_p;
 
 
 		}
@@ -540,10 +545,10 @@ void poset_forest<NodeValue>::getPartialLS(Vertex v, std::set<Vertex>& lowerSet)
 	if (lowerSet.count(v) == 0)
 		{
 		lowerSet.insert(v);
-		OutEIterator out_it, end_out_it;
-		for (boost::tie(out_it,end_out_it) = boost::out_edges(v, poset); out_it!=end_out_it;out_it++)
+		InEIterator in_it, end_in_it;
+		for (boost::tie(in_it,end_in_it) = boost::in_edges(v, poset); in_it!=end_in_it;in_it++)
 			{
-			Vertex next_v= boost::target(*out_it,poset);
+			Vertex next_v= boost::source(*in_it,poset);
 			getPartialLS(next_v, lowerSet);
 			}
 		}
