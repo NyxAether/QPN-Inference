@@ -36,8 +36,25 @@ class poset_forest
 		poset_forest(void);
 		~poset_forest(void);
 
+		/**
+		* \brief add new state to the poset
+		* \details In a poset, all states need to be on the same node. All parents of the node need to set on the state.
+		* \param[in] state : A pointer on the state. Be cautious, if a poset is delete same is done for his states.
+		*/
 		void addState(parents_sign_state<NodeValue>* state);
+		
+		/**
+		* \brief Find all the lower sets in the current poset
+		* \details The number of lower sets can be huge. For instance, if the node associate to this poset has 5 parents this method can compute 7580 lower set. For 6 parents, it can compute over 7 000 000 lower sets.
+		* \param[out] lowerSets : Will contain at the end of the method all the lower sets 
+		*/
 		void findLowerSets(std::vector<lower_set_type>& lowerSets );
+
+		/**
+		* \brief Minimum lower sets algorithm
+		* \param[in] fc : a pointer on a FrequencyCounter associated to the data
+		* \param[out] probs : At the end, contains the probability table for the node associate to the poset
+		*/
 		void MLS(PILGRIM::pmFrequencyCounter<plCSVFileDataDescriptor<int>::CSVDescRowDataType>* fc, std::vector<plProbValue>& probs);		 
 
 	protected:
